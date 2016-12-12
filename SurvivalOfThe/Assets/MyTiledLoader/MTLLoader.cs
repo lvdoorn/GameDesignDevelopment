@@ -38,7 +38,7 @@ public class MTLLoader : MonoBehaviour
     for( int x=0; x< lvl.tilesets.Count;x++)
     {
       Debug.Log(lvl.tilesets[x].image);
-      Texture2D ts = UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>("assets/scifitiles-sheet.png");
+      Texture2D ts = UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>("assets/Tiledmaps/"+ lvl.tilesets[x].image);
 
       if (ts == null)
         Debug.Log("Couldn't load tileset");

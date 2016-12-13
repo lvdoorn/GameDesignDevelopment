@@ -17,11 +17,24 @@ public class MTLLoader : MonoBehaviour
   {
     Debug.Log("Clearing");
     tileset_textures.Clear();
-    tiles.Clear();
+  
+    // destroy layers
     foreach( KeyValuePair<int, GameObject> obj in layer_objects  )
     {
       DestroyImmediate(obj.Value);
     }
+
+    // destroy collision boxes
+    foreach(KeyValuePair<int, List<GameObject>> layer_tiles in tiles)
+    {
+      foreach(GameObject obj in layer_tiles.Value  )
+      {
+        DestroyImmediate(obj);
+      }
+      layer_tiles.Value.Clear();
+    }
+    tiles.Clear();
+
     layer_objects.Clear();
   }
   public void Load()
@@ -37,7 +50,7 @@ public class MTLLoader : MonoBehaviour
     
     for( int x=0; x< lvl.tilesets.Count;x++)
     {
-      Debug.Log(lvl.tilesets[x].image);
+     // Debug.Log(lvl.tilesets[x].image);
       Texture2D ts = UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>("assets/Tiledmaps/"+ lvl.tilesets[x].image);
 
       if (ts == null)
@@ -64,17 +77,17 @@ public class MTLLoader : MonoBehaviour
   }
   public void CreateLevel()
   { 
-
     int realWidth = lvl.tilewidth * lvl.width;
     int realHeight = lvl.tileheight * lvl.height;
     tiles = new Dictionary<int, List<GameObject>>();
     int c = 0;
 
+
     foreach (MTLayer layer in lvl.layers)
     {
-      List<GameObject> tiles_layer = new List<GameObject>();  
+      List<GameObject> tiles_layer = new List<GameObject>();        
 
-      Debug.Log(realWidth);
+      //Debug.Log(realWidth);
       Texture2D overlay = new Texture2D((int)(realWidth), (int)(realHeight));
 
       overlay.SetPixels(new Color[realWidth* realHeight]);
@@ -124,7 +137,37 @@ public class MTLLoader : MonoBehaviour
           // create collision boxes
           if( tileType != 0 )
           {
-            
+            if (mt_ts.tiles.ContainsKey(tileType-1) )
+            {
+              MTTile mt_tile = mt_ts.tiles[tileType-1];
+
+              Debug.Log(tileType-1);
+              foreach(KeyValuePair<int, MTObject> iobj in mt_tile.objects)
+              {
+
+                float scaleX = 10.0f / (float) (lvl.tilewidth * lvl.width);
+                float scaleY = 10.0f / (float)(lvl.tileheight * lvl.height);
+                MTObject obj = iobj.Value;
+                GameObject go = new GameObject();
+                go.name= x.ToString() +" " + y.ToString();
+     
+                BoxCollider2D b2d =  go.AddComponent<BoxCollider2D>();
+                b2d.transform.SetParent(transform);
+                b2d.size = new Vector2((float) obj.width *scaleX, (float) obj.height *scaleY);
+                Vector3 off = new Vector3( (float)(x * lvl.tilewidth)  *scaleX,- (float)(y * lvl.tileheight) *scaleY, 0);
+                off += new Vector3(obj.x*scaleX , -(obj.y)*scaleY, 0);
+                off -= new Vector3(-(float)obj.width * scaleX/2.0f, (float)obj.height * scaleY/2.0f, 0);
+                off += new Vector3(-5.0f, 5.0f,0);
+
+                Rigidbody2D body = go.AddComponent<Rigidbody2D>();
+                body.isKinematic = true;
+
+                b2d.transform.position = transform.position + off;
+
+                tiles_layer.Add(go);
+              }
+              
+            }
           }
 
         }
@@ -146,12 +189,14 @@ public class MTLLoader : MonoBehaviour
 
 
       MeshRenderer meshRenderer = overlayObject.GetComponent<MeshRenderer>();
+    
       Material material = new Material(Shader.Find("Unlit/Transparent"));
       material.mainTexture = overlay;
       meshRenderer.material = material;
 
       float scale = 1.0f;// ((LevelGridSize.y * TilePixelSize.y) / (LevelGridSize.x * TilePixelSize.x))
-      meshRenderer.gameObject.transform.localScale = new Vector3(scale, 1, scale * ((lvl.height * lvl.tileheight) / (lvl.width * lvl.tilewidth)));
+     
+      meshRenderer.transform.localScale = new Vector3(scale, 1, scale * ((lvl.height * lvl.tileheight) / (lvl.width * lvl.tilewidth)));
       meshRenderer.gameObject.transform.localPosition = transform.localPosition + new Vector3(0.0f, 0.0f, -0.01f*c);
 
       tiles.Add(c, tiles_layer);
@@ -177,16 +222,16 @@ public class MTLLoader : MonoBehaviour
 
       if (mt_ts.image != "Tilesets/scifitiles-sheet.png")
       {
-        Debug.Log(mt_ts.image);
-        Debug.Log(xIndex);
-        Debug.Log(yIndex);
+        //Debug.Log(mt_ts.image);
+       // Debug.Log(xIndex);
+       // Debug.Log(yIndex);
       }
-      Debug.Log(tileType);
+     // Debug.Log(tileType);
       if (tileType >= 85)
       {
-        Debug.Log(mt_ts.image);
-        Debug.Log(xIndex);
-        Debug.Log(yIndex);
+       // Debug.Log(mt_ts.image);
+        //Debug.Log(xIndex);
+       // Debug.Log(yIndex);
       }
       // xIndex = TiledLevel.tilesets[0].columns - xIndex;
       //return tileset_textures[0].GetPixels(0, 0, (int)lvl.tilewidth, (int)lvl.tileheight);

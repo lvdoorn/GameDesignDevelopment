@@ -101,7 +101,7 @@ public class MTLParser
     l.layers = ParseLayers(json["layers"]);
     l.tilesets = ParseTilesets(json["tilesets"]);
 
-    Debug.Log(l.tilesets.Count);
+   // Debug.Log(l.tilesets.Count);
     
   //public Tileset[] tilesets;
 
@@ -112,7 +112,7 @@ public class MTLParser
   {
     List<MTLayer> layers = new List<MTLayer>();
 
-    Debug.Log(json);
+  //  Debug.Log(json);
 
     foreach (JSONNode layerNode in json.AsArray)
     {
@@ -156,8 +156,9 @@ public class MTLParser
       ts.image = tilesetNode["image"].Value;
       ts.name = tilesetNode["name"].Value;
       ts.tiles = ParseTiles(tilesetNode["tiles"], ts.tilecount);
+      //Debug.Log( ts.tiles.Count);
 
-     // Debug.Log(tilesetNode["tiles"]);
+      // Debug.Log(tilesetNode["tiles"]);
 
       tilesets.Add(ts);
     }
@@ -166,11 +167,12 @@ public class MTLParser
   public Dictionary<int,MTTile> ParseTiles(JSONNode json, int count)
   {
     Dictionary < int, MTTile > tiles = new Dictionary < int, MTTile > ();
-
-    for(int x=0 ; x<count ; x++)
+  
+    for (int x=0 ; x<count ; x++)
     {
       JSONNode node = json[x.ToString()];
-      if(node  != null)
+      node = node["objectgroup"];
+      if (node  != null)
       {
         MTTile ti = new MTTile();
 
@@ -183,7 +185,10 @@ public class MTLParser
         ti.type = node["type"].Value;
         ti.opacity = node["opacity"].AsFloat;
         ti.visible = node["visible"].AsBool;
+        Debug.Log("objs");   
+
         ti.objects = ParseObjects(node["objects"]);
+  
 
         tiles.Add(x, ti);
       }
@@ -193,6 +198,7 @@ public class MTLParser
 
   public Dictionary<int, MTObject> ParseObjects(JSONNode node)
   {
+    
     Dictionary<int, MTObject> objects = new Dictionary<int, MTObject>();
 
     foreach (JSONNode objectNode in node.AsArray)

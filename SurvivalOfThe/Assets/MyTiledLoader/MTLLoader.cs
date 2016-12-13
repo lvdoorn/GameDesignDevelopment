@@ -63,9 +63,7 @@ public class MTLLoader : MonoBehaviour
     }
   }
   public void CreateLevel()
-  {
-  
-  
+  { 
 
     int realWidth = lvl.tilewidth * lvl.width;
     int realHeight = lvl.tileheight * lvl.height;
@@ -74,32 +72,64 @@ public class MTLLoader : MonoBehaviour
 
     foreach (MTLayer layer in lvl.layers)
     {
-      List<GameObject> tiles_layer = new List<GameObject>();
+      List<GameObject> tiles_layer = new List<GameObject>();  
 
       Debug.Log(realWidth);
       Texture2D overlay = new Texture2D((int)(realWidth), (int)(realHeight));
+
+      overlay.SetPixels(new Color[realWidth* realHeight]);
    
       for (int x = 0; x < lvl.width; x++)
       {
         for (int y = 0; y < lvl.height; y++)
         {
+          int tileType = layer.data[y * lvl.height + x];
 
-          int tileType = layer.data[y*lvl.height + x];
-          Color[] col = overlay.GetPixels((int)((lvl.width - 1) * lvl.tilewidth) - (int)(x * lvl.tilewidth), (int)(y * lvl.tileheight), (int)lvl.tilewidth, (int)lvl.tileheight);
-          Color[] c2 = GetTilePixels(tileType);
+          Texture2D ts = tileset_textures[0];
+          MTTileset mt_ts = lvl.tilesets[0];
+          for (int tc = 0; tc < tileset_textures.Count; tc++)
+          {
+            if (tc + 1 == tileset_textures.Count)
+            {
+              ts = tileset_textures[tc];
+              mt_ts = lvl.tilesets[tc];
+            }
+            else
+            {
+              if ( (lvl.tilesets[tc].firstgid <= tileType)  && (lvl.tilesets[tc+1].firstgid > tileType))
+              {
+                ts = tileset_textures[tc];
+                mt_ts = lvl.tilesets[tc];
+                tc = tileset_textures.Count;
+
+              }
+            }
+          
+          }
+        
+
+          Color[] col = overlay.GetPixels((int)((lvl.width - 1) * lvl.tilewidth) - (int)(x * lvl.tilewidth), (int)(y * lvl.tileheight), (int)mt_ts.tilewidth, (int)mt_ts.tileheight);
+          Color[] c2 = GetTilePixels(tileType, ts, mt_ts);
 
           for (int o = 0; o < c2.Length; o++)
           {
             if (c2[o].a != 0.0f)
               col[o] = c2[o];
+          
           }
-         // overlay.SetPixels(32, 32, (int)lvl.tilewidth, (int)lvl.tileheight, c2);
+          overlay.SetPixels(32, 32, (int)lvl.tilewidth, (int)lvl.tileheight, c2);
+    
+          overlay.SetPixels((int)((lvl.width - 1) * lvl.tilewidth) - (int)(x * lvl.tilewidth), (int)(y * lvl.tileheight), (int)mt_ts.tilewidth, (int)mt_ts.tileheight, col);
 
-          overlay.SetPixels((int)((lvl.width - 1) * lvl.tilewidth) - (int)(x * lvl.tilewidth), (int)(y * lvl.tileheight), (int)lvl.tilewidth, (int)lvl.tileheight, c2);
+          // create collision boxes
+          if( tileType != 0 )
+          {
+            
+          }
 
         }
       }
-      overlay.filterMode = FilterMode.Point;
+      overlay.filterMode = FilterMode.Trilinear;
       overlay.wrapMode = TextureWrapMode.Clamp;
       overlay.Apply();
 
@@ -130,26 +160,37 @@ public class MTLLoader : MonoBehaviour
     }
 
   }
-  Color[] GetTilePixels(int tileType)
+  Color[] GetTilePixels(int tileType, Texture2D ts, MTTileset mt_ts)
   {
-   
+    
     if (tileType == 0)
     {
       // tiletype 0 means we have a background color. Return an empty color array.
-      return new Color[(int)lvl.tilewidth * (int)lvl.tileheight];
+      return new Color[(int)mt_ts.tilewidth * (int)mt_ts.tileheight];
     }
     else
-    {
-      int xIndex = (tileType - 1) % lvl.tilesets[0].columns;
-      int yIndex = (tileType - 1) / lvl.tilesets[0].columns;
-      xIndex = lvl.tilesets[0].columns - xIndex - 1;
+    {   
 
-      
+      int xIndex = (tileType - mt_ts.firstgid ) % mt_ts.columns;
+      int yIndex = (tileType - mt_ts.firstgid ) / mt_ts.columns;
+      xIndex = mt_ts.columns - xIndex -1;
 
-      // Debug.Log(tileType);
+      if (mt_ts.image != "Tilesets/scifitiles-sheet.png")
+      {
+        Debug.Log(mt_ts.image);
+        Debug.Log(xIndex);
+        Debug.Log(yIndex);
+      }
+      Debug.Log(tileType);
+      if (tileType >= 85)
+      {
+        Debug.Log(mt_ts.image);
+        Debug.Log(xIndex);
+        Debug.Log(yIndex);
+      }
       // xIndex = TiledLevel.tilesets[0].columns - xIndex;
       //return tileset_textures[0].GetPixels(0, 0, (int)lvl.tilewidth, (int)lvl.tileheight);
-      return tileset_textures[0].GetPixels(xIndex * (int)lvl.tilewidth, (yIndex * (int)lvl.tileheight), (int)lvl.tilewidth, (int)lvl.tileheight);
+      return ts.GetPixels(xIndex * (int)mt_ts.tilewidth, (yIndex * (int)mt_ts.tileheight), (int)mt_ts.tilewidth, (int)mt_ts.tileheight);
     }
   }
 

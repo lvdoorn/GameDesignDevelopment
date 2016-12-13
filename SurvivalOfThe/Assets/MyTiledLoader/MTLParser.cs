@@ -138,7 +138,7 @@ public class MTLParser
 
   public List<MTTileset> ParseTilesets(JSONNode json)
   {
-    List<MTTileset> tilesets = new List<MTTileset>();
+    List<MTTileset> tilesets = new List<MTTileset>();    
 
     foreach (JSONNode tilesetNode in json.AsArray)
     {

@@ -9,6 +9,7 @@ public class MTLevel
 {
   public int height;
   public List<MTLayer> layers;
+  public List<MTObjectLayer> objectlayers;
   public int nextobjectid;
   public string orientation;
   public string renderorder;
@@ -79,6 +80,35 @@ public class MTObject
   public float y;
 }
 
+[Serializable]
+public class MTObjectLayer
+{
+  public string draworder;
+  public int height;
+  public string name;
+  public float opacity;
+  public string type;
+  public bool visible;
+  public int width;
+  public int x;
+  public int y;
+  public Dictionary<int, MTGameObject> objects;
+
+}
+[Serializable]
+public class MTGameObject
+{
+  public int gid;
+  public float height;
+  public int id;
+  public string name;
+  public int rotation;
+  public string type;
+  public bool visible;
+  public float width;
+  public float x;
+  public float y;
+}
 
 public class MTLParser
 {
@@ -99,6 +129,7 @@ public class MTLParser
     l.version = json["version"];
 
     l.layers = ParseLayers(json["layers"]);
+    l.objectlayers = ParseObjectLayers(json["layers"]);
     l.tilesets = ParseTilesets(json["tilesets"]);
 
    // Debug.Log(l.tilesets.Count);
@@ -111,29 +142,84 @@ public class MTLParser
   public List<MTLayer> ParseLayers(JSONNode json)
   {
     List<MTLayer> layers = new List<MTLayer>();
+    
 
-  //  Debug.Log(json);
+    //  Debug.Log(json);
 
     foreach (JSONNode layerNode in json.AsArray)
     {
-      MTLayer layer = new MTLayer();
+      if (layerNode["data"].Count > 0)
+      {
+        MTLayer layer = new MTLayer();
 
-      layer.height = layerNode["height"].AsInt;
-      layer.width = layerNode["width"].AsInt;
-      layer.x = layerNode["x"].AsInt;
-      layer.y = layerNode["y"].AsInt;
-      layer.name = layerNode["name"].Value;
-      layer.type = layerNode["type"].Value;
-      layer.opacity = layerNode["opacity"].AsFloat;
-      layer.visible = layerNode["visible"].AsBool;
-      layer.data = new List<int>();
+        layer.height = layerNode["height"].AsInt;
+        layer.width = layerNode["width"].AsInt;
+        layer.x = layerNode["x"].AsInt;
+        layer.y = layerNode["y"].AsInt;
+        layer.name = layerNode["name"].Value;
+        layer.type = layerNode["type"].Value;
+        layer.opacity = layerNode["opacity"].AsFloat;
+        layer.visible = layerNode["visible"].AsBool;
+        layer.data = new List<int>();
 
-      foreach (JSONNode dataNode in layerNode["data"].AsArray)
-        layer.data.Add(dataNode.AsInt);
+        foreach (JSONNode dataNode in layerNode["data"].AsArray)
+          layer.data.Add(dataNode.AsInt);
 
-      layers.Add(layer);
+        layers.Add(layer);
+      }     
     }
+   
     return layers;
+  }
+  public List<MTObjectLayer> ParseObjectLayers(JSONNode json)
+  {
+    List<MTObjectLayer> layers = new List<MTObjectLayer>();
+
+
+    //  Debug.Log(json);
+
+    foreach (JSONNode layerNode in json.AsArray)
+    {
+      if (layerNode["objects"].Count > 0)    
+      {
+        MTObjectLayer layer = new MTObjectLayer();
+        layer.height = layerNode["height"].AsInt;
+        layer.width = layerNode["width"].AsInt;
+        layer.x = layerNode["x"].AsInt;
+        layer.y = layerNode["y"].AsInt;
+        layer.name = layerNode["name"].Value;
+        layer.type = layerNode["type"].Value;
+        layer.opacity = layerNode["opacity"].AsFloat;
+        layer.visible = layerNode["visible"].AsBool;
+
+        layer.objects = ParseGameObjects(layerNode["objects"]);
+        layers.Add(layer);
+      }
+    }
+
+    return layers;
+  }
+
+  public Dictionary<int , MTGameObject> ParseGameObjects(JSONNode json)
+  {
+    Dictionary<int, MTGameObject> list = new Dictionary<int, MTGameObject>();
+
+    foreach( JSONNode node in json.AsArray)
+    {
+      MTGameObject obj = new MTGameObject();
+      obj.height = node["height"].AsFloat;
+      obj.width = node["width"].AsFloat;
+      obj.name = node["name"].Value;
+      obj.type = node["type"].Value;
+      obj.visible = node["visible"].AsBool;
+      obj.rotation = node["rotation"].AsInt;
+      obj.x = node["x"].AsFloat;
+      obj.y = node["y"].AsFloat;
+      obj.gid = node["gid"].AsInt;
+      obj.id = node["id"].AsInt;
+      list.Add(node["id"].AsInt, obj);
+    }
+    return list;
   }
 
   public List<MTTileset> ParseTilesets(JSONNode json)
@@ -184,11 +270,8 @@ public class MTLParser
         ti.name = node["name"].Value;
         ti.type = node["type"].Value;
         ti.opacity = node["opacity"].AsFloat;
-        ti.visible = node["visible"].AsBool;
-        Debug.Log("objs");   
-
-        ti.objects = ParseObjects(node["objects"]);
-  
+        ti.visible = node["visible"].AsBool;   
+        ti.objects = ParseObjects(node["objects"]);  
 
         tiles.Add(x, ti);
       }

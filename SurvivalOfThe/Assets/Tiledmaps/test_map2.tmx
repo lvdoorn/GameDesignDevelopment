@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" nextobjectid="11">
  <tileset firstgid="1" name="scifitiles-sheet" tilewidth="32" tileheight="32" tilecount="84" columns="14">
   <image source="Tilesets/scifitiles-sheet.png" width="448" height="192"/>
   <tile id="5">
@@ -46,6 +46,11 @@
     <object id="2" x="25.9091" y="-0.181818" width="6" height="24.9091"/>
    </objectgroup>
   </tile>
+  <tile id="44">
+   <objectgroup draworder="index">
+    <object id="1" x="-1" y="0" width="32" height="31"/>
+   </objectgroup>
+  </tile>
  </tileset>
  <tileset firstgid="85" name="ChildStanding" tilewidth="32" tileheight="64" tilecount="4" columns="4">
   <image source="Tilesets/ChildStanding.png" width="128" height="64"/>
@@ -56,7 +61,7 @@
 20,21,21,21,21,21,21,22,0,0,0,0,0,0,0,0,0,0,0,0,
 20,21,21,21,21,21,21,22,0,0,0,0,0,0,0,0,0,0,0,0,
 20,21,21,21,21,21,21,22,0,0,0,0,0,0,0,0,0,0,0,0,
-20,21,21,21,21,21,21,22,0,0,0,0,0,0,0,0,0,0,0,0,
+20,21,21,21,21,21,21,21,0,0,0,0,0,0,0,0,0,0,0,0,
 20,21,21,21,21,21,21,22,0,0,0,0,0,0,0,0,0,0,0,0,
 20,21,21,21,21,21,21,22,0,0,0,0,0,0,0,0,0,0,0,0,
 20,21,21,21,21,21,21,22,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -74,7 +79,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="Tile Layer 2" width="20" height="20">
+ <layer name="Tile Layer 2" width="20" height="20" visible="0">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -122,4 +127,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup name="Object Layer 1">
+  <object id="10" name="thingy" gid="45" x="121" y="32" width="32" height="32"/>
+ </objectgroup>
 </map>

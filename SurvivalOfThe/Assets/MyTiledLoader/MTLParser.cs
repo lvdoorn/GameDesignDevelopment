@@ -32,6 +32,7 @@ public class MTLayer
   public int width;
   public int x;
   public int y;
+  public int level_layer = 0;
 }
 
 [Serializable]
@@ -93,6 +94,7 @@ public class MTObjectLayer
   public int x;
   public int y;
   public Dictionary<int, MTGameObject> objects;
+  public int level_layer = 0;
 
 }
 [Serializable]
@@ -110,7 +112,8 @@ public class MTGameObject
   public float y;
 }
 
-public class MTLParser
+
+  public class MTLParser
 {
   public MTLevel Parse(TextAsset level)
   {
@@ -162,6 +165,12 @@ public class MTLParser
         layer.visible = layerNode["visible"].AsBool;
         layer.data = new List<int>();
 
+        if(layerNode["properties"] != null)
+        {
+          if (layerNode["properties"]["level_layer"] != null)
+            layer.level_layer = layerNode["properties"]["level_layer"].AsInt;
+        }
+
         foreach (JSONNode dataNode in layerNode["data"].AsArray)
           layer.data.Add(dataNode.AsInt);
 
@@ -191,6 +200,12 @@ public class MTLParser
         layer.type = layerNode["type"].Value;
         layer.opacity = layerNode["opacity"].AsFloat;
         layer.visible = layerNode["visible"].AsBool;
+
+        if (layerNode["properties"] != null)
+        {
+          if (layerNode["properties"]["level_layer"] != null)
+            layer.level_layer = layerNode["properties"]["level_layer"].AsInt;
+        }
 
         layer.objects = ParseGameObjects(layerNode["objects"]);
         layers.Add(layer);

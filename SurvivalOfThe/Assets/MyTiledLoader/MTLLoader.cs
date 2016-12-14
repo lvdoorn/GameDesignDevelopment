@@ -2,7 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 
-// Credits to https://github.com/adampassey/Unity-Tiled-Importer/blob/master/Assets/Scripts/Tiled/Parser/JSONMapParser.cs
+
+
+public class MTLevelLayer : MonoBehaviour
+{
+  private Dictionary<int, List<GameObject>> collision_boxes = new Dictionary<int, List<GameObject>>();
+  private Dictionary<int, GameObject> layer_sprites = new Dictionary<int, GameObject>();
+  private Dictionary<int, List<GameObject>> layer_game_objects = new Dictionary<int, List<GameObject>>();
+}
 
 public class MTLLoader : MonoBehaviour
 {
@@ -11,10 +18,10 @@ public class MTLLoader : MonoBehaviour
 
   private MTLevel lvl;
   private Dictionary<int, Texture2D> tileset_textures= new Dictionary<int, Texture2D>();
-
   private Dictionary<int, List<GameObject> > tiles = new Dictionary<int, List<GameObject>>() ;
   private Dictionary<int, GameObject> layer_objects = new Dictionary<int, GameObject>();
-  private Dictionary<int, List<GameObject>> layer_game_objects = new Dictionary<int, List<GameObject>>();
+  private Dictionary<int, List<GameObject>> layer_game_objects = new Dictionary<int, List<GameObject>>();  
+  private Dictionary<int, GameObject> level_layers = new Dictionary<int, GameObject>();
 
   public void Clear()
   {
@@ -50,9 +57,17 @@ public class MTLLoader : MonoBehaviour
     }
     layer_game_objects.Clear();
 
+    // destroy level layers
+    foreach (KeyValuePair<int, GameObject> level_layer in level_layers)
+    {
+      DestroyImmediate(level_layer.Value);
+    }
+    level_layers.Clear();
   }
   public void Load()
   {
+    transform.localScale = new Vector3(scale,scale,scale);
+    name = "Level";
     Debug.Log("LoadLevel");
     MTLParser p = new MTLParser();
     lvl = p.Parse(level_file);
@@ -95,8 +110,41 @@ public class MTLLoader : MonoBehaviour
   public void CreateLevelObjects()
   {
     int c = 0;
+
+  
+
     foreach (MTObjectLayer layer in lvl.objectlayers)
     {
+      GameObject level_layer;
+      GameObject level_layer_objects;
+
+      if (level_layers.ContainsKey(layer.level_layer))
+      {
+        level_layer = level_layers[layer.level_layer];
+        level_layer_objects = level_layer.transform.GetChild(2).gameObject;
+      }
+      else
+      {
+        level_layer = new GameObject();
+        level_layer.name = "LevelLayer" + layer.level_layer.ToString();
+        level_layer.transform.SetParent(transform);
+        level_layers.Add(layer.level_layer, level_layer);
+
+        GameObject level_layer_tile_layer = new GameObject();
+        GameObject level_layer_collision_boxes = new GameObject();
+
+        level_layer_tile_layer.transform.SetParent(level_layer.transform);
+        level_layer_tile_layer.name = "TileLayers";
+
+        level_layer_collision_boxes.transform.SetParent(level_layer.transform);
+        level_layer_collision_boxes.name = "Tiles";
+
+        level_layer_objects = new GameObject();
+        level_layer_objects.transform.SetParent(level_layer.transform);
+        level_layer_objects.name = "Objects";
+      }
+           
+
       List<GameObject> objects_layer = new List<GameObject>();
 
       foreach(KeyValuePair<int, MTGameObject> iobj in layer.objects)
@@ -138,7 +186,7 @@ public class MTLLoader : MonoBehaviour
 
         GameObject main_obj = new GameObject();
 
-        main_obj.transform.SetParent(transform);
+        main_obj.transform.SetParent(level_layer_objects.transform);
 
         GameObject gobj = GameObject.CreatePrimitive(PrimitiveType.Plane);
      
@@ -156,12 +204,12 @@ public class MTLLoader : MonoBehaviour
         material.mainTexture = overlay;
         meshRenderer.material = material;
 
-        float scaleX = 10.0f / (float)(lvl.tilewidth * lvl.width);
-        float scaleY = 10.0f / (float)(lvl.tileheight * lvl.height);   
+        float scaleX = (10.0f * scale) / (float)(lvl.tilewidth * lvl.width);
+        float scaleY = (10.0f * scale) / (float)(lvl.tileheight * lvl.height);   
         
-        gobj.transform.localScale = new Vector3(scaleX * mt_ts.tilewidth /10.0f , 1,scaleY * mt_ts.tileheight/10.0f);
-        gobj.transform.localPosition = new Vector3(obj.x*scaleX / 10.0f, obj.y*scaleY / 10.0f ,0);
-        gobj.transform.position = new Vector3(obj.x * scaleX,- obj.y * scaleY,0) + new Vector3(-5,5,0)  - new Vector3(-(float)obj.width * scaleX / 2.0f, -(float)obj.height * scaleY / 2.0f, 0);
+        gobj.transform.localScale = new Vector3(scaleX * mt_ts.tilewidth / (10.0f ), 1,scaleY * mt_ts.tileheight / (10.0f ));
+        gobj.transform.localPosition = new Vector3(obj.x*scaleX / ( 10.0f *scale), obj.y*scaleY / (10.0f * scale), 0);
+        gobj.transform.position = new Vector3(obj.x * scaleX,- obj.y * scaleY,0) + new Vector3(-(10.0f * scale)/2.0f, (10.0f * scale)/2.0f, 0)  - new Vector3(-(float)obj.width * scaleX / 2.0f, -(float)obj.height * scaleY / 2.0f, 0);
         //  meshRenderer.transform.localScale = new Vector3(scale, 1, scale * ((mt_ts.tileheight) / (mt_ts.tilewidth)));
         // meshRenderer.gameObject.transform.localPosition = transform.localPosition + new Vector3(0.0f, 0.0f, -0.01f * c);
 
@@ -211,6 +259,39 @@ public class MTLLoader : MonoBehaviour
 
     foreach (MTLayer layer in lvl.layers)
     {
+      GameObject level_layer;
+      GameObject level_layer_tile_layer;
+      GameObject level_layer_collision_boxes ;
+
+      if (level_layers.ContainsKey(layer.level_layer))
+      {
+        level_layer = level_layers[layer.level_layer];
+        level_layer_tile_layer = level_layer.transform.GetChild(0).gameObject;
+        level_layer_collision_boxes = level_layer.transform.GetChild(1).gameObject;
+      }
+      else
+      {
+        level_layer = new GameObject();
+        level_layer.name = "LevelLayer" + layer.level_layer.ToString();
+        level_layer.transform.SetParent(transform);
+        level_layers.Add(layer.level_layer, level_layer);
+
+        level_layer_tile_layer = new GameObject();
+        level_layer_collision_boxes = new GameObject();
+
+        level_layer_tile_layer.transform.SetParent(level_layer.transform);
+        level_layer_tile_layer.name = "TileLayers";
+
+        level_layer_collision_boxes.transform.SetParent(level_layer.transform);
+        level_layer_collision_boxes.name = "Tiles";
+
+        GameObject level_layer_objects = new GameObject();
+        level_layer_objects.transform.SetParent(level_layer.transform);
+        level_layer_objects.name = "Objects";
+      }
+
+     
+
       List<GameObject> tiles_layer = new List<GameObject>();        
 
       //Debug.Log(realWidth);
@@ -279,20 +360,19 @@ public class MTLLoader : MonoBehaviour
               Debug.Log(tileType-1);
               foreach(KeyValuePair<int, MTObject> iobj in mt_tile.objects)
               {
-
-                float scaleX = 10.0f / (float) (lvl.tilewidth * lvl.width);
-                float scaleY = 10.0f / (float)(lvl.tileheight * lvl.height);
+                float scaleX = (10.0f * this.scale) / (float) (lvl.tilewidth * lvl.width);
+                float scaleY = (10.0f * this.scale) / (float)(lvl.tileheight * lvl.height);
                 MTObject obj = iobj.Value;
                 GameObject go = new GameObject();
                 go.name= x.ToString() +" " + y.ToString();
      
                 BoxCollider2D b2d =  go.AddComponent<BoxCollider2D>();
-                b2d.transform.SetParent(transform);
+                b2d.transform.SetParent(level_layer_collision_boxes.transform);
                 b2d.size = new Vector2((float) obj.width *scaleX, (float) obj.height *scaleY);
                 Vector3 off = new Vector3( (float)(x * lvl.tilewidth)  *scaleX,- (float)(y * lvl.tileheight) *scaleY, 0);
                 off += new Vector3(obj.x*scaleX , -(obj.y)*scaleY, 0);
                 off -= new Vector3(-(float)obj.width * scaleX/2.0f, (float)obj.height * scaleY/2.0f, 0);
-                off += new Vector3(-5.0f, 5.0f,0);
+                off += new Vector3(-(10.0f * this.scale) / 2.0f, (10.0f * this.scale) / 2.0f, 0);
 
                 Rigidbody2D body = go.AddComponent<Rigidbody2D>();
                 body.isKinematic = true;
@@ -312,7 +392,8 @@ public class MTLLoader : MonoBehaviour
       overlay.Apply();
 
       GameObject overlayObject = GameObject.CreatePrimitive(PrimitiveType.Plane);
-      overlayObject.transform.SetParent(transform);
+
+      overlayObject.transform.SetParent(level_layer_tile_layer.transform);
       overlayObject.transform.localPosition = new Vector3(0.0f,0.0f, 0.01f);
      // overlayObject.layer = 7 + lvl.layers.Count-c;
       layer_objects.Add(c, overlayObject);
@@ -320,7 +401,7 @@ public class MTLLoader : MonoBehaviour
 
       overlayObject.transform.localEulerAngles = new Vector3(-90, 0, 0);
       overlayObject.transform.localPosition = new Vector3(0.0f, 0.0f, 0.01f);
-      overlayObject.name = "Layer "+ c.ToString();
+      overlayObject.name =  layer.name;
 
 
       MeshRenderer meshRenderer = overlayObject.GetComponent<MeshRenderer>();

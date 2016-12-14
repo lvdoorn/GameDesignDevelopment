@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" nextobjectid="11">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" nextobjectid="12">
  <tileset firstgid="1" name="scifitiles-sheet" tilewidth="32" tileheight="32" tilecount="84" columns="14">
   <image source="Tilesets/scifitiles-sheet.png" width="448" height="192"/>
   <tile id="5">
@@ -51,11 +51,20 @@
     <object id="1" x="-1" y="0" width="32" height="31"/>
    </objectgroup>
   </tile>
+  <tile id="75">
+   <objectgroup draworder="index">
+    <object id="2" x="0.363636" y="0" width="5.63636" height="31.6364"/>
+    <object id="3" x="6.36364" y="25.2727" width="25.4545" height="6.36364"/>
+   </objectgroup>
+  </tile>
  </tileset>
  <tileset firstgid="85" name="ChildStanding" tilewidth="32" tileheight="64" tilecount="4" columns="4">
   <image source="Tilesets/ChildStanding.png" width="128" height="64"/>
  </tileset>
  <layer name="Tile Layer 1" width="20" height="20">
+  <properties>
+   <property name="level_layer" type="int" value="0"/>
+  </properties>
   <data encoding="csv">
 6,7,7,7,7,7,7,8,0,0,0,0,0,0,0,0,0,0,0,0,
 20,21,21,21,21,21,21,22,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -79,7 +88,10 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="Tile Layer 2" width="20" height="20" visible="0">
+ <layer name="Tile Layer 2" width="20" height="20">
+  <properties>
+   <property name="level_layer" type="int" value="0"/>
+  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -104,6 +116,9 @@
 </data>
  </layer>
  <layer name="Tile Layer 3" width="20" height="20">
+  <properties>
+   <property name="level_layer" type="int" value="0"/>
+  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -128,6 +143,42 @@
 </data>
  </layer>
  <objectgroup name="Object Layer 1">
+  <properties>
+   <property name="level_layer" type="int" value="0"/>
+  </properties>
   <object id="10" name="thingy" gid="45" x="121" y="32" width="32" height="32"/>
+ </objectgroup>
+ <layer name="Top" width="20" height="20">
+  <properties>
+   <property name="level_layer" type="int" value="1"/>
+  </properties>
+  <data encoding="csv">
+48,49,49,49,49,49,50,0,0,0,0,0,0,0,0,0,0,0,0,0,
+62,63,63,63,63,63,64,0,0,0,0,0,0,0,0,0,0,0,0,0,
+62,63,63,63,63,63,64,0,0,0,0,0,0,0,0,0,0,0,0,0,
+62,63,63,63,63,63,64,0,0,0,0,0,0,0,0,0,0,0,0,0,
+62,63,63,63,63,63,64,0,0,0,0,0,0,0,0,0,0,0,0,0,
+76,77,77,77,77,77,78,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup name="Object LayerTop">
+  <properties>
+   <property name="level_layer" type="int" value="1"/>
+  </properties>
+  <object id="11" name="thingyTop" gid="4" x="32" y="38" width="32" height="32"/>
  </objectgroup>
 </map>

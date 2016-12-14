@@ -5,6 +5,14 @@
          "height":20,
          "name":"Tile Layer 1",
          "opacity":1,
+         "properties":
+            {
+             "level_layer":0
+            },
+         "propertytypes":
+            {
+             "level_layer":"int"
+            },
          "type":"tilelayer",
          "visible":true,
          "width":20,
@@ -16,8 +24,16 @@
          "height":20,
          "name":"Tile Layer 2",
          "opacity":1,
+         "properties":
+            {
+             "level_layer":0
+            },
+         "propertytypes":
+            {
+             "level_layer":"int"
+            },
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":20,
          "x":0,
          "y":0
@@ -27,6 +43,14 @@
          "height":20,
          "name":"Tile Layer 3",
          "opacity":1,
+         "properties":
+            {
+             "level_layer":0
+            },
+         "propertytypes":
+            {
+             "level_layer":"int"
+            },
          "type":"tilelayer",
          "visible":true,
          "width":20,
@@ -51,13 +75,72 @@
                  "y":32
                 }],
          "opacity":1,
+         "properties":
+            {
+             "level_layer":0
+            },
+         "propertytypes":
+            {
+             "level_layer":"int"
+            },
          "type":"objectgroup",
          "visible":true,
          "width":0,
          "x":0,
          "y":0
+        }, 
+        {
+         "data":[48, 49, 49, 49, 49, 49, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 63, 63, 63, 63, 63, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 63, 63, 63, 63, 63, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 63, 63, 63, 63, 63, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 63, 63, 63, 63, 63, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 76, 77, 77, 77, 77, 77, 78, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         "height":20,
+         "name":"Top",
+         "opacity":1,
+         "properties":
+            {
+             "level_layer":1
+            },
+         "propertytypes":
+            {
+             "level_layer":"int"
+            },
+         "type":"tilelayer",
+         "visible":true,
+         "width":20,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "height":20,
+         "name":"Object LayerTop",
+         "objects":[
+                {
+                 "gid":4,
+                 "height":32,
+                 "id":11,
+                 "name":"thingyTop",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":32,
+                 "y":38
+                }],
+         "opacity":1,
+         "properties":
+            {
+             "level_layer":1
+            },
+         "propertytypes":
+            {
+             "level_layer":"int"
+            },
+         "type":"objectgroup",
+         "visible":true,
+         "width":20,
+         "x":0,
+         "y":0
         }],
- "nextobjectid":11,
+ "nextobjectid":12,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tileheight":32,
@@ -353,6 +436,44 @@
                              "width":6,
                              "x":26.3636,
                              "y":5.81818
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "width":0,
+                     "x":0,
+                     "y":0
+                    }
+                },
+             "75":
+                {
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "height":0,
+                     "name":"",
+                     "objects":[
+                            {
+                             "height":31.6363636363636,
+                             "id":2,
+                             "name":"",
+                             "rotation":0,
+                             "type":"",
+                             "visible":true,
+                             "width":5.63636363636364,
+                             "x":0.363636363636364,
+                             "y":0
+                            }, 
+                            {
+                             "height":6.36363636363636,
+                             "id":3,
+                             "name":"",
+                             "rotation":0,
+                             "type":"",
+                             "visible":true,
+                             "width":25.4545454545455,
+                             "x":6.36363636363636,
+                             "y":25.2727272727273
                             }],
                      "opacity":1,
                      "type":"objectgroup",

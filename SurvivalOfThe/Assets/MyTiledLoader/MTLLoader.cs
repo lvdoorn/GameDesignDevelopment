@@ -410,7 +410,7 @@ public class MTLLoader : MonoBehaviour
       material.mainTexture = overlay;
       meshRenderer.material = material;
 
-      float scale = 1.0f;// ((LevelGridSize.y * TilePixelSize.y) / (LevelGridSize.x * TilePixelSize.x))
+   //   float scale = 1.0f;// ((LevelGridSize.y * TilePixelSize.y) / (LevelGridSize.x * TilePixelSize.x))
      
       meshRenderer.transform.localScale = new Vector3(scale, 1, scale * ((lvl.height * lvl.tileheight) / (lvl.width * lvl.tilewidth)));
       meshRenderer.gameObject.transform.localPosition = transform.localPosition + new Vector3(0.0f, 0.0f, +(lvl.layers.Count *0.01f) - 0.01f*( c));

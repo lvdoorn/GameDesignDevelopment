@@ -7,15 +7,16 @@ using Newtonsoft.Json.Linq;
 
 public class PlayersScript : MonoBehaviour
 {
-  private List<GameObject> players_;
+  private Dictionary<int, GameObject> players_;
 
   public GameObject prefab;
 
-  // Use this for initialization
+  public bool join_enabled_ = true;
+
   void Start()
   {
     int player_count = 3;
-    players_ = new List<GameObject>();
+    players_ = new Dictionary<int, GameObject>();
 
     AirConsole.instance.onConnect += OnConnect;
     AirConsole.instance.onDisconnect += OnDisconnect;   
@@ -23,58 +24,83 @@ public class PlayersScript : MonoBehaviour
     SpriteRenderer sr = prefab.GetComponent<SpriteRenderer>();
   }
 
-  // Update is called once per frame
   void Update()
   {
-
   }
+
+  // player handling
 
   void AddPlayer(int id)
   {
     GameObject clone = Instantiate(prefab, prefab.transform.position, prefab.transform.rotation) as GameObject;
-    Debug.Log("inst");
+    Debug.Log("Added Player "+id.ToString());
 
     clone.GetComponent<SpriteRenderer>().enabled = true;
     clone.GetComponent<PlayerScript>().enabled = true;
     clone.GetComponent<PlayerScript>().setId(id);
+    clone.GetComponent<PlayerScript>().layer_ = 0;
+    if (id == 1)
+      clone.GetComponent<PlayerScript>().layer_ = 1;    
 
-    players_.Add(clone);
+    players_.Add(id,clone);
 
     SetFocus(id);
   }
+
   void RemovePlayer(int id)
   {
-  
-    for (int i = players_.Count - 1; i > -1; i--)
-    {
-      PlayerScript ps = players_[i].GetComponent<PlayerScript>();
-      if (ps.getId() ==  id)
-      {
-        Destroy(players_[i] );
-        players_.RemoveAt(i);
-      }
-    }
+    Destroy(players_[id]);
+    players_.Remove(id);
   }
 
+  public GameObject GetPlayer(int id)
+  {
+    return players_[id];
+  }
+
+  // airconsole handlers
   void OnConnect(int device_id)
   {
-    AddPlayer(device_id);
+    if(join_enabled_)
+      AddPlayer(device_id);
   }
 
   void OnDisconnect(int device_id)
   {
     RemovePlayer(device_id);
   }
-  void SetFocus(int id)
-  {
-    for (int i = players_.Count - 1; i > -1; i--)
-    {
-      PlayerScript ps = players_[i].GetComponent<PlayerScript>();
-      if (ps.getId() == id)
-        ps.has_focus_ = true;
-      else
-        ps.has_focus_ = false;
 
+
+  // publics 
+
+  public void SetFocus(int id)
+  {
+    PlayerScript ps;
+    foreach (KeyValuePair<int,GameObject> player in players_ )
+    {
+      ps = player.Value.GetComponent<PlayerScript>();   
+      ps.has_focus_ = false;
+    }
+    ps = players_[id].GetComponent<PlayerScript>();
+    ps.has_focus_ = true;    
+  }
+
+  public void LayerSwitched(int layer_id)
+  {
+    foreach(KeyValuePair<int, GameObject> player in players_)
+    {
+      PlayerScript ps = player.Value.GetComponent<PlayerScript>();
+      if(ps.layer_ == layer_id)
+      {
+        ps.enabled = true;
+        ps.gameObject.SetActive(true);
+      }
+      else
+      {
+        ps.enabled = false;
+        ps.gameObject.SetActive(false);
+      }
     }
   }
+
 }

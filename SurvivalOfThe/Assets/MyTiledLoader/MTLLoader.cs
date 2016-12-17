@@ -67,6 +67,7 @@ public class MTLLoader : MonoBehaviour
   public void Load()
   {
     transform.localScale = new Vector3(scale,scale,scale);
+    LevelScript ls =   this.gameObject.GetComponent<LevelScript>();
     name = "Level";
     Debug.Log("LoadLevel");
     MTLParser p = new MTLParser();
@@ -75,6 +76,7 @@ public class MTLLoader : MonoBehaviour
     CreateLevel();
     if(lvl.objectlayers != null)
       CreateLevelObjects();
+    ls.Init();
   }
   private void LoadTilesets()
   {

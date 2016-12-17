@@ -13,8 +13,9 @@ public class PlayerScript : MonoBehaviour
   private int id_;
   private string movement_;
   public bool has_focus_;
+  public int layer_ = 0;
 
-  // Use this for initialization
+
   void Start ()
   {
     rb_ = GetComponent<Rigidbody2D>();
@@ -27,10 +28,11 @@ public class PlayerScript : MonoBehaviour
     AirConsole.instance.onMessage += OnMessage;
   }
 
-  // Update is called once per frame
   void Update()
   {
     bool m = false;
+
+    // set the movement
     if (movement_ == "R")
     {
       rb_.AddForce(new Vector2(5, 0));
@@ -52,14 +54,15 @@ public class PlayerScript : MonoBehaviour
       m = true;
     }
 
-
+    // if focused -> move camera
     if (has_focus_)
     {
       Camera cam = GameObject.Find("MainCamera").GetComponent<Camera>();
-      Vector3 p = GameObject.Find("Player").transform.position;
+      Vector3 p = gameObject.transform.position;
       cam.transform.position = new Vector3(p.x, p.y, -10);// + new Vector2(50,50) ;
     }
 
+    // animate it
     if (m && ( !moved_ ))
     {
       anim_.enabled = true;
@@ -72,17 +75,25 @@ public class PlayerScript : MonoBehaviour
 
   }
 
+  // Airconsole handler
+
   void OnMessage(int from, JToken data)
   {
-    Debug.Log((string)data["direction"]);
+   // Debug.Log((string)data["direction"]);
     if(from == id_)
     {
-      string dir = (string)data["direction"];
-      movement_ = dir;
+      if (data["direction"] != null)
+      {
+        string dir = (string)data["direction"];
+        movement_ = dir;
+      }
     }
 
   }
 
+  // publics 
+
+    // id getter setter
   public void setId(int id)
   {
     id_ = id;
@@ -91,5 +102,6 @@ public class PlayerScript : MonoBehaviour
   {
     return id_;
   }
+
 }
  

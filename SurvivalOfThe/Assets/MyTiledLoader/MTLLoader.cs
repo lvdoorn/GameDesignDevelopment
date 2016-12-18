@@ -85,6 +85,7 @@ public class MTLLoader : MonoBehaviour
     {
      // Debug.Log(lvl.tilesets[x].image);
       Texture2D ts = UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>("assets/Tiledmaps/"+ lvl.tilesets[x].image);
+      ts.filterMode = FilterMode.Point;
 
       if (ts == null)
         Debug.Log("Couldn't load tileset");
@@ -154,6 +155,7 @@ public class MTLLoader : MonoBehaviour
         MTGameObject obj = iobj.Value;
 
         Texture2D overlay = new Texture2D((int)(obj.width), (int)(obj.height));
+
         overlay.SetPixels(new Color[(int)obj.width * (int)obj.height]);
 
         Texture2D ts = tileset_textures[0];
@@ -182,7 +184,9 @@ public class MTLLoader : MonoBehaviour
 
         overlay.SetPixels( 0,0 , (int)mt_ts.tilewidth, (int)mt_ts.tileheight, c2);
 
-        overlay.filterMode = FilterMode.Trilinear;
+        //overlay.filterMode = FilterMode.Trilinear;
+        overlay.filterMode = FilterMode.Point;
+      
         overlay.wrapMode = TextureWrapMode.Clamp;
         overlay.Apply();
 
@@ -298,6 +302,7 @@ public class MTLLoader : MonoBehaviour
 
       //Debug.Log(realWidth);
       Texture2D overlay = new Texture2D((int)(realWidth), (int)(realHeight));
+      overlay.filterMode = FilterMode.Point;
 
       overlay.SetPixels(new Color[realWidth* realHeight]);
    
@@ -308,6 +313,7 @@ public class MTLLoader : MonoBehaviour
           int tileType = layer.data[y * lvl.height + x];
 
           Texture2D ts = tileset_textures[0];
+          ts.filterMode = FilterMode.Point;
           MTTileset mt_ts = lvl.tilesets[0];
           for (int tc = 0; tc < tileset_textures.Count; tc++)
           {
@@ -389,7 +395,8 @@ public class MTLLoader : MonoBehaviour
 
         }
       }
-      overlay.filterMode = FilterMode.Trilinear;
+      // overlay.filterMode = FilterMode.Trilinear;
+      overlay.filterMode = FilterMode.Point;
       overlay.wrapMode = TextureWrapMode.Clamp;
       overlay.Apply();
 

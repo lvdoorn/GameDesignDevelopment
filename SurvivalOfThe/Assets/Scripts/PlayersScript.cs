@@ -35,11 +35,12 @@ public class PlayersScript : MonoBehaviour
     GameObject clone = Instantiate(prefab, prefab.transform.position, prefab.transform.rotation) as GameObject;
     Debug.Log("Added Player "+id.ToString());
 
+    clone.transform.position = new Vector3(1, 0.28f, 0);
     clone.GetComponent<SpriteRenderer>().enabled = true;
     clone.GetComponent<PlayerScript>().enabled = true;
     clone.GetComponent<PlayerScript>().setId(id);
     clone.GetComponent<PlayerScript>().layer_ = 0;
-    if (id == 1)
+    if (id != 1) // DEBUG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       clone.GetComponent<PlayerScript>().layer_ = 1;    
 
     players_.Add(id,clone);
@@ -55,7 +56,7 @@ public class PlayersScript : MonoBehaviour
 
   public GameObject GetPlayer(int id)
   {
-    return players_[id];
+    return (players_.ContainsKey(id) ? players_[id] : null );
   }
 
   // airconsole handlers

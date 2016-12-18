@@ -63,22 +63,45 @@ public class LevelScript : MonoBehaviour
       players_.LayerSwitched(layer_id);
       foreach (Transform child in transform)
       {
-        if (child.gameObject.name.Contains("LevelLayer" + layer_id.ToString()) )
+        if (!child.gameObject.name.Contains("LevelLayer" + layer_id.ToString()))
         {
+          Debug.Log("Switch off :" + child.gameObject.name);
           child.gameObject.SetActive(false);
         }
         else
+        {
+          Debug.Log("Switch on :" + child.gameObject.name);
           child.gameObject.SetActive(true);
+        }
       }
     }
     current_layer_ = layer_id;
   }
 
-  private void SetFocus(int player_id)
+  public void SetFocus(int player_id)
   {
     GameObject pl = players_.GetPlayer(player_id);
-    SwitchLayer((pl.GetComponent<PlayerScript>()).layer_);
-    players_.SetFocus(player_id);
+    if (pl != null)
+    {
+      SwitchLayer((pl.GetComponent<PlayerScript>()).layer_);
+      players_.SetFocus(player_id);
+    }
+  }
+  public void FocusSomeone()
+  {
+    int player_id = 0;
+
+    while (player_id < 100)
+    {
+      GameObject pl = players_.GetPlayer(player_id);
+      if (pl != null)
+      {
+        SwitchLayer((pl.GetComponent<PlayerScript>()).layer_);
+        players_.SetFocus(player_id);
+        player_id = 100;
+      }
+      player_id++;
+    }
   }
 
 }

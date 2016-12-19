@@ -36,6 +36,7 @@ public class GameScript : MonoBehaviour
   {
     if (data["start"] != null)
     {
+      Debug.Log("received start");
       StartLevel();
     }
   }
@@ -55,6 +56,7 @@ public class GameScript : MonoBehaviour
       loader.Load();
       (current_level_.GetComponent<LevelScript>()).FocusSomeone();
       state_ = GameState.PLAY;
+      AirConsole.instance.Broadcast("GameStarts");
     }
     else
       Debug.Log("Couldn't load file");

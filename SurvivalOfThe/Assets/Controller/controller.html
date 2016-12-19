@@ -9,11 +9,11 @@
 <body onload="init()">
     <div id="left_side">
         <div id="action_container">
-            <div id="action1">
-                <div class="action_label">ACTION 1</div>
+            <div id="action1"  class="button"  ontouchstart="action1()" onmousedown="action1()">
+                <div class="button_label" id="action1lbl">ACTION 1</div>
             </div>
             <div id="action2">
-                <div class="action_label">ACTION 2</div>
+                <div class="action_label" class="button" ontouchstart="action2()" ontouchend="action2">ACTION 2</div>
             </div>
         </div>
         <div id="inventory_container">

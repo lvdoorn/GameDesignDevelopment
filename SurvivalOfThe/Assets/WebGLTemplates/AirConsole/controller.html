@@ -1,128 +1,62 @@
-
 <html>
+
 <head>
-    <script type="text/javascript"
-            src="https://www.airconsole.com/api/airconsole-1.4.0.js"></script>
-    <script type="text/javascript">
-    navigator.vibrate = (navigator.vibrate ||
-                         navigator.webkitVibrate ||
-                         navigator.mozVibrate ||
-                         navigator.msVibrate);
-
-    var airconsole;
-    /**
-     * Sets up the communication to the screen.
-     */
-    function init() {
-      airconsole = new AirConsole({"orientation": "portrait"});
-      airconsole.onMessage = function (from, data)
-      {
-        if (from == AirConsole.SCREEN && data.vibrate) {
-          navigator.vibrate(data.vibrate);
-          console.log("Vibrating: " + data.vibrate);
-        }
-      }
-      airconsole.onActivePlayersChange = function(player_number) {
-        updateText(player_number);
-      }
-      airconsole.onReady = function() {
-        updateText();
-      }
-    }
-/*
-	function updateText(player_number) {
-	  var div = document.getElementById("player_id");
-      if (airconsole.getActivePlayerDeviceIds().length == 0) {
-        div.innerHTML = "Waiting for more players.";
-      } else if (player_number == undefined) {
-        div.innerHTML = "This is a 2 player game";
-      } else if (player_number == 0) {
-        div.innerHTML = "You are the player on the left";
-      } else if (player_number == 1) {
-        div.innerHTML = "You are the player on the right";
-      };
-	}*/
-
-    /**
-     * Tells the screen to move the paddle of this player.
-     * @param dir
-     */
-	  function move(dir)
-	  {
-      //airconsole.message(AirConsole.SCREEN, { move: amount })
-	    airconsole.message(AirConsole.SCREEN, { direction: dir })
-	    console.log("move");
-    }
-
-    </script>
-    <style type="text/css">
-        @font-face {
-            font-family: 'Arial';
-        }
-
-        html, body {
-            height: 100%;
-            margin: 0px;
-            font-family: 'PressStart2P', sans-serif;
-            color: white;
-            text-align: center;
-            background-color: black;
-        }
-
-        .button {
-            display: inline-block;
-            height: 45%;
-            width: 98%;
-            background-color: #222;
-            position: relative;
-        }
-
-        .button_label {
-            position: absolute;
-            left: 0px;
-            width: 100%;
-            top: 50%;
-            margin-top: -6px;
-        }
-
-        #player_id {
-            position: absolute;
-            top: 50%;
-            left: 0%;
-            width: 100%;
-            margin-top: -8px;
-            color: #777;
-        }
-    </style>
+    <script type="text/javascript" src="https://www.airconsole.com/api/airconsole-1.4.0.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
+
 <body onload="init()">
-    
-
-  <div  style="height:50%; background-color:white" >
-
-
-  </div>
-  <div style="height:50%;" >
-    <div style="float:left; height:100%; width:33%; position:relative;" >
-      <div style="height: 33%;" ></div>
-      <div class="button" style="height: 33%; " ontouchstart="move('L')"  ontouchend="move('S')" onmousedown="move('L')" onmouseup="move('S')" > <div class="button_label" >LEFT</div></div>
-      <div style="height: 33%;"></div>
+    <div id="left_side">
+        <div id="action_container">
+            <div id="action1"  class="button"  ontouchstart="action1()" onmousedown="action1()">
+                <div class="button_label" id="action1lbl">ACTION 1</div>
+            </div>
+            <div id="action2">
+                <div class="action_label" class="button" ontouchstart="action2()" ontouchend="action2">ACTION 2</div>
+            </div>
+        </div>
+        <div id="inventory_container">
+            <div class="inventory_item">
+                <div class="inventory_label">ITEM 1</div>
+            </div>
+            <div class="inventory_item">
+                <div class="inventory_label">ITEM 2</div>
+            </div>
+            <div class="inventory_item">
+                <div class="inventory_label">ITEM 3</div>
+            </div>
+            <div class="inventory_item">
+                <div class="inventory_label">ITEM 4</div>
+            </div>
+        </div>
     </div>
-    <div style="float:left; position:relative;  height:100%; width:33%; ">
-      <div class="button" style="height: 33%;" ontouchstart="move('U')"  ontouchend="move('S')" onmousedown="move('U')" onmouseup="move('S')" > <div class="button_label">UP</div></div>
-      <div style="height: 33%;"></div>
-      <div class="button" style="height: 33%;" ontouchstart="move('D')"  ontouchend="move('S')" onmousedown="move('D')" onmouseup="move('S')" > <div class="button_label">DOWN</div></div>
-      
+    <div id="right_side">
+        <div class="container">
+            <div class="margin"></div>
+            <div class="button" ontouchstart="move('L')" ontouchend="move('S')" onmousedown="move('L')" onmouseup="move('S')">
+                <div class="button_label">LEFT</div>
+            </div>
+            <div class="margin"></div>
+        </div>
+        <div class="container">
+            <div class="button" ontouchstart="move('U')" ontouchend="move('S')" onmousedown="move('U')" onmouseup="move('S')">
+                <div class="button_label">UP</div>
+            </div>
+            <div class="margin"></div>
+            <div class="button" ontouchstart="move('D')" ontouchend="move('S')" onmousedown="move('D')" onmouseup="move('S')">
+                <div class="button_label">DOWN</div>
+            </div>
+
+        </div>
+        <div class="container">
+            <div class="margin"></div>
+            <div class="button" ontouchstart="move('R')" ontouchend="move('S')" onmousedown="move('R')" onmouseup="move('S')">
+                <div class="button_label">RIGHT</div>
+            </div>
+            <div class="margin"></div>
+        </div>
     </div>
-    <div style="float:left;height:100%; width:33%;position:relative;  ">
-       <div style="height: 33%;"></div>
-      <div class="button" style="height: 33%;" ontouchstart="move('R')"  ontouchend="move('S')" onmousedown="move('R')" onmouseup="move('S')" > <div class="button_label">RIGHT</div></div>
-      <div style="height: 33%;"></div>
-    </div>
-  </div>
-
-
-
-
 </body>
+
 </html>

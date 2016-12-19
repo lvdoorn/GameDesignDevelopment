@@ -45,6 +45,11 @@ public class PlayersScript : MonoBehaviour
 
     players_.Add(id,clone);
 
+    if(players_.Count < 3)
+      GameObject.Find("Game").GetComponent<GameScript>().RefreshWaitingScreen(players_.Count+" players connected ... waiting for players");
+    else
+      GameObject.Find("Game").GetComponent<GameScript>().RefreshWaitingScreen(players_.Count + " players connected ... waiting for start");
+
     SetFocus(id);
   }
 

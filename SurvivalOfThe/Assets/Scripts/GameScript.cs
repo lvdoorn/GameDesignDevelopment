@@ -3,6 +3,7 @@ using System.Collections;
 
 using NDream.AirConsole;
 using Newtonsoft.Json.Linq;
+using UnityEngine.UI;
 
 enum GameState
 {
@@ -21,6 +22,7 @@ public class GameScript : MonoBehaviour
     current_level_.transform.SetParent(transform);
 
     AirConsole.instance.onMessage += OnMessage;
+    RefreshWaitingScreen("Waiting for players");
 
   }
   void Update()
@@ -57,9 +59,15 @@ public class GameScript : MonoBehaviour
       (current_level_.GetComponent<LevelScript>()).FocusSomeone();
       state_ = GameState.PLAY;
       AirConsole.instance.Broadcast("GameStarts");
+      GameObject.Find("WaitingScreen").SetActive(false);
+
     }
     else
       Debug.Log("Couldn't load file");
+  }
+  public void RefreshWaitingScreen(string text)
+  {
+    GameObject.Find("WaitingScreenText").GetComponent<Text>().text = text;
   }
 }
 

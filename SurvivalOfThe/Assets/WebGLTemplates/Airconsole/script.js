@@ -83,7 +83,7 @@ function action1()
   }
   if (state === "playing")
   {
-
+    airconsole.message(AirConsole.SCREEN, { action: 1 });
   }
 }
 function action2()

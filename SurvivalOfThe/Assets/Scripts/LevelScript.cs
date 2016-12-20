@@ -18,22 +18,6 @@ public class LevelScript : MonoBehaviour
   }	
 	void Update ()
   {
-    /*
-    if (Input.GetKeyDown("1"))
-    {
-      Debug.Log("kd1");
-      SetFocus(1);
-    }
-    if (Input.GetKeyDown("2"))
-    {
-      Debug.Log("kd2");
-      SetFocus(2);
-    }
-    if (Input.GetKeyDown("3"))
-    {
-      Debug.Log("kd3");
-      SetFocus(3);
-    }*/
 
   }
   public void Init()
@@ -102,6 +86,39 @@ public class LevelScript : MonoBehaviour
       }
       player_id++;
     }
+  }
+
+  // scripted 
+
+  public void TriggerObject(Vector3 player_position)
+  {
+    GameObject lobjs = GameObject.Find("LevelLayer" + current_layer_.ToString()).transform.FindChild("Objects").gameObject;
+    if (lobjs != null)
+    {
+      foreach (Transform child in lobjs.transform)
+      {        
+        float d = Vector3.Distance(child.GetChild(0).position, player_position);
+        if(d < 0.3f)
+        {
+          Debug.Log(child.gameObject.name);
+          string action = child.gameObject.GetComponent<ObjectScript>().action;
+          Debug.Log(action);
+          if ( action.StartsWith("destroy") )
+          {
+            string[] parts = action.Split(':');
+            RemoveObject(parts[1]);
+          }
+        }
+      }
+    }
+    else
+      Debug.Log("couldn't find obj");
+  }
+
+  public void RemoveObject(string name)
+  {
+    Debug.Log("Destroying "+name);
+    Destroy( GameObject.Find(name) );
   }
 
 }

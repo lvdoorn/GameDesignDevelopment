@@ -110,6 +110,7 @@ public class MTGameObject
   public float width;
   public float x;
   public float y;
+  public string action = "";
 }
 
 
@@ -231,7 +232,15 @@ public class MTGameObject
       obj.x = node["x"].AsFloat;
       obj.y = node["y"].AsFloat;
       obj.gid = node["gid"].AsInt;
-      obj.id = node["id"].AsInt;
+      obj.id = node["id"].AsInt;      
+
+      if (node["properties"] != null)
+      {
+        if (node["properties"]["action"] != null)
+          obj.action = node["properties"]["action"];
+      }
+
+
       list.Add(node["id"].AsInt, obj);
     }
     return list;
@@ -311,6 +320,7 @@ public class MTGameObject
       obj.rotation = objectNode["rotation"].AsInt;
       obj.x = objectNode["x"].AsFloat;
       obj.y = objectNode["y"].AsFloat;
+   
 
       objects.Add(objectNode["id"].AsInt, obj);
     }

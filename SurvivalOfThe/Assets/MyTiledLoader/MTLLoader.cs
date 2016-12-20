@@ -219,12 +219,18 @@ public class MTLLoader : MonoBehaviour
         //  meshRenderer.transform.localScale = new Vector3(scale, 1, scale * ((mt_ts.tileheight) / (mt_ts.tilewidth)));
         // meshRenderer.gameObject.transform.localPosition = transform.localPosition + new Vector3(0.0f, 0.0f, -0.01f * c);
 
+        ObjectScript objscript = main_obj.AddComponent<ObjectScript>();
+        objscript.action = obj.action;
+
+
         // create collision boxes
         if (obj.gid != 0)
         {
           if (mt_ts.tiles.ContainsKey(obj.gid - 1))
           {
             MTTile mt_tile = mt_ts.tiles[obj.gid - 1];
+
+            bool f = true;
 
             foreach (KeyValuePair<int, MTObject> iobj2 in mt_tile.objects)
             {
@@ -238,9 +244,15 @@ public class MTLLoader : MonoBehaviour
               // off -= new Vector3(-(float)obj2.width * scaleX / 2.0f, (float)obj2.height * scaleY / 2.0f, 0);
               // off += new Vector3(-5.0f, 5.0f, 0);
               b2d.offset= gobj.transform.position;
-              Rigidbody2D body = main_obj.AddComponent<Rigidbody2D>();
-              body.isKinematic = true;
+              if (f)
+              {
+                Rigidbody2D body = main_obj.AddComponent<Rigidbody2D>();
+                body.isKinematic = true;
+              }
+
+
               b2d.transform.position = main_obj.transform.position;
+              f = false;
             }
 
           }
@@ -366,7 +378,10 @@ public class MTLLoader : MonoBehaviour
               MTTile mt_tile = mt_ts.tiles[tileType-1];
 
               Debug.Log(tileType-1);
-              foreach(KeyValuePair<int, MTObject> iobj in mt_tile.objects)
+
+              bool f = true;
+
+              foreach (KeyValuePair<int, MTObject> iobj in mt_tile.objects)
               {
                 float scaleX = (10.0f * this.scale) / (float) (lvl.tilewidth * lvl.width);
                 float scaleY = (10.0f * this.scale) / (float)(lvl.tileheight * lvl.height);
@@ -382,10 +397,14 @@ public class MTLLoader : MonoBehaviour
                 off -= new Vector3(-(float)obj.width * scaleX/2.0f, (float)obj.height * scaleY/2.0f, 0);
                 off += new Vector3(-(10.0f * this.scale) / 2.0f, (10.0f * this.scale) / 2.0f, 0);
 
-                Rigidbody2D body = go.AddComponent<Rigidbody2D>();
-                body.isKinematic = true;
+                if (f)
+                {
+                  Rigidbody2D body = go.AddComponent<Rigidbody2D>();
+                  body.isKinematic = true;
+                  f = false;
+                }
 
-                b2d.transform.position = transform.position + off;
+                b2d.transform.position = transform.position + off;        
 
                 tiles_layer.Add(go);
               }

@@ -19,8 +19,10 @@ public class PlayersScript : MonoBehaviour
     players_ = new Dictionary<int, GameObject>();
 
     AirConsole.instance.onConnect += OnConnect;
-    AirConsole.instance.onDisconnect += OnDisconnect;   
-    
+    AirConsole.instance.onDisconnect += OnDisconnect;
+    AirConsole.instance.onMessage += OnMessage;
+
+
     SpriteRenderer sr = prefab.GetComponent<SpriteRenderer>();
   }
 
@@ -40,7 +42,7 @@ public class PlayersScript : MonoBehaviour
     clone.GetComponent<PlayerScript>().enabled = true;
     clone.GetComponent<PlayerScript>().setId(id);
     clone.GetComponent<PlayerScript>().layer_ = 0;
-    if (id != 1) // DEBUG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    if (id != 2) // DEBUG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       clone.GetComponent<PlayerScript>().layer_ = 1;    
 
     players_.Add(id,clone);
@@ -75,7 +77,24 @@ public class PlayersScript : MonoBehaviour
   {
     RemovePlayer(device_id);
   }
-
+  void OnMessage(int from, JToken data)
+  {
+    if (data["action"] != null)
+    {
+      if (((int)data["action"]) == 1)
+      {
+        Debug.Log("received action1");
+        GameObject player = players_[from];
+        Vector3 pos = player.transform.position;
+        GameObject lvl = GameObject.Find("Level");
+        if (lvl != null)
+        {
+          LevelScript ls = lvl.GetComponent<LevelScript>();
+          ls.TriggerObject(pos);
+        }
+      }
+    }
+  }
 
   // publics 
 

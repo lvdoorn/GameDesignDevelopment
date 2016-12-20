@@ -47,7 +47,7 @@ public class LevelScript : MonoBehaviour
   {
     if (data["focus"] != null)
     {
-      Debug.Log((string)data["focus"]);
+      //Debug.Log((string)data["focus"]);
       int id = from;
       SetFocus(id);
     }

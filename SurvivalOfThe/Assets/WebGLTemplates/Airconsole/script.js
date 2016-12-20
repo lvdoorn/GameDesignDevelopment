@@ -91,4 +91,15 @@ function action2()
 
 }
 
+function itemUsed(id)
+{
+  console.log("item");
+  console.log(id);
+}
+
+function requestFocus()
+{
+  console.log("request focus");
+  airconsole.message(AirConsole.SCREEN, { focus: 1 });
+}
 

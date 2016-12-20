@@ -14,6 +14,8 @@ public class PlayerScript : MonoBehaviour
   private string movement_;
   public bool has_focus_;
   public int layer_ = 0;
+  private bool flipped_ = false;
+  private Vector3 offset;
 
 
   void Start ()
@@ -21,9 +23,10 @@ public class PlayerScript : MonoBehaviour
     rb_ = GetComponent<Rigidbody2D>();
     moved_ = false;
     anim_ = GetComponent<Animator>();
-    anim_.enabled = false;
+    //anim_.enabled = false;
     movement_ = "S";
     has_focus_ = false;
+    offset = new Vector3(((float)gameObject.GetComponent<SpriteRenderer>().sprite.texture.width) / (gameObject.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit * 10), 0, 0);
 
     AirConsole.instance.onMessage += OnMessage;
   }
@@ -31,16 +34,32 @@ public class PlayerScript : MonoBehaviour
   void Update()
   {
     bool m = false;
-
+    
     // set the movement
     if (movement_ == "R")
     {
       rb_.AddForce(new Vector2(5, 0));
+      gameObject.GetComponent<SpriteRenderer>().flipX = false;
+      if(flipped_)
+      {
+        transform.position -= offset;
+        gameObject.GetComponent<BoxCollider2D>().offset += new Vector2(offset.x, offset.y);
+      }
+
+      flipped_ = false;
       m = true;
     }
     if (movement_ == "L")
     {
       rb_.AddForce(new Vector2(-5, 0));
+      gameObject.GetComponent<SpriteRenderer>().flipX = true;
+      if (!flipped_)
+      {
+        transform.position += offset;
+        gameObject.GetComponent<BoxCollider2D>().offset -= new Vector2(offset.x, offset.y);
+      }
+
+      flipped_ = true;
       m = true;
     }
     if (movement_ == "U")
@@ -58,18 +77,23 @@ public class PlayerScript : MonoBehaviour
     if (has_focus_)
     {
       Camera cam = GameObject.Find("MainCamera").GetComponent<Camera>();
-      Vector3 p = gameObject.transform.position;
-      cam.transform.position = new Vector3(p.x, p.y, -10);// + new Vector2(50,50) ;
+      Vector3 p = getCenteredPosition();
+      cam.transform.position = new Vector3(p.x,p.y, -10);// + new Vector2(50,50) ;
     }
 
     // animate it
     if (m && ( !moved_ ))
     {
-      anim_.enabled = true;
+      //anim_.Stop();
+      anim_.Play("WalkSide");
+
+      //anim_.enabled = true;
     }
     if(!m && moved_)
     {
-      anim_.enabled = false;
+      //anim_.Stop();
+      anim_.Play("Idle");
+      //anim_.enabled = false;
     }
     moved_ = m;
 
@@ -101,6 +125,17 @@ public class PlayerScript : MonoBehaviour
   public int getId()
   {
     return id_;
+  }
+
+  public Vector3 getCenteredPosition()
+  {
+    Vector3 v = transform.position;
+    if (flipped_)
+      v -= offset / 2.0f;
+    else
+      v += offset / 2.0f;
+    return v;
+
   }
 
 }

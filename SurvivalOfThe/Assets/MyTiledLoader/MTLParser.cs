@@ -111,6 +111,7 @@ public class MTGameObject
   public float x;
   public float y;
   public string action = "";
+  public string animation = "";
 }
 
 
@@ -238,6 +239,8 @@ public class MTGameObject
       {
         if (node["properties"]["action"] != null)
           obj.action = node["properties"]["action"];
+        if (node["properties"]["animation"] != null)
+          obj.animation = node["properties"]["animation"];
       }
 
 

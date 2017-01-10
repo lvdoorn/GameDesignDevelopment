@@ -88,6 +88,17 @@ public class LevelScript : MonoBehaviour
     }
   }
 
+  private void FocusInput( string type )
+  {
+
+  }
+  private void DefocusInput()
+  {
+
+  }
+
+
+
   // scripted 
 
   public void TriggerObject(Vector3 player_position)
@@ -120,5 +131,6 @@ public class LevelScript : MonoBehaviour
     Debug.Log("Destroying "+name);
     Destroy( GameObject.Find(name) );
   }
+
 
 }

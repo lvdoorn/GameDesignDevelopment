@@ -65,6 +65,8 @@ public class GameScript : MonoBehaviour
     else
       Debug.Log("Couldn't load file");
   }
+  
+
   public void RefreshWaitingScreen(string text)
   {
     GameObject.Find("WaitingScreenText").GetComponent<Text>().text = text;

@@ -296,9 +296,17 @@ public class LevelScript : MonoBehaviour
   }
 
   public void RemoveObject(string name)
-  {    
-    Debug.Log("Destroying "+name);
-    Destroy(GameObject.Find("Game").transform.FindChild(name).gameObject);
+  {
+    for( int x=0; x < GameObject.Find("Level").transform.childCount; x++)
+    {
+      Transform ll = GameObject.Find("Level").transform.GetChild(x);
+      Transform o = ll.FindChild("Objects").FindChild(name);
+      if (o != null)
+      {
+        Debug.Log("Destroying " + name);
+        Destroy(o.gameObject);
+      }
+    }   
   }
 
   public bool IsInVoteMode()

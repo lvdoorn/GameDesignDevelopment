@@ -39,7 +39,7 @@ public class GameScript : MonoBehaviour
     if (data["start"] != null)
     {
       Debug.Log("received start");
-      StartLevel();
+      StartExtendedTutorial();
     }
   }
 
@@ -60,6 +60,31 @@ public class GameScript : MonoBehaviour
       state_ = GameState.PLAY;
       AirConsole.instance.Broadcast("GameStarts");
       GameObject.Find("WaitingScreen").SetActive(false);
+    
+
+
+
+    }
+    else
+      Debug.Log("Couldn't load file");
+  }
+
+  public void StartExtendedTutorial()
+  {
+    current_level_.AddComponent<LevelScript>();
+    MTLLoader loader = current_level_.AddComponent<MTLLoader>();
+    loader.level_file = UnityEditor.AssetDatabase.LoadAssetAtPath<TextAsset>("assets/Tiledmaps/tutorial_ex.json");
+    //loader.scale = 1.0f;
+    GameObject.Find("Players").GetComponent<PlayersScript>().join_enabled_ = false;
+
+    if (loader.level_file != null)
+    {
+      loader.Load();
+      (current_level_.GetComponent<LevelScript>()).FocusSomeone();
+      state_ = GameState.PLAY;
+      AirConsole.instance.Broadcast("GameStarts");
+      GameObject.Find("WaitingScreen").SetActive(false);
+      GameObject.Find("Players").GetComponent<PlayersScript>().MoveAllPlayers(new Vector3(0.0f, 2.95f, 0));
 
     }
     else
@@ -70,6 +95,11 @@ public class GameScript : MonoBehaviour
   public void RefreshWaitingScreen(string text)
   {
     GameObject.Find("WaitingScreenText").GetComponent<Text>().text = text;
+  }
+
+  public LevelScript GetCurrentLevel()
+  {
+    return current_level_.GetComponent<LevelScript>();
   }
 }
 

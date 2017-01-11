@@ -41,9 +41,8 @@ public class PlayersScript : MonoBehaviour
     clone.GetComponent<SpriteRenderer>().enabled = true;
     clone.GetComponent<PlayerScript>().enabled = true;
     clone.GetComponent<PlayerScript>().setId(id);
-    clone.GetComponent<PlayerScript>().layer_ = 0;
-    if (id != 2) // DEBUG !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      clone.GetComponent<PlayerScript>().layer_ = 1;    
+
+    clone.GetComponent<PlayerScript>().layer_ = 2;   
 
     players_.Add(id,clone);
 
@@ -65,6 +64,15 @@ public class PlayersScript : MonoBehaviour
   {
     return (players_.ContainsKey(id) ? players_[id] : null );
   }
+  public void MoveAllPlayers(Vector3 v)
+  {
+    foreach( KeyValuePair<int,GameObject> ko in players_)
+    {
+      ko.Value.transform.position = v;
+      Debug.Log("Mode Player " + ko.Key.ToString());
+    }
+  }
+
 
   // airconsole handlers
   void OnConnect(int device_id)
@@ -126,6 +134,71 @@ public class PlayersScript : MonoBehaviour
         ps.gameObject.SetActive(false);
       }
     }
+  }
+  public int GatherVotes()
+  {
+    int v1 = 0;
+    int v2 = 0;
+    foreach (KeyValuePair<int, GameObject> player in players_)
+    {
+      int v = player.Value.GetComponent<PlayerScript>().getVote();
+      if (v == -1)
+        return -1;
+      if (v == 0)
+        v1++;
+      if (v == 1)
+        v2++;
+    }
+    if (v1 > v2)
+      return 0;
+    else
+      return 1;
+  }
+  public List<int> VotesYes()
+  {
+    List<int> tl = new List<int>();
+    foreach (KeyValuePair<int, GameObject> player in players_)
+    {
+      int v = player.Value.GetComponent<PlayerScript>().getVote();
+      if (v == 0)
+        tl.Add(player.Key);
+        
+    }
+    return tl;
+  }
+  public List<int> VotesNo()
+  {
+    List<int> tl = new List<int>();
+    foreach (KeyValuePair<int, GameObject> player in players_)
+    {
+      int v = player.Value.GetComponent<PlayerScript>().getVote();
+      if (v == 1)
+        tl.Add(player.Key);
+
+    }
+    return tl;
+  }
+
+  public void SetVoteMode()
+  {
+    foreach (KeyValuePair<int, GameObject> player in players_)
+    {
+      player.Value.GetComponent<PlayerScript>().resetVote();
+    }
+  }
+  public void RefreshVisibility()
+  {
+    int active_idx =0;
+    int layer_id = 0;
+    foreach (KeyValuePair<int, GameObject> player in players_)
+    {
+      if (player.Value.GetComponent<PlayerScript>().hasFocus() )
+      {
+        active_idx = player.Key;
+        layer_id = player.Value.GetComponent<PlayerScript>().layer_;
+      }
+    }
+    LayerSwitched(layer_id);
   }
 
 }

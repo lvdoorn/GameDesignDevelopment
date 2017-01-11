@@ -216,7 +216,7 @@ public class MTLLoader : MonoBehaviour
           main_obj.transform.localScale = new Vector3(scaleX * mt_ts.tilewidth, scaleY * mt_ts.tileheight,1);
           main_obj.transform.localPosition = new Vector3(obj.x * scaleX / (scale),  0, obj.y * scaleY / (scale));
           main_obj.transform.position =  - new Vector3((10*scale) / 2.0f,-(10*scale) / 2.0f, 0) + new Vector3(obj.x * scaleX, -obj.y * scaleY, 0) - new Vector3(-(float)obj.width * scaleX / 2.0f, -(float)obj.height * scaleY / 2.0f, 0);//new Vector3(obj.x * scaleX, 0, -obj.y * scaleY); + new Vector3(-( scale) / 2.0f, 0, (scale) / 2.0f) - new Vector3(-(float)obj.width * scaleX / 2.0f,  0, -(float)obj.height * scaleY / 2.0f);
-
+          main_obj.AddComponent<ObjectScript>();
 
           if (animatcontroller != null)
           {
@@ -276,8 +276,9 @@ public class MTLLoader : MonoBehaviour
 
           ObjectScript objscript = main_obj.AddComponent<ObjectScript>();
           objscript.action = obj.action;
-
-
+          objscript.switch_layer = obj.switch_layer;
+          objscript.turn_off = obj.turn_off;
+          objscript.trigger_vote = obj.trigger_vote;
         }
 
         // create collision boxes

@@ -3,12 +3,16 @@ using System.Collections;
 
 using NDream.AirConsole;
 using Newtonsoft.Json.Linq;
-
+using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class LevelScript : MonoBehaviour
 {
   private PlayersScript players_;
   private int current_layer_ = -1;
+
+  private bool vote_mode = false;
+  private string vote_event = "";
 
 	void Start ()
   {
@@ -18,7 +22,35 @@ public class LevelScript : MonoBehaviour
   }	
 	void Update ()
   {
+    if(vote_mode)
+    {
+      int vote = players_.GatherVotes();
+      if(vote != -1)
+      {
+        EndVoteMode(vote);
+      }
+      else
+      {
+        string yes = "Yes(Action1) [";
+        foreach(int k in players_.VotesYes( ) )
+        {
+          yes += k.ToString() + ", ";
+        }
+        yes += "]";
 
+        string no = "No(Action2) [";
+        foreach (int k in players_.VotesNo())
+        {
+          no += k.ToString() + ", ";
+        }
+        no += "]";
+
+        GameObject.Find("Game").transform.GetChild(1).GetChild(1).GetChild(1).GetComponent<Text>().text = yes;
+        GameObject.Find("Game").transform.GetChild(1).GetChild(1).GetChild(2).GetComponent<Text>().text = no;
+      }
+    }
+    if (Input.GetKeyDown(KeyCode.V))
+      BeginVoteMode("disable_pipe_system","Test");
   }
   public void Init()
   {
@@ -88,13 +120,32 @@ public class LevelScript : MonoBehaviour
     }
   }
 
-  private void FocusInput( string type )
+  private void BeginVoteMode(string type, string question )
   {
+    vote_mode = true;
+    vote_event = type;
 
+    GameObject.Find("Game").transform.GetChild(1).gameObject.SetActive(true);
+    Vector3 v = GameObject.Find("MainCamera").transform.position;
+    v.z = 0;
+    GameObject.Find("Game").transform.GetChild(1).position =  v;
+    GameObject.Find("Game").transform.GetChild(1).GetChild(1).GetChild(0).GetComponent<Text>().text = question;
+    GameObject.Find("Players").GetComponent<PlayersScript>().SetVoteMode();
   }
-  private void DefocusInput()
-  {
 
+  private void EndVoteMode(int vote)
+  {
+    Debug.Log(vote);
+    vote_mode = false;
+    GameObject.Find("Game").transform.GetChild(1).gameObject.SetActive(false);
+    if( vote_event == "disable_pipe_system"  )
+    {
+      if(vote == 0 )
+      {
+        RemoveObject("fire1");
+        RemoveObject("fire2");
+      }
+    }
   }
 
 
@@ -107,17 +158,26 @@ public class LevelScript : MonoBehaviour
     if (lobjs != null)
     {
       foreach (Transform child in lobjs.transform)
-      {        
-        float d = Vector3.Distance(child.GetChild(0).position, player_position);
-        if(d < 0.3f)
+      {
+        if (child.childCount > 0)
         {
-          Debug.Log(child.gameObject.name);
-          string action = child.gameObject.GetComponent<ObjectScript>().action;
-          Debug.Log(action);
-          if ( action.StartsWith("destroy") )
+          float d = Vector3.Distance(child.GetChild(0).position, player_position);
+          if (d < 0.3f)
           {
-            string[] parts = action.Split(':');
-            RemoveObject(parts[1]);
+            Debug.Log(child.gameObject.name);
+            string action = child.gameObject.GetComponent<ObjectScript>().action;
+            Debug.Log(action);
+            if (action.StartsWith("destroy"))
+            {
+              string[] parts = action.Split(':');
+              RemoveObject(parts[1]);
+            }
+            string triggerVote = child.gameObject.GetComponent<ObjectScript>().trigger_vote;
+            if (triggerVote != "")
+            {
+              string[] parts = triggerVote.Split('|');
+              BeginVoteMode(parts[0], parts[1]);
+            }
           }
         }
       }
@@ -125,12 +185,126 @@ public class LevelScript : MonoBehaviour
     else
       Debug.Log("couldn't find obj");
   }
-
-  public void RemoveObject(string name)
+  public void CheckMoveTrigger(GameObject obj)
   {
-    Debug.Log("Destroying "+name);
-    Destroy( GameObject.Find(name) );
+    int player_id = obj.GetComponent<PlayerScript>().getId();
+    GameObject lobjs = GameObject.Find("LevelLayer" + current_layer_.ToString()).transform.FindChild("Objects").gameObject;
+    if (lobjs != null)
+    {
+      foreach (Transform child in lobjs.transform)
+      {
+        if (child.childCount > 0)
+        {
+          Vector2 tv = obj.GetComponent<BoxCollider2D>().offset;
+          float d = Vector3.Distance(child.GetChild(0).position  , obj.transform.position + new Vector3(tv.x, tv.y, 0));
+          //Debug.Log(d);
+          // one time 
+          if ((d < 0.3f) && child.gameObject.GetComponent<ObjectScript>().wasOutside(player_id))
+          {
+            child.gameObject.GetComponent<ObjectScript>().PlayerWasInside(player_id);
+
+            int switch_layer = child.gameObject.GetComponent<ObjectScript>().switch_layer;
+            string t = child.gameObject.GetComponent<ObjectScript>().turn_off;
+            if (switch_layer != -1)
+            {
+              PlayerScript ps = obj.GetComponent<PlayerScript>();
+              ps.setLayer(switch_layer);
+              if (ps.hasFocus())
+              {
+                SetFocus(ps.getId());
+              }
+              else
+              {
+                players_.RefreshVisibility();
+              }
+            }
+            if (t != "")
+            {
+              List<GameObject> objs = new List<GameObject>();
+              string[] parts = t.Split('|');
+              foreach (string p in parts)
+              {
+                objs.Add(GameObject.Find(p));
+              }
+              
+              foreach (GameObject p in objs)
+              {
+                if (p != null)
+                {
+                  p.SetActive(false);
+                  child.gameObject.GetComponent<ObjectScript>().tmp_objects.Add(p);
+                }
+              }
+              
+            }
+          }
+
+          if (d >0.6f)
+          {
+            if(!child.gameObject.GetComponent<ObjectScript>().wasOutside(player_id))
+            {
+              Debug.Log("OUTSIDE");
+              foreach (GameObject p in child.gameObject.GetComponent<ObjectScript>().tmp_objects)
+              {
+                p.SetActive(true);
+              }
+              child.gameObject.GetComponent<ObjectScript>().tmp_objects.Clear();
+            }
+
+            child.gameObject.GetComponent<ObjectScript>().was_outside = true;
+            child.gameObject.GetComponent<ObjectScript>().PlayerWasOutside(player_id);
+          }
+          // 
+         /* if (child.gameObject.GetComponent<ObjectScript>().turn_off != "")
+          {
+            string t = child.gameObject.GetComponent<ObjectScript>().turn_off;
+
+            List<GameObject> objs = new List<GameObject> ();
+            string[] parts = t.Split('|');
+            foreach ( string p in parts)
+            {
+              objs.Add( GameObject.Find(p) );
+            }
+
+            if (d < 0.2f)
+            {
+              foreach (GameObject p in objs)
+              {
+                if (p != null)
+                {
+                  p.SetActive(false);
+                  child.gameObject.GetComponent<ObjectScript>().tmp_objects.Add(p);
+                }
+              }
+            }
+            else
+            {
+
+              foreach (GameObject p in child.gameObject.GetComponent<ObjectScript>().tmp_objects)
+              {
+                  p.SetActive(true);
+              }
+              child.gameObject.GetComponent<ObjectScript>().tmp_objects.Clear();
+            }
+          }*/
+        }
+       
+      }
+    }
+    else
+      Debug.Log("couldn't find obj");
   }
 
+  public void RemoveObject(string name)
+  {    
+    Debug.Log("Destroying "+name);
+    Destroy(GameObject.Find("Game").transform.FindChild(name).gameObject);
+  }
+
+  public bool IsInVoteMode()
+  {
+    return vote_mode;
+  }
+ 
 
 }

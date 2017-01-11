@@ -55,9 +55,11 @@ function updateText(player_number)
 function updateText()
 {
   var div = document.getElementById("action1lbl");
+  var div2 = document.getElementById("action2lbl");
   if(state == "playing")
   {
     div.innerHTML = "Action 1";
+    div2.innerHTML = "Action 2";
   }
   if (state == "waiting") {
     div.innerHTML = "Start game";
@@ -88,7 +90,10 @@ function action1()
 }
 function action2()
 {
-
+  if (state === "playing")
+  {
+    airconsole.message(AirConsole.SCREEN, { action: 2 });
+  }
 }
 
 function itemUsed(id)

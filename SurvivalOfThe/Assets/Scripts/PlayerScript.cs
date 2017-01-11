@@ -17,6 +17,9 @@ public class PlayerScript : MonoBehaviour
   private bool flipped_ = false;
   private Vector3 offset;
 
+  private int selected_answer = -1;
+  public bool holds_trigger = false;
+
 
   void Start ()
   {
@@ -34,68 +37,77 @@ public class PlayerScript : MonoBehaviour
   void Update()
   {
     bool m = false;
-    
-    // set the movement
-    if (movement_ == "R")
+
+    LevelScript ls = GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel();
+
+    if (!ls.IsInVoteMode())
     {
-      rb_.AddForce(new Vector2(5, 0));
-      gameObject.GetComponent<SpriteRenderer>().flipX = false;
-      if(flipped_)
+      // set the movement
+      if (movement_ == "R")
       {
-        transform.position -= offset;
-        gameObject.GetComponent<BoxCollider2D>().offset += new Vector2(offset.x, offset.y);
+        rb_.AddForce(new Vector2(5, 0));
+        gameObject.GetComponent<SpriteRenderer>().flipX = false;
+        if (flipped_)
+        {
+          transform.position -= offset;
+          gameObject.GetComponent<BoxCollider2D>().offset += new Vector2(offset.x, offset.y);
+        }
+
+        flipped_ = false;
+        m = true;
+      }
+      if (movement_ == "L")
+      {
+        rb_.AddForce(new Vector2(-5, 0));
+        gameObject.GetComponent<SpriteRenderer>().flipX = true;
+        if (!flipped_)
+        {
+          transform.position += offset;
+          gameObject.GetComponent<BoxCollider2D>().offset -= new Vector2(offset.x, offset.y);
+        }
+
+        flipped_ = true;
+        m = true;
+      }
+      if (movement_ == "U")
+      {
+        rb_.AddForce(new Vector2(0, 5));
+        m = true;
+      }
+      if (movement_ == "D")
+      {
+        rb_.AddForce(new Vector2(0, -5));
+        m = true;
       }
 
-      flipped_ = false;
-      m = true;
-    }
-    if (movement_ == "L")
-    {
-      rb_.AddForce(new Vector2(-5, 0));
-      gameObject.GetComponent<SpriteRenderer>().flipX = true;
-      if (!flipped_)
+      // if focused -> move camera
+      if (has_focus_)
       {
-        transform.position += offset;
-        gameObject.GetComponent<BoxCollider2D>().offset -= new Vector2(offset.x, offset.y);
+        Camera cam = GameObject.Find("MainCamera").GetComponent<Camera>();
+        Vector3 p = getCenteredPosition();
+        cam.transform.position = new Vector3(p.x, p.y, -10);// + new Vector2(50,50) ;
+      }
+      if (moved_)
+      {
+        GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().CheckMoveTrigger(this.gameObject);
       }
 
-      flipped_ = true;
-      m = true;
-    }
-    if (movement_ == "U")
-    {
-      rb_.AddForce(new Vector2(0, 5));
-      m = true;
-    }
-    if (movement_ == "D")
-    {
-      rb_.AddForce(new Vector2(0, -5));
-      m = true;
-    }
+      // animate it
+      if (m && (!moved_))
+      {
+        //anim_.Stop();
+        anim_.Play("WalkSide");
 
-    // if focused -> move camera
-    if (has_focus_)
-    {
-      Camera cam = GameObject.Find("MainCamera").GetComponent<Camera>();
-      Vector3 p = getCenteredPosition();
-      cam.transform.position = new Vector3(p.x,p.y, -10);// + new Vector2(50,50) ;
+        //anim_.enabled = true;
+      }
+      if (!m && moved_)
+      {
+        //anim_.Stop();
+        anim_.Play("Idle");
+        //anim_.enabled = false;
+      }
+      moved_ = m;
     }
-
-    // animate it
-    if (m && ( !moved_ ))
-    {
-      //anim_.Stop();
-      anim_.Play("WalkSide");
-
-      //anim_.enabled = true;
-    }
-    if(!m && moved_)
-    {
-      //anim_.Stop();
-      anim_.Play("Idle");
-      //anim_.enabled = false;
-    }
-    moved_ = m;
 
 
   }
@@ -104,16 +116,26 @@ public class PlayerScript : MonoBehaviour
 
   void OnMessage(int from, JToken data)
   {
-   // Debug.Log((string)data["direction"]);
-    if(from == id_)
+    // Debug.Log((string)data["direction"]);
+    if (from == id_)
     {
       if (data["direction"] != null)
       {
         string dir = (string)data["direction"];
-        movement_ = dir;
+        movement_ = dir;       
+      }
+      if (data["action"] != null)
+      {
+        if (((int)data["action"]) == 1)
+        {
+          selected_answer = 0;
+        }
+        if (((int)data["action"]) == 2)
+        {
+          selected_answer = 1;
+        }
       }
     }
-
   }
 
   // publics 
@@ -138,6 +160,22 @@ public class PlayerScript : MonoBehaviour
     return v;
 
   }
+  public void setLayer(int layer)
+  {
+    layer_ = layer;
+  }
+  public bool hasFocus()
+  {
+    return has_focus_;
+  }
 
+  public void resetVote()
+  {
+    selected_answer = -1;
+  }
+  public int getVote()
+  {
+    return selected_answer;
+  }
 }
  

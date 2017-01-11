@@ -112,6 +112,9 @@ public class MTGameObject
   public float y;
   public string action = "";
   public string animation = "";
+  public int switch_layer = -1;
+  public string trigger_vote = "";
+  public string turn_off = "";
 }
 
 
@@ -241,6 +244,12 @@ public class MTGameObject
           obj.action = node["properties"]["action"];
         if (node["properties"]["animation"] != null)
           obj.animation = node["properties"]["animation"];
+        if (node["properties"]["switch_layer"] != null)
+          obj.switch_layer = node["properties"]["switch_layer"].AsInt;
+        if (node["properties"]["trigger_vote"] != null)
+          obj.trigger_vote = node["properties"]["trigger_vote"];
+        if (node["properties"]["turn_off"] != null)
+          obj.turn_off = node["properties"]["turn_off"];
       }
 
 

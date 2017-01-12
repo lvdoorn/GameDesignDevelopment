@@ -29,7 +29,7 @@ public class PlayerScript : MonoBehaviour
     //anim_.enabled = false;
     movement_ = "S";
     has_focus_ = false;
-    offset = new Vector3(((float)gameObject.GetComponent<SpriteRenderer>().sprite.texture.width) / (gameObject.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit * 10), 0, 0);
+    offset = new Vector3(((float)gameObject.GetComponent<SpriteRenderer>().sprite.texture.width * gameObject.transform.localScale.x) / (gameObject.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit * 10), 0, 0);
 
     AirConsole.instance.onMessage += OnMessage;
   }
@@ -50,7 +50,7 @@ public class PlayerScript : MonoBehaviour
         if (flipped_)
         {
           transform.position -= offset;
-          gameObject.GetComponent<BoxCollider2D>().offset += new Vector2(offset.x, offset.y);
+          gameObject.GetComponent<BoxCollider2D>().offset += new Vector2(offset.x, offset.y) / gameObject.transform.localScale.x;
         }
 
         flipped_ = false;
@@ -63,7 +63,7 @@ public class PlayerScript : MonoBehaviour
         if (!flipped_)
         {
           transform.position += offset;
-          gameObject.GetComponent<BoxCollider2D>().offset -= new Vector2(offset.x, offset.y);
+          gameObject.GetComponent<BoxCollider2D>().offset -= new Vector2(offset.x, offset.y) / gameObject.transform.localScale.x;
         }
 
         flipped_ = true;
@@ -156,7 +156,7 @@ public class PlayerScript : MonoBehaviour
   {
     Vector3 v = transform.position;
     if (flipped_)
-      v -= offset / 2.0f;
+      v -= offset  / 2.0f;
     else
       v += offset / 2.0f;
     return v;

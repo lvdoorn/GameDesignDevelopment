@@ -239,8 +239,7 @@ public class LevelScript : MonoBehaviour
                   p.SetActive(false);
                   child.gameObject.GetComponent<ObjectScript>().tmp_objects.Add(p);
                 }
-              }
-              
+              }              
             }
           }
 
@@ -263,39 +262,7 @@ public class LevelScript : MonoBehaviour
             child.gameObject.GetComponent<ObjectScript>().was_outside = true;
             child.gameObject.GetComponent<ObjectScript>().PlayerWasOutside(player_id);
           }
-          // 
-         /* if (child.gameObject.GetComponent<ObjectScript>().turn_off != "")
-          {
-            string t = child.gameObject.GetComponent<ObjectScript>().turn_off;
-
-            List<GameObject> objs = new List<GameObject> ();
-            string[] parts = t.Split('|');
-            foreach ( string p in parts)
-            {
-              objs.Add( GameObject.Find(p) );
-            }
-
-            if (d < 0.2f)
-            {
-              foreach (GameObject p in objs)
-              {
-                if (p != null)
-                {
-                  p.SetActive(false);
-                  child.gameObject.GetComponent<ObjectScript>().tmp_objects.Add(p);
-                }
-              }
-            }
-            else
-            {
-
-              foreach (GameObject p in child.gameObject.GetComponent<ObjectScript>().tmp_objects)
-              {
-                  p.SetActive(true);
-              }
-              child.gameObject.GetComponent<ObjectScript>().tmp_objects.Clear();
-            }
-          }*/
+     
         }
        
       }

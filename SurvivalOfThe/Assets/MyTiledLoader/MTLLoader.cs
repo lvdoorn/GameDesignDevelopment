@@ -23,6 +23,10 @@ public class MTLLoader : MonoBehaviour
   private Dictionary<int, List<GameObject>> layer_game_objects = new Dictionary<int, List<GameObject>>();  
   private Dictionary<int, GameObject> level_layers = new Dictionary<int, GameObject>();
 
+  private MeshFilter mf;
+  private MeshRenderer mr;
+  private MeshCollider mc;
+
   public void Clear()
   {
     Debug.Log("Clearing");
@@ -83,8 +87,9 @@ public class MTLLoader : MonoBehaviour
     
     for( int x=0; x< lvl.tilesets.Count;x++)
     {
-     // Debug.Log(lvl.tilesets[x].image);
-      Texture2D ts = UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>("assets/Tiledmaps/"+ lvl.tilesets[x].image);
+      // Debug.Log(lvl.tilesets[x].image);
+      string [] ps = lvl.tilesets[x].image.Split('.');
+      Texture2D ts = (Texture2D) Resources.Load("Tiledmaps/"+ ps[0]) as Texture2D;
       ts.filterMode = FilterMode.Point;
 
       if (ts == null)
@@ -198,7 +203,7 @@ public class MTLLoader : MonoBehaviour
 
          // string spriteSheet = UnityEditor.AssetDatabase.GetAssetPath("Assets/TiledMaps/animations.png");
          // Object[] sprites = UnityEditor.AssetDatabase.LoadAllAssetsAtPath("Assets/TiledMaps/animations.png");
-          Object[] sprites = UnityEditor.AssetDatabase.LoadAllAssetRepresentationsAtPath("Assets/TiledMaps/Tilesets/animations.png");
+          Object[] sprites = Resources.LoadAll("TiledMaps/Tilesets/animations_png") ;
 
           Debug.Log(sprites.Length);
           Sprite sprite = Sprite.Create(ts, r, new Vector2(0.0f, 0.0f));
@@ -208,10 +213,10 @@ public class MTLLoader : MonoBehaviour
           {
             Debug.Log("couldnt create sprite");
           }
-          sr.sprite = (Sprite)sprites[0];
+          sr.sprite = sprites[0] as Sprite;
 
 
-          RuntimeAnimatorController animatcontroller = UnityEditor.AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>("assets/Tiledmaps/Tilesets/SpecialEffects.controller");
+          RuntimeAnimatorController animatcontroller = Resources.Load("Tiledmaps/Tilesets/SpecialEffects") as RuntimeAnimatorController;
 
           main_obj.transform.localScale = new Vector3(scaleX * mt_ts.tilewidth, scaleY * mt_ts.tileheight,1);
           main_obj.transform.localPosition = new Vector3(obj.x * scaleX / (scale),  0, obj.y * scaleY / (scale));
@@ -476,7 +481,7 @@ public class MTLLoader : MonoBehaviour
             {
               MTTile mt_tile = mt_ts.tiles[tileType-1];
 
-              Debug.Log(tileType-1);
+              //Debug.Log(tileType-1);
 
               bool f = true;
 

@@ -49,7 +49,7 @@ public class GameScript : MonoBehaviour
   {
     current_level_.AddComponent<LevelScript>();
     MTLLoader loader = current_level_.AddComponent<MTLLoader>();
-    loader.level_file = UnityEditor.AssetDatabase.LoadAssetAtPath<TextAsset>("assets/Tiledmaps/test_3.json");
+    loader.level_file = Resources.Load("Tiledmaps/test_3.json") as TextAsset;
     //loader.scale = 1.0f;
     GameObject.Find("Players").GetComponent<PlayersScript>().join_enabled_ = false;
 
@@ -73,7 +73,7 @@ public class GameScript : MonoBehaviour
   {
     current_level_.AddComponent<LevelScript>();
     MTLLoader loader = current_level_.AddComponent<MTLLoader>();
-    loader.level_file = UnityEditor.AssetDatabase.LoadAssetAtPath<TextAsset>("assets/Tiledmaps/tutorial_ex.json");
+    loader.level_file = Resources.Load("Tiledmaps/tutorial_ex_json") as TextAsset;
     //loader.scale = 1.0f;
     GameObject.Find("Players").GetComponent<PlayersScript>().join_enabled_ = false;
 

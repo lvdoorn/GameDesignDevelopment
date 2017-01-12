@@ -77,8 +77,10 @@ public class MTLLoader : MonoBehaviour
     MTLParser p = new MTLParser();
     lvl = p.Parse(level_file);
     LoadTilesets();
+    Debug.Log("Tileset loaded");
     CreateLevel();
-    if(lvl.objectlayers != null)
+    Debug.Log("Level created");
+    if (lvl.objectlayers != null)
       CreateLevelObjects();
     ls.Init();
   }
@@ -481,7 +483,8 @@ public class MTLLoader : MonoBehaviour
             {
               MTTile mt_tile = mt_ts.tiles[tileType-1];
 
-              //Debug.Log(tileType-1);
+              Debug.Log(tileType - 1);
+              Debug.Log(mt_ts.tiles.Count);
 
               bool f = true;
 
@@ -518,12 +521,15 @@ public class MTLLoader : MonoBehaviour
 
         }
       }
+      Debug.Log("tiles fin");
       // overlay.filterMode = FilterMode.Trilinear;
       overlay.filterMode = FilterMode.Point;
       overlay.wrapMode = TextureWrapMode.Clamp;
       overlay.Apply();
 
       GameObject overlayObject = GameObject.CreatePrimitive(PrimitiveType.Plane);
+      if(overlayObject == null)
+        Debug.Log("couldn't create overlay");
 
       overlayObject.transform.SetParent(level_layer_tile_layer.transform);
       overlayObject.transform.localPosition = new Vector3(0.0f,0.0f, 0.01f);
@@ -537,7 +543,9 @@ public class MTLLoader : MonoBehaviour
 
 
       MeshRenderer meshRenderer = overlayObject.GetComponent<MeshRenderer>();
-    
+      if (meshRenderer == null)
+        Debug.Log("couldn't create meshRenderer");
+
       Material material = new Material(Shader.Find("Unlit/Transparent"));
       material.mainTexture = overlay;
       meshRenderer.material = material;
@@ -548,6 +556,7 @@ public class MTLLoader : MonoBehaviour
       meshRenderer.gameObject.transform.localPosition = transform.localPosition + new Vector3(0.0f, 0.0f, +(lvl.layers.Count *0.01f) - 0.01f*( c));
 
       tiles.Add(c, tiles_layer);
+      Debug.Log("Layer fin");
 
       c += 1;
     }

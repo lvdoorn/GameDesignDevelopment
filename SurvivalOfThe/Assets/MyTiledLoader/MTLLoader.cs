@@ -16,6 +16,8 @@ public class MTLLoader : MonoBehaviour
   public TextAsset level_file;
   public float scale = 1.0f;
 
+
+
   private MTLevel lvl;
   private Dictionary<int, Texture2D> tileset_textures= new Dictionary<int, Texture2D>();
   private Dictionary<int, List<GameObject> > tiles = new Dictionary<int, List<GameObject>>() ;
@@ -26,6 +28,10 @@ public class MTLLoader : MonoBehaviour
   private MeshFilter mf;
   private MeshRenderer mr;
   private MeshCollider mc;
+
+  public Shader shad_;//= Shader.Find("Unlit/Transparent");
+
+  //public Shader dummy = Material.S
 
   public void Clear()
   {
@@ -86,8 +92,8 @@ public class MTLLoader : MonoBehaviour
   }
   private void LoadTilesets()
   {
-    
-    for( int x=0; x< lvl.tilesets.Count;x++)
+    shad_ = Shader.Find("Unlit/Transparent");
+    for ( int x=0; x< lvl.tilesets.Count;x++)
     {
       // Debug.Log(lvl.tilesets[x].image);
       string [] ps = lvl.tilesets[x].image.Split('.');
@@ -493,27 +499,28 @@ public class MTLLoader : MonoBehaviour
                 float scaleX = (10.0f * this.scale) / (float) (lvl.tilewidth * lvl.width);
                 float scaleY = (10.0f * this.scale) / (float)(lvl.tileheight * lvl.height);
                 MTObject obj = iobj.Value;
-                GameObject go = new GameObject();
-                go.name= x.ToString() +" " + y.ToString();
+               // GameObject go = new GameObject();
+               // go.name= x.ToString() +" " + y.ToString();
      
-                BoxCollider2D b2d =  go.AddComponent<BoxCollider2D>();
-                b2d.transform.SetParent(level_layer_collision_boxes.transform);
+                BoxCollider2D b2d = level_layer_collision_boxes.AddComponent<BoxCollider2D>();
+                //b2d.transform.SetParent(level_layer_collision_boxes.transform);
                 b2d.size = new Vector2((float) obj.width *scaleX, (float) obj.height *scaleY);
                 Vector3 off = new Vector3( (float)(x * lvl.tilewidth)  *scaleX,- (float)(y * lvl.tileheight) *scaleY, 0);
                 off += new Vector3(obj.x*scaleX , -(obj.y)*scaleY, 0);
                 off -= new Vector3(-(float)obj.width * scaleX/2.0f, (float)obj.height * scaleY/2.0f, 0);
                 off += new Vector3(-(10.0f * this.scale) / 2.0f, (10.0f * this.scale) / 2.0f, 0);
 
-                if (f)
+                if (level_layer_collision_boxes.GetComponent<Rigidbody2D>() == null)
                 {
-                  Rigidbody2D body = go.AddComponent<Rigidbody2D>();
+
+                  Rigidbody2D body = level_layer_collision_boxes.AddComponent<Rigidbody2D>();
                   body.isKinematic = true;
                   f = false;
                 }
 
-                b2d.transform.position = transform.position + off;        
+                b2d.offset =  off;        
 
-                tiles_layer.Add(go);
+               // tiles_layer.Add(go);
               }
               
             }
@@ -535,23 +542,23 @@ public class MTLLoader : MonoBehaviour
       overlayObject.transform.localPosition = new Vector3(0.0f,0.0f, 0.01f);
      // overlayObject.layer = 7 + lvl.layers.Count-c;
       layer_objects.Add(c, overlayObject);
-      
 
+ 
       overlayObject.transform.localEulerAngles = new Vector3(-90, 0, 0);
       overlayObject.transform.localPosition = new Vector3(0.0f, 0.0f, 0.01f);
       overlayObject.name =  layer.name;
 
-
+    
       MeshRenderer meshRenderer = overlayObject.GetComponent<MeshRenderer>();
       if (meshRenderer == null)
         Debug.Log("couldn't create meshRenderer");
 
-      Material material = new Material(Shader.Find("Unlit/Transparent"));
+      Material material = new Material(shad_);
       material.mainTexture = overlay;
       meshRenderer.material = material;
+      Debug.Log("6");
+      //   float scale = 1.0f;// ((LevelGridSize.y * TilePixelSize.y) / (LevelGridSize.x * TilePixelSize.x))
 
-   //   float scale = 1.0f;// ((LevelGridSize.y * TilePixelSize.y) / (LevelGridSize.x * TilePixelSize.x))
-     
       meshRenderer.transform.localScale = new Vector3(scale, 1, scale * ((lvl.height * lvl.tileheight) / (lvl.width * lvl.tilewidth)));
       meshRenderer.gameObject.transform.localPosition = transform.localPosition + new Vector3(0.0f, 0.0f, +(lvl.layers.Count *0.01f) - 0.01f*( c));
 

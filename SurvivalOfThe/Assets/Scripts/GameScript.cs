@@ -19,7 +19,7 @@ public class GameScript : MonoBehaviour
 
   void Start()
   {
-    ShowTutorial ();
+   // ShowTutorial ();
     current_level_ = new GameObject();
     current_level_.transform.SetParent(transform);
 
@@ -67,7 +67,7 @@ public class GameScript : MonoBehaviour
 
   private void StartLevel()
   {
-    ShowTutorial ();
+    //ShowTutorial ();
     current_level_.AddComponent<LevelScript>();
     MTLLoader loader = current_level_.AddComponent<MTLLoader>();
     loader.level_file = Resources.Load("Tiledmaps/test_3.json") as TextAsset;

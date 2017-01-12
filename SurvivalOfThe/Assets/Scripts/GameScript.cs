@@ -7,14 +7,17 @@ using UnityEngine.UI;
 
 enum GameState
 {
-  JOIN =0,
-  PLAY =1
+  JOIN = 0,
+  PLAY = 1
 }
 
 public class GameScript : MonoBehaviour
 {
   private GameState state_ = GameState.JOIN;
   private GameObject current_level_;
+  public Text tutorialText;
+  public Text waitingScreenText;
+  public Animation animation;
 
   void Start()
   {
@@ -38,15 +41,30 @@ public class GameScript : MonoBehaviour
   {
     if (data["start"] != null)
     {
-      Debug.Log("received start");
       StartLevel();
     }
+  }
+
+  private void ShowTutorial()
+  {
+    StartCoroutine(Example());
+  }
+
+  IEnumerator Example() {
+    tutorialText.text = ("Welcome to survival of the Zargs!");
+    yield return new WaitForSeconds(5);
+    tutorialText.text = ("Cooperate to repair the spaceship");
+    yield return new WaitForSeconds(5);
+    tutorialText.text = ("Press FOCUS to center the camera on your player");
+    yield return new WaitForSeconds(5);
+    tutorialText.text = ("Use the action buttons to vote when required");
   }
 
   //action
 
   private void StartLevel()
   {
+    ShowTutorial();
     current_level_.AddComponent<LevelScript>();
     MTLLoader loader = current_level_.AddComponent<MTLLoader>();
     loader.level_file = UnityEditor.AssetDatabase.LoadAssetAtPath<TextAsset>("assets/Tiledmaps/test_3.json");
@@ -69,7 +87,7 @@ public class GameScript : MonoBehaviour
 
   public void RefreshWaitingScreen(string text)
   {
-    GameObject.Find("WaitingScreenText").GetComponent<Text>().text = text;
+    waitingScreenText.text = text;
   }
 }
 

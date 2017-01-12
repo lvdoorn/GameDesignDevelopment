@@ -231,6 +231,43 @@ public class MTLLoader : MonoBehaviour
           else
             Debug.Log("Couldn't load anim");
 
+          // create collision boxes
+          if (obj.gid != 0)
+          {
+            Debug.Log("Create Collision");
+            Debug.Log("TC" +mt_ts.tilecount);
+            if (mt_ts.tiles.ContainsKey(obj.gid - 1))
+            {
+              MTTile mt_tile = mt_ts.tiles[obj.gid - 1];
+
+              bool f = true;
+
+              foreach (KeyValuePair<int, MTObject> iobj2 in mt_tile.objects)
+              {
+                MTObject obj2 = iobj2.Value;
+                Debug.Log("Create Collision ___");
+                BoxCollider2D b2d = main_obj.AddComponent<BoxCollider2D>();
+                b2d.transform.SetParent(main_obj.transform);
+               // b2d.size = new Vector2((float)obj2.width * scaleX, (float)obj2.height * scaleY);
+                // Vector3 off = new Vector3((float)(x * lvl.tilewidth) * scaleX, -(float)(y * lvl.tileheight) * scaleY, 0);
+                // off += new Vector3(obj2.x * scaleX, -(obj2.y) * scaleY, 0);
+                // off -= new Vector3(-(float)obj2.width * scaleX / 2.0f, (float)obj2.height * scaleY / 2.0f, 0);
+                // off += new Vector3(-5.0f, 5.0f, 0);
+                // b2d.offset = main_obj.transform.position;
+                if (f)
+                {
+                  Rigidbody2D body = main_obj.AddComponent<Rigidbody2D>();
+                  body.isKinematic = true;
+                }
+
+
+                b2d.transform.position = main_obj.transform.position;
+                f = false;
+              }
+
+            }
+          }
+
 
         }
         else
@@ -266,8 +303,8 @@ public class MTLLoader : MonoBehaviour
           material.mainTexture = overlay;
           meshRenderer.material = material;
 
-     
 
+          main_obj.transform.position = new Vector3(obj.x * scaleX, -obj.y * scaleY, 0) + new Vector3(-(10.0f * scale) / 2.0f, (10.0f * scale) / 2.0f, 0) - new Vector3(-(float)obj.width * scaleX / 2.0f, -(float)obj.height * scaleY / 2.0f, 0);
           gobj.transform.localScale = new Vector3(scaleX * mt_ts.tilewidth / (10.0f), 1, scaleY * mt_ts.tileheight / (10.0f));
           gobj.transform.localPosition = new Vector3(obj.x * scaleX / (10.0f * scale), obj.y * scaleY / (10.0f * scale), 0);
           gobj.transform.position = new Vector3(obj.x * scaleX, -obj.y * scaleY, 0) + new Vector3(-(10.0f * scale) / 2.0f, (10.0f * scale) / 2.0f, 0) - new Vector3(-(float)obj.width * scaleX / 2.0f, -(float)obj.height * scaleY / 2.0f, 0);
@@ -279,42 +316,46 @@ public class MTLLoader : MonoBehaviour
           objscript.switch_layer = obj.switch_layer;
           objscript.turn_off = obj.turn_off;
           objscript.trigger_vote = obj.trigger_vote;
-        }
 
-        // create collision boxes
-        if (obj.gid != 0)
-        {
-          if (mt_ts.tiles.ContainsKey(obj.gid - 1))
+
+          // create collision boxes
+          if (obj.gid != 0)
           {
-            MTTile mt_tile = mt_ts.tiles[obj.gid - 1];
-
-            bool f = true;
-
-            foreach (KeyValuePair<int, MTObject> iobj2 in mt_tile.objects)
+           // Debug.Log("Create Collision");
+            if (mt_ts.tiles.ContainsKey(obj.gid - 1))
             {
-              MTObject obj2 = iobj2.Value;          
+              MTTile mt_tile = mt_ts.tiles[obj.gid - 1];
 
-              BoxCollider2D b2d = main_obj.AddComponent<BoxCollider2D>();
-              b2d.transform.SetParent(main_obj.transform);
-              b2d.size = new Vector2((float)obj2.width * scaleX, (float)obj2.height * scaleY);
-              // Vector3 off = new Vector3((float)(x * lvl.tilewidth) * scaleX, -(float)(y * lvl.tileheight) * scaleY, 0);
-              // off += new Vector3(obj2.x * scaleX, -(obj2.y) * scaleY, 0);
-              // off -= new Vector3(-(float)obj2.width * scaleX / 2.0f, (float)obj2.height * scaleY / 2.0f, 0);
-              // off += new Vector3(-5.0f, 5.0f, 0);
-              b2d.offset= main_obj.transform.position;
-              if (f)
+              bool f = true;
+
+              foreach (KeyValuePair<int, MTObject> iobj2 in mt_tile.objects)
               {
-                Rigidbody2D body = main_obj.AddComponent<Rigidbody2D>();
-                body.isKinematic = true;
+                MTObject obj2 = iobj2.Value;
+
+                BoxCollider2D b2d = main_obj.AddComponent<BoxCollider2D>();
+                b2d.transform.SetParent(main_obj.transform);
+                b2d.size = new Vector2((float)obj2.width * scaleX, (float)obj2.height * scaleY);
+                // Vector3 off = new Vector3((float)(x * lvl.tilewidth) * scaleX, -(float)(y * lvl.tileheight) * scaleY, 0);
+                // off += new Vector3(obj2.x * scaleX, -(obj2.y) * scaleY, 0);
+                // off -= new Vector3(-(float)obj2.width * scaleX / 2.0f, (float)obj2.height * scaleY / 2.0f, 0);
+                // off += new Vector3(-5.0f, 5.0f, 0);
+               // b2d.offset = main_obj.transform.position;
+                if (f)
+                {
+                  Rigidbody2D body = main_obj.AddComponent<Rigidbody2D>();
+                  body.isKinematic = true;
+                }
+
+
+                b2d.transform.position = main_obj.transform.position;
+                f = false;
               }
 
-
-              b2d.transform.position = main_obj.transform.position;
-              f = false;
             }
-
           }
         }
+
+       
 
         objects_layer.Add(main_obj);
       }

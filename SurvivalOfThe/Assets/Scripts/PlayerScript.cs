@@ -119,6 +119,7 @@ public class PlayerScript : MonoBehaviour
     // Debug.Log((string)data["direction"]);
     if (from == id_)
     {
+   
       if (data["direction"] != null)
       {
         string dir = (string)data["direction"];
@@ -126,6 +127,7 @@ public class PlayerScript : MonoBehaviour
       }
       if (data["action"] != null)
       {
+        Debug.Log(data["action"]);
         if (((int)data["action"]) == 1)
         {
           selected_answer = 0;

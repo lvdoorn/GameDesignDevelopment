@@ -15,13 +15,13 @@ public class ObjectScript : MonoBehaviour
   public List<int> inside = new List<int>();
 
 
-  void Start ()
-  {	
-	}
-	
-	void Update ()
-  {	
-	}
+  void Start()
+  {
+  }
+
+  void Update()
+  {
+  }
   public void PlayerWasOutside(int id)
   {
     inside.Remove(id);
@@ -30,8 +30,13 @@ public class ObjectScript : MonoBehaviour
   {
     inside.Add(id);
   }
-  public bool wasOutside( int id)
+  public bool wasOutside(int id)
   {
     return !inside.Contains(id);
+  }
+  public bool someoneInside()
+  {
+    Debug.Log("inside" +inside.Count);
+    return ( (inside.Count-1) > 0);
   }
 }

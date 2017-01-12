@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="32" tileheight="32" nextobjectid="18">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="32" tileheight="32" nextobjectid="23">
  <tileset firstgid="1" name="tileset" tilewidth="32" tileheight="32" tilecount="240" columns="20">
   <image source="Tilesets/tileset.png" width="640" height="400"/>
   <tile id="0">
@@ -22,6 +22,11 @@
     <object id="1" x="0" y="0" width="32" height="32"/>
    </objectgroup>
   </tile>
+  <tile id="25">
+   <objectgroup draworder="index">
+    <object id="1" x="0" y="0" width="32" height="32"/>
+   </objectgroup>
+  </tile>
   <tile id="42">
    <objectgroup draworder="index">
     <object id="1" x="0" y="0" width="32" height="32"/>
@@ -35,8 +40,53 @@
     <object id="1" x="8.36364" y="0" width="18.7273" height="32"/>
    </objectgroup>
   </tile>
+  <tile id="1">
+   <objectgroup draworder="index">
+    <object id="1" x="9.63636" y="3.27273" width="14.9091" height="28.9091"/>
+   </objectgroup>
+  </tile>
+  <tile id="2">
+   <objectgroup draworder="index">
+    <object id="1" x="9.81818" y="3.27273" width="14.7273" height="28.7273"/>
+   </objectgroup>
+  </tile>
+  <tile id="3">
+   <objectgroup draworder="index">
+    <object id="1" x="8.18182" y="2.36364" width="15.8182" height="29.4545"/>
+   </objectgroup>
+  </tile>
+  <tile id="4">
+   <objectgroup draworder="index">
+    <object id="1" x="8.36364" y="4" width="15.0909" height="28.5455"/>
+   </objectgroup>
+  </tile>
+  <tile id="5">
+   <objectgroup draworder="index">
+    <object id="1" x="9.81818" y="4.36364" width="14.3636" height="27.4545"/>
+   </objectgroup>
+  </tile>
+  <tile id="6">
+   <objectgroup draworder="index">
+    <object id="1" x="10" y="4.36364" width="16.3636" height="27.0909"/>
+   </objectgroup>
+  </tile>
+  <tile id="7">
+   <objectgroup draworder="index">
+    <object id="1" x="10.5455" y="6" width="14.5455" height="26.1818"/>
+   </objectgroup>
+  </tile>
+  <tile id="8">
+   <objectgroup draworder="index">
+    <object id="1" x="8.90909" y="2.90909" width="18.1818" height="28.5455"/>
+   </objectgroup>
+  </tile>
+  <tile id="9">
+   <objectgroup draworder="index">
+    <object id="1" x="7.81818" y="4.72727" width="17.4545" height="27.0909"/>
+   </objectgroup>
+  </tile>
  </tileset>
- <layer name="BOT_1" width="40" height="40" visible="0">
+ <layer name="BOT_1" width="40" height="40">
   <properties>
    <property name="level_layer" type="int" value="0"/>
   </properties>
@@ -83,7 +133,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="BOT_2" width="40" height="40" visible="0">
+ <layer name="BOT_2" width="40" height="40">
   <properties>
    <property name="level_layer" type="int" value="0"/>
   </properties>
@@ -130,18 +180,19 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="BOT_O" visible="0">
+ <objectgroup name="BOT_O">
   <object id="11" name="console_bot" gid="82" x="672" y="189" width="32" height="32">
    <properties>
-    <property name="action" value="destory:exit_bot"/>
+    <property name="action" value="destroy:exit_bot|exit_bot_2"/>
    </properties>
   </object>
-  <object id="12" name="exit_bot" gid="21" x="96" y="350.333" width="32" height="61"/>
+  <object id="12" name="exit_bot" gid="21" x="96.0568" y="352.094" width="32" height="32"/>
   <object id="17" name="stairs_bot" gid="5" x="160" y="479.333" width="32" height="32">
    <properties>
     <property name="switch_layer" type="int" value="1"/>
    </properties>
   </object>
+  <object id="22" name="exit_bot_2" gid="21" x="96" y="320.151" width="32" height="32"/>
  </objectgroup>
  <layer name="MID_1" width="40" height="40" visible="0">
   <properties>
@@ -257,7 +308,7 @@
    </properties>
   </object>
  </objectgroup>
- <layer name="TOP_1" width="40" height="40">
+ <layer name="TOP_1" width="40" height="40" visible="0">
   <properties>
    <property name="level_layer" type="int" value="2"/>
   </properties>
@@ -304,7 +355,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="TOP_2" width="40" height="40">
+ <layer name="TOP_2" width="40" height="40" visible="0">
   <properties>
    <property name="level_layer" type="int" value="2"/>
   </properties>
@@ -351,20 +402,10 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="TOP_O">
+ <objectgroup name="TOP_O" visible="0">
   <properties>
    <property name="level_layer" type="int" value="2"/>
   </properties>
-  <object id="1" name="fire1" gid="241" x="384.667" y="320" width="32" height="32">
-   <properties>
-    <property name="animation" value="fire"/>
-   </properties>
-  </object>
-  <object id="2" name="fire2" gid="241" x="384.333" y="352.333" width="32" height="32">
-   <properties>
-    <property name="animation" value="fire"/>
-   </properties>
-  </object>
   <object id="4" name="button_top" gid="65" x="478" y="294" width="32" height="32">
    <properties>
     <property name="turn_off" value="fire1|fire2"/>
@@ -373,6 +414,16 @@
   <object id="13" name="stairs_top" gid="4" x="160" y="320" width="32" height="32">
    <properties>
     <property name="switch_layer" type="int" value="1"/>
+   </properties>
+  </object>
+  <object id="19" name="fire1" gid="26" x="384" y="352.25" width="32" height="32">
+   <properties>
+    <property name="animation" value="fire"/>
+   </properties>
+  </object>
+  <object id="21" name="fire2" gid="26" x="384" y="320" width="32" height="32">
+   <properties>
+    <property name="animation" value="fire"/>
    </properties>
   </object>
  </objectgroup>

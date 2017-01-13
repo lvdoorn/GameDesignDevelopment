@@ -111,13 +111,17 @@ public class GameScript : MonoBehaviour
       loader = current_level_.GetComponent<MTLLoader>();
       loader.Clear();
 
+
+     // Destroy(current_level_.GetComponent<LevelScript>());
+      //current_level_.AddComponent<LevelScript>();
+      (current_level_.GetComponent<LevelScript>()).Reset();
+
       loader.level_file = Resources.Load(lvl) as TextAsset;
-      Destroy(current_level_.GetComponent<LevelScript>());
-      current_level_.AddComponent<LevelScript>();
     }
     else
     {
       current_level_.AddComponent<LevelScript>();
+      (current_level_.GetComponent<LevelScript>()).Reset();
       loader = current_level_.AddComponent<MTLLoader>();
       state_ = GameState.PLAY;
       AirConsole.instance.Broadcast("GameStarts");
@@ -132,9 +136,10 @@ public class GameScript : MonoBehaviour
     if (loader.level_file != null)
     {
       loader.Load();
-    
-      GameObject.Find("Players").GetComponent<PlayersScript>().MoveAllPlayers(new Vector3(0.0f, 2.95f, -8));
+
+      GameObject.Find("Players").GetComponent<PlayersScript>().MoveAllPlayers(new Vector3(0.0f, 2.75f, -8));
       (current_level_.GetComponent<LevelScript>()).FocusSomeone();
+      
     }
     else
       Debug.Log("Couldn't load file"); 

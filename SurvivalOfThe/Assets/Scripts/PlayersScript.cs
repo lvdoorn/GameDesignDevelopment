@@ -105,18 +105,21 @@ public class PlayersScript : MonoBehaviour
   }
   void OnMessage(int from, JToken data)
   {
-    if (data["action"] != null)
+    if (GameObject.Find("Game").GetComponent<GameScript>().State == GameState.PLAY)
     {
-      if (((int)data["action"]) == 1)
+      if (data["action"] != null)
       {
-        Debug.Log("received action1");
-        GameObject player = players_[from];
-        Vector3 pos = player.transform.position;
-        GameObject lvl = GameObject.Find("Level");
-        if (lvl != null)
+        if (((int)data["action"]) == 1)
         {
-          LevelScript ls = lvl.GetComponent<LevelScript>();
-          ls.TriggerObject(pos);
+          Debug.Log("received action1");
+          GameObject player = players_[from];
+          Vector3 pos = player.transform.position;
+          GameObject lvl = GameObject.Find("Level");
+          if (lvl != null)
+          {
+            LevelScript ls = lvl.GetComponent<LevelScript>();
+            ls.TriggerObject(pos);
+          }
         }
       }
     }

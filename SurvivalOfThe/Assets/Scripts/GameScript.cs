@@ -15,14 +15,17 @@ public enum GameState
 
 public class GameScript : MonoBehaviour
 {
-  private GameState state_ = GameState.JOIN;
   private GameObject current_level_;
+  public float Scale { get; set; }
+  public GameState State { get; set; }
 
   void Start()
   {
    // ShowTutorial ();
     current_level_ = new GameObject();
     current_level_.transform.SetParent(transform);
+
+    State = GameState.JOIN;
 
     AirConsole.instance.onMessage += OnMessage;
     RefreshWaitingScreen("Waiting for players");
@@ -62,7 +65,7 @@ public class GameScript : MonoBehaviour
     {
       loader.Load();
       (current_level_.GetComponent<LevelScript>()).FocusSomeone();
-      state_ = GameState.PLAY;
+      State = GameState.PLAY;
       AirConsole.instance.Broadcast("GameStarts");
       GameObject.Find("WaitingScreen").SetActive(false);
     }
@@ -73,14 +76,14 @@ public class GameScript : MonoBehaviour
   public void StartTutorial() {
     ChangeLevel("Tiledmaps/tutorial_json", 10.0f / 4.0f);
     ChangePositions(
-      new Vector3(-8.5f, 9.0f, 0),
-      new Vector3(-4.5f, 10.0f, 0),
-      new Vector3(-7.5f, 10.0f, 0),
-      new Vector3(-1.5f, 10.0f, 0),
-      new Vector3(4.5f, 10.0f, 0),
-      new Vector3(10.5f, 10.0f, 0),
-      new Vector3(7.5f, 10.0f, 0),
-      new Vector3(1.5f, 10.0f, 0)
+      new Vector3(-8.5f, 9.0f, -8),
+      new Vector3(-4.5f, 10.0f, -8),
+      new Vector3(-7.5f, 10.0f, -8),
+      new Vector3(-1.5f, 10.0f, -8),
+      new Vector3(4.5f, 10.0f, -8),
+      new Vector3(10.5f, 10.0f, -8),
+      new Vector3(7.5f, 10.0f, -8),
+      new Vector3(1.5f, 10.0f, -8)
     );
     GetCurrentLevel().DisplayInfoBox("Welcome to Survival of the Zargs! Use the ACTION buttons on your device to interact.", 10);
   }
@@ -88,6 +91,7 @@ public class GameScript : MonoBehaviour
   public void StartExtendedTutorial() {
     ChangeLevel("Tiledmaps/tutorial_ex_json");
     ChangePositions(new Vector3(0.0f, 2.75f, -8));
+    GetCurrentLevel().DisplayInfoBox("Use action buttons to interact.\nTry to escape the crashed ship.", 5);
   }
 
   public void ChangePositions(params Vector3[] vs) {
@@ -120,14 +124,14 @@ public class GameScript : MonoBehaviour
       current_level_.AddComponent<LevelScript>();
       (current_level_.GetComponent<LevelScript>()).Reset();
       loader = current_level_.AddComponent<MTLLoader>();
-      state_ = GameState.PLAY;
+      State = GameState.PLAY;
       AirConsole.instance.Broadcast("GameStarts");
       GameObject.Find("WaitingScreen").SetActive(false);
-      GetCurrentLevel().DisplayInfoBox("Use action buttons to interact.\nTry to escape the crashed ship.", 5);
       loader.level_file = Resources.Load(lvl) as TextAsset;
     }
        
     loader.scale = scale;
+    Scale = scale;
     GameObject.Find("Players").GetComponent<PlayersScript>().join_enabled_ = false;
 
     if (loader.level_file != null)
@@ -148,10 +152,6 @@ public class GameScript : MonoBehaviour
   public LevelScript GetCurrentLevel()
   {
     return current_level_.GetComponent<LevelScript>();
-  }
-
-  public GameState GetState() {
-    return state_;
   }
 }
 

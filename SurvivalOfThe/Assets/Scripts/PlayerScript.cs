@@ -43,7 +43,7 @@ public class PlayerScript : MonoBehaviour
     LevelScript ls = game_.GetCurrentLevel();
     if (ls != null)
     {
-      if (!ls.IsInVoteMode() && game_.GetState() == GameState.PLAY)
+      if (!ls.IsInVoteMode() && game_.State == GameState.PLAY)
       {
         // set the movement
         if (movement_ == "R")

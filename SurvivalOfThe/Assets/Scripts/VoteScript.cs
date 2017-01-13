@@ -9,6 +9,7 @@ public class VoteScript : MonoBehaviour
 {
   private PlayersScript players_;
   private GameScript game_;
+  private GameObject vote_;
   private Text question_;
 
   private Text code_text_;
@@ -19,11 +20,11 @@ public class VoteScript : MonoBehaviour
 
   void Start()
   {
-    GameObject vote = GameObject.Find("UI").transform.GetChild(1).gameObject;
+    vote_ = GameObject.Find("UI").transform.GetChild(0).gameObject;
     game_ = GameObject.Find("Game").GetComponent<GameScript>();
     players_ = GameObject.Find("Players").GetComponent<PlayersScript>();
-    question_ = vote.transform.GetChild(0).GetComponent<Text>();
-    code_text_ = vote.transform.GetChild(1).GetChild(0).GetComponent<Text>();
+    question_ = GameObject.Find("UI").transform.GetChild(0).GetChild(0).GetComponent<Text>();
+    code_text_ = GameObject.Find("UI").transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<Text>();
 
     AirConsole.instance.onMessage += OnMessage;
   }
@@ -34,6 +35,12 @@ public class VoteScript : MonoBehaviour
   }
 
   public void Init(string question, int number_of_players) {
+    if (game_.State == GameState.VOTE || vote_.activeSelf)
+      return;
+
+    vote_.SetActive(true);
+    game_.State = GameState.VOTE;
+
     code_ = new char[number_of_players - 1];
     for (int i = 0; i < number_of_players - 1; i++) {
       code_[i] = '0';
@@ -56,11 +63,16 @@ public class VoteScript : MonoBehaviour
     return result;
   }
 
-  // Airconsole handler
+  IEnumerator FadeBackToGame() {
+    yield return new WaitForSeconds(1);
+    game_.State = GameState.PLAY;
+    vote_.SetActive(false);
+  }
 
+  // Airconsole handler
   void OnMessage(int from, JToken data)
   {
-    if (game_.GetState() == GameState.VOTE)
+    if (game_.State == GameState.VOTE)
     {
       if (data["direction"] != null)
       {
@@ -91,11 +103,13 @@ public class VoteScript : MonoBehaviour
       {
         for (int i = 0; i < code_.Length; i++) {
           if (code_[i] != solution_[i]) {
-            game_.GetCurrentLevel().DisplayInfoBox("That code did not start the engine...");
+            game_.GetCurrentLevel().DisplayInfoBox("That code did not start the engine...", 2);
+            StartCoroutine(FadeBackToGame());
             return;
           }
         }
-        game_.GetCurrentLevel().DisplayInfoBox("The engine started !\nAfter a while, the entire crew gathered and decided to escape the ship before it is too late...", 5);
+        game_.GetCurrentLevel().DisplayInfoBox("The engine started !", 2);
+        StartCoroutine(FadeBackToGame());
         game_.StartExtendedTutorial();
       }
     }

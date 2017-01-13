@@ -26,7 +26,7 @@ public class LevelScript : MonoBehaviour
   void Start ()
   {
     players_ = GameObject.Find("Players").GetComponent<PlayersScript>();
-    info_box_ = GameObject.Find("UI").transform.GetChild(0).gameObject;
+    info_box_ = GameObject.Find("UI").transform.GetChild(1).gameObject;
     info_box_text_ = info_box_.GetComponentInChildren<Text>(true);
 
     AirConsole.instance.onMessage += OnMessage;
@@ -232,6 +232,8 @@ public class LevelScript : MonoBehaviour
 
   public void TriggerObject(Vector3 player_position)
   {
+    float scale = GameObject.Find("Game").GetComponent<GameScript>().Scale;
+    Vector2 player_position_2d = new Vector2(player_position.x, player_position.y);
     GameObject lobjs = GameObject.Find("LevelLayer" + current_layer_.ToString()).transform.FindChild("Objects").gameObject;
     if (lobjs != null)
     {
@@ -240,7 +242,7 @@ public class LevelScript : MonoBehaviour
         if (child.childCount > 0)
         {
           float d = Vector2.Distance(new Vector2(child.GetChild(0).position.x, child.GetChild(0).position.y), new Vector2(player_position.x, player_position.y) );
-          if (d < 0.3f)
+          if (d < (scale > 1.0f ? 0.4f : 0.3f))
           {
             Debug.Log(child.gameObject.name);
             string action = child.gameObject.GetComponent<ObjectScript>().action;
@@ -264,9 +266,8 @@ public class LevelScript : MonoBehaviour
               string[] parts = action.Split(':');
               if (parts[1] == "startengine") {
                 int number_of_players = GameObject.Find("Players").GetComponent<PlayersScript>().PlayerCount();
-                VoteScript vote_script = GameObject.Find("UI").transform.GetChild(1).GetComponent<VoteScript>();
+                VoteScript vote_script = GameObject.Find("UI").GetComponent<VoteScript>();
                 vote_script.Init("Enter the start sequence for the engine ...", number_of_players);
-                vote_script.gameObject.SetActive(true);
               }
             }
             string triggerVote = child.gameObject.GetComponent<ObjectScript>().trigger_vote;

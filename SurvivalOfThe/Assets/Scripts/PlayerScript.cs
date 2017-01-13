@@ -29,7 +29,7 @@ public class PlayerScript : MonoBehaviour
     //anim_.enabled = false;
     movement_ = "S";
     has_focus_ = false;
-    offset = new Vector3(((float)gameObject.GetComponent<SpriteRenderer>().sprite.texture.width) / (gameObject.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit * 10), 0, 0);
+    offset = new Vector3(((float)gameObject.GetComponent<SpriteRenderer>().sprite.texture.width * gameObject.transform.localScale.x) / (gameObject.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit * 10), 0, 0);
 
     AirConsole.instance.onMessage += OnMessage;
   }
@@ -39,74 +39,76 @@ public class PlayerScript : MonoBehaviour
     bool m = false;
 
     LevelScript ls = GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel();
-
-    if (!ls.IsInVoteMode())
+    if (ls != null)
     {
-      // set the movement
-      if (movement_ == "R")
+      if (!ls.IsInVoteMode())
       {
-        rb_.AddForce(new Vector2(5, 0));
-        gameObject.GetComponent<SpriteRenderer>().flipX = false;
-        if (flipped_)
+        // set the movement
+        if (movement_ == "R")
         {
-          transform.position -= offset;
-          gameObject.GetComponent<BoxCollider2D>().offset += new Vector2(offset.x, offset.y);
+          rb_.AddForce(new Vector2(5, 0));
+          gameObject.GetComponent<SpriteRenderer>().flipX = false;
+          if (flipped_)
+          {
+            transform.position -= offset;
+            gameObject.GetComponent<BoxCollider2D>().offset += new Vector2(offset.x, offset.y) / gameObject.transform.localScale.x;
+          }
+
+          flipped_ = false;
+          m = true;
+        }
+        if (movement_ == "L")
+        {
+          rb_.AddForce(new Vector2(-5, 0));
+          gameObject.GetComponent<SpriteRenderer>().flipX = true;
+          if (!flipped_)
+          {
+            transform.position += offset;
+            gameObject.GetComponent<BoxCollider2D>().offset -= new Vector2(offset.x, offset.y) / gameObject.transform.localScale.x;
+          }
+
+          flipped_ = true;
+          m = true;
+        }
+        if (movement_ == "U")
+        {
+          rb_.AddForce(new Vector2(0, 5));
+          m = true;
+        }
+        if (movement_ == "D")
+        {
+          rb_.AddForce(new Vector2(0, -5));
+          m = true;
         }
 
-        flipped_ = false;
-        m = true;
-      }
-      if (movement_ == "L")
-      {
-        rb_.AddForce(new Vector2(-5, 0));
-        gameObject.GetComponent<SpriteRenderer>().flipX = true;
-        if (!flipped_)
+        // if focused -> move camera
+        if (has_focus_)
         {
-          transform.position += offset;
-          gameObject.GetComponent<BoxCollider2D>().offset -= new Vector2(offset.x, offset.y);
+          Camera cam = GameObject.Find("MainCamera").GetComponent<Camera>();
+          Vector3 p = getCenteredPosition();
+          cam.transform.position = new Vector3(p.x, p.y, -10);// + new Vector2(50,50) ;
+        }
+        if (moved_)
+        {
+          GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().CheckMoveTrigger(this.gameObject);
         }
 
-        flipped_ = true;
-        m = true;
-      }
-      if (movement_ == "U")
-      {
-        rb_.AddForce(new Vector2(0, 5));
-        m = true;
-      }
-      if (movement_ == "D")
-      {
-        rb_.AddForce(new Vector2(0, -5));
-        m = true;
-      }
+        // animate it
+        if (m && (!moved_))
+        {
+          //anim_.Stop();
+          anim_.Play("WalkSide");
 
-      // if focused -> move camera
-      if (has_focus_)
-      {
-        Camera cam = GameObject.Find("MainCamera").GetComponent<Camera>();
-        Vector3 p = getCenteredPosition();
-        cam.transform.position = new Vector3(p.x, p.y, -10);// + new Vector2(50,50) ;
+          //anim_.enabled = true;
+        }
+        if (!m && moved_)
+        {
+          //anim_.Stop();
+          anim_.Play("Idle");
+          //anim_.enabled = false;
+        }
+        moved_ = m;
       }
-      if (moved_)
-      {
-        GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().CheckMoveTrigger(this.gameObject);
-      }
-
-      // animate it
-      if (m && (!moved_))
-      {
-        //anim_.Stop();
-        anim_.Play("WalkSide");
-
-        //anim_.enabled = true;
-      }
-      if (!m && moved_)
-      {
-        //anim_.Stop();
-        anim_.Play("Idle");
-        //anim_.enabled = false;
-      }
-      moved_ = m;
     }
 
 
@@ -119,6 +121,7 @@ public class PlayerScript : MonoBehaviour
     // Debug.Log((string)data["direction"]);
     if (from == id_)
     {
+   
       if (data["direction"] != null)
       {
         string dir = (string)data["direction"];
@@ -126,6 +129,7 @@ public class PlayerScript : MonoBehaviour
       }
       if (data["action"] != null)
       {
+        Debug.Log(data["action"]);
         if (((int)data["action"]) == 1)
         {
           selected_answer = 0;
@@ -154,7 +158,7 @@ public class PlayerScript : MonoBehaviour
   {
     Vector3 v = transform.position;
     if (flipped_)
-      v -= offset / 2.0f;
+      v -= offset  / 2.0f;
     else
       v += offset / 2.0f;
     return v;

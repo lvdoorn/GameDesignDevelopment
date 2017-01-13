@@ -14,7 +14,12 @@ public class LevelScript : MonoBehaviour
   private bool vote_mode = false;
   private string vote_event = "";
 
-	void Start ()
+  private float debug_text_current = 0.0f;
+  private float debug_text_executed = 0.0f;
+  private float debug_text_wait = 5.0f;
+  private List<string> debug_text_queue = new List<string>();
+
+  void Start ()
   {
     players_ = GameObject.Find("Players").GetComponent<PlayersScript>();
 
@@ -51,10 +56,30 @@ public class LevelScript : MonoBehaviour
     }
     if (Input.GetKeyDown(KeyCode.V))
       BeginVoteMode("disable_pipe_system","Test");
+
+    debug_text_current = Time.time;
+    if (debug_text_executed != 0.0f)
+    {
+      if (debug_text_current - debug_text_executed > debug_text_wait)
+      {
+        debug_text_executed = 0.0f;
+        GameObject.Find("DebugTextText").GetComponent<Text>().text = "";
+      }
+    }
+    else
+    {
+      if( debug_text_queue.Count >0 )
+      {
+        debug_text_executed = debug_text_current;
+        GameObject.Find("DebugTextText").GetComponent<Text>().text = debug_text_queue[0];
+        debug_text_queue.RemoveAt(0);
+      }
+    }
   }
   public void Init()
   {
     players_ = GameObject.Find("Players").GetComponent<PlayersScript>();
+
   }
 
   // airconsole handlers
@@ -147,6 +172,10 @@ public class LevelScript : MonoBehaviour
       }
     }
   }
+  public void MessageToDebug(string msg)
+  {
+    debug_text_queue.Add(msg);
+  }
 
 
 
@@ -170,7 +199,11 @@ public class LevelScript : MonoBehaviour
             if (action.StartsWith("destroy"))
             {
               string[] parts = action.Split(':');
-              RemoveObject(parts[1]);
+              string[] obj_parts = parts[1].Split('|');
+          
+              for ( int x=0; x< obj_parts.Length; x++ )
+               RemoveObject(obj_parts[x]);
+              MessageToDebug("That did something");
             }
             string triggerVote = child.gameObject.GetComponent<ObjectScript>().trigger_vote;
             if (triggerVote != "")
@@ -209,6 +242,7 @@ public class LevelScript : MonoBehaviour
             {
               PlayerScript ps = obj.GetComponent<PlayerScript>();
               ps.setLayer(switch_layer);
+            
               if (ps.hasFocus())
               {
                 SetFocus(ps.getId());
@@ -217,6 +251,7 @@ public class LevelScript : MonoBehaviour
               {
                 players_.RefreshVisibility();
               }
+              TempDisableObjects(obj);
             }
             if (t != "")
             {
@@ -226,7 +261,9 @@ public class LevelScript : MonoBehaviour
               {
                 objs.Add(GameObject.Find(p));
               }
-              
+              MessageToDebug("Holding that.. I need to stay here");
+              MessageToDebug("To deactivate that permanently we need a main console");
+
               foreach (GameObject p in objs)
               {
                 if (p != null)
@@ -234,59 +271,30 @@ public class LevelScript : MonoBehaviour
                   p.SetActive(false);
                   child.gameObject.GetComponent<ObjectScript>().tmp_objects.Add(p);
                 }
-              }
-              
+              }              
             }
           }
 
-          if (d >0.6f)
+          if (d >0.5f)
           {
             if(!child.gameObject.GetComponent<ObjectScript>().wasOutside(player_id))
             {
               Debug.Log("OUTSIDE");
-              foreach (GameObject p in child.gameObject.GetComponent<ObjectScript>().tmp_objects)
+              if (!child.gameObject.GetComponent<ObjectScript>().someoneInside())
               {
-                p.SetActive(true);
+                foreach (GameObject p in child.gameObject.GetComponent<ObjectScript>().tmp_objects)
+                {
+                  if (p != null)
+                    p.SetActive(true);
+                }
+                child.gameObject.GetComponent<ObjectScript>().tmp_objects.Clear();
               }
-              child.gameObject.GetComponent<ObjectScript>().tmp_objects.Clear();
             }
 
             child.gameObject.GetComponent<ObjectScript>().was_outside = true;
             child.gameObject.GetComponent<ObjectScript>().PlayerWasOutside(player_id);
           }
-          // 
-         /* if (child.gameObject.GetComponent<ObjectScript>().turn_off != "")
-          {
-            string t = child.gameObject.GetComponent<ObjectScript>().turn_off;
-
-            List<GameObject> objs = new List<GameObject> ();
-            string[] parts = t.Split('|');
-            foreach ( string p in parts)
-            {
-              objs.Add( GameObject.Find(p) );
-            }
-
-            if (d < 0.2f)
-            {
-              foreach (GameObject p in objs)
-              {
-                if (p != null)
-                {
-                  p.SetActive(false);
-                  child.gameObject.GetComponent<ObjectScript>().tmp_objects.Add(p);
-                }
-              }
-            }
-            else
-            {
-
-              foreach (GameObject p in child.gameObject.GetComponent<ObjectScript>().tmp_objects)
-              {
-                  p.SetActive(true);
-              }
-              child.gameObject.GetComponent<ObjectScript>().tmp_objects.Clear();
-            }
-          }*/
+     
         }
        
       }
@@ -296,9 +304,38 @@ public class LevelScript : MonoBehaviour
   }
 
   public void RemoveObject(string name)
-  {    
-    Debug.Log("Destroying "+name);
-    Destroy(GameObject.Find("Game").transform.FindChild(name).gameObject);
+  {
+    for( int x=0; x < GameObject.Find("Level").transform.childCount; x++)
+    {
+      Transform ll = GameObject.Find("Level").transform.GetChild(x);
+      Transform o = ll.FindChild("Objects").FindChild(name);
+      if (o != null)
+      {
+        Debug.Log("Destroying " + name);
+        Destroy(o.gameObject);
+      }
+    }   
+  }
+  private void TempDisableObjects(GameObject obj)
+  {
+    int player_id = obj.GetComponent<PlayerScript>().getId();
+    GameObject lobjs = GameObject.Find("LevelLayer" + current_layer_.ToString()).transform.FindChild("Objects").gameObject;
+    if (lobjs != null)
+    {
+      foreach (Transform child in lobjs.transform)
+      {
+        if (child.childCount > 0)
+        {
+          Vector2 tv = obj.GetComponent<BoxCollider2D>().offset;
+          float d = Vector3.Distance(child.GetChild(0).position, obj.transform.position + new Vector3(tv.x, tv.y, 0));
+
+          if ((d < 0.5f))
+          {
+            child.gameObject.GetComponent<ObjectScript>().PlayerWasInside(player_id);
+          }
+        }
+      }
+    }
   }
 
   public bool IsInVoteMode()

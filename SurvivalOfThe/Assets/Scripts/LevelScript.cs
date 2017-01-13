@@ -269,7 +269,7 @@ public class LevelScript : MonoBehaviour
               if (parts[1] == "startengine") {
                 int number_of_players = GameObject.Find("Players").GetComponent<PlayersScript>().PlayerCount();
                 VoteScript vote_script = GameObject.Find("UI").GetComponent<VoteScript>();
-                vote_script.Init("Enter the start sequence for the engine ...", number_of_players);
+                vote_script.Init("Enter the start sequence for the engine ...\nUse the DIRECTION keys to enter the code.\nSubmit the code with the ACTION key.", number_of_players);
               }
             }
             string triggerVote = child.gameObject.GetComponent<ObjectScript>().trigger_vote;

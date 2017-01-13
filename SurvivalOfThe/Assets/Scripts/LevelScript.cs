@@ -187,10 +187,12 @@ public class LevelScript : MonoBehaviour
     GameObject.Find("Game").transform.GetChild(1).position =  v;
     GameObject.Find("Game").transform.GetChild(1).GetChild(1).GetChild(0).GetComponent<Text>().text = question;
     GameObject.Find("Players").GetComponent<PlayersScript>().SetVoteMode();
+    AirConsole.instance.Broadcast("BeginVote");
   }
 
   private void EndVoteMode(int vote)
   {
+    AirConsole.instance.Broadcast("EndVote");
     Debug.Log(vote);
     vote_mode = false;
     GameObject.Find("Game").transform.GetChild(1).gameObject.SetActive(false);

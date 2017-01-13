@@ -22,9 +22,17 @@ function init()
     if (from == AirConsole.SCREEN && data == "GameStarts")
     {
       state = "playing";
-      console.log("playing");
-    
+      console.log("playing");    
     }
+    if (from == AirConsole.SCREEN && data == "BeginVote")
+    {
+      state = "voting";
+    }
+    if (from == AirConsole.SCREEN && data == "EndVote")
+    {
+      state = "playing";
+    }
+
     if (from == AirConsole.SCREEN )
       updateText();
   };
@@ -58,11 +66,17 @@ function updateText()
   var div2 = document.getElementById("action2lbl");
   if(state == "playing")
   {
-    div.innerHTML = "Action 1";
-    div2.innerHTML = "Action 2";
+    div.innerHTML = "Interact";
+    div2.innerHTML = "";
   }
-  if (state == "waiting") {
+  if (state == "waiting")
+  {
     div.innerHTML = "Start game";
+  }
+  if (state == "voting")
+  {
+    div.innerHTML = "Yes";
+    div2.innerHTML = "No";
   }
 }
 
@@ -87,10 +101,18 @@ function action1()
   {
     airconsole.message(AirConsole.SCREEN, { action: 1 });
   }
+  if (state === "voting")
+  {
+    airconsole.message(AirConsole.SCREEN, { action: 1 });
+  }
 }
 function action2()
 {
   if (state === "playing")
+  {
+    airconsole.message(AirConsole.SCREEN, { action: 2 });
+  }
+  if (state === "voting")
   {
     airconsole.message(AirConsole.SCREEN, { action: 2 });
   }

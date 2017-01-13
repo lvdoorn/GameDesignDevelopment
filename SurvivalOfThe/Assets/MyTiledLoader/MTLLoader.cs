@@ -226,8 +226,8 @@ public class MTLLoader : MonoBehaviour
 
           RuntimeAnimatorController animatcontroller = Resources.Load("Tiledmaps/Tilesets/SpecialEffects") as RuntimeAnimatorController;
 
-          main_obj.transform.localScale = new Vector3(scaleX * mt_ts.tilewidth, scaleY * mt_ts.tileheight,1);
-          main_obj.transform.localPosition = new Vector3(obj.x * scaleX / (scale),  0, obj.y * scaleY / (scale));
+          main_obj.transform.localScale = new Vector3(scaleX * mt_ts.tilewidth*2.0f, scaleY * mt_ts.tileheight*2.0f,1);
+          main_obj.transform.localPosition = new Vector3(obj.x * scaleX / (10*scale),  0, obj.y * scaleY / (10*scale));
           main_obj.transform.position =  - new Vector3((10*scale) / 2.0f,-(10*scale) / 2.0f, 0) + new Vector3(obj.x * scaleX, -obj.y * scaleY, 0) - new Vector3(-(float)obj.width * scaleX / 2.0f, -(float)obj.height * scaleY / 2.0f, 0);//new Vector3(obj.x * scaleX, 0, -obj.y * scaleY); + new Vector3(-( scale) / 2.0f, 0, (scale) / 2.0f) - new Vector3(-(float)obj.width * scaleX / 2.0f,  0, -(float)obj.height * scaleY / 2.0f);
           main_obj.AddComponent<ObjectScript>();
 

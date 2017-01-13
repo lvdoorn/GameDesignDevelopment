@@ -20,6 +20,7 @@ public class PlayerScript : MonoBehaviour
   private int selected_answer = -1;
   public bool holds_trigger = false;
 
+  private GameScript game_;
 
   void Start ()
   {
@@ -30,6 +31,7 @@ public class PlayerScript : MonoBehaviour
     movement_ = "S";
     has_focus_ = false;
     offset = new Vector3(((float)gameObject.GetComponent<SpriteRenderer>().sprite.texture.width * gameObject.transform.localScale.x) / (gameObject.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit * 10), 0, 0);
+    game_ = GameObject.Find("Game").GetComponent<GameScript>();
 
     AirConsole.instance.onMessage += OnMessage;
   }
@@ -38,10 +40,10 @@ public class PlayerScript : MonoBehaviour
   {
     bool m = false;
 
-    LevelScript ls = GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel();
+    LevelScript ls = game_.GetCurrentLevel();
     if (ls != null)
     {
-      if (!ls.IsInVoteMode())
+      if (!ls.IsInVoteMode() && game_.GetState() == GameState.PLAY)
       {
         // set the movement
         if (movement_ == "R")

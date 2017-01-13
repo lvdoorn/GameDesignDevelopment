@@ -219,4 +219,8 @@ public class PlayersScript : MonoBehaviour
     LayerSwitched(layer_id);
   }
 
+  public int PlayerCount() {
+    return players_.Count;
+  }
+
 }

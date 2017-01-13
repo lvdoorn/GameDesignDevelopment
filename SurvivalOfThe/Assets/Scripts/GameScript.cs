@@ -6,10 +6,11 @@ using Newtonsoft.Json.Linq;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-enum GameState
+public enum GameState
 {
   JOIN =0,
-  PLAY =1
+  PLAY =1,
+  VOTE =2
 }
 
 public class GameScript : MonoBehaviour
@@ -31,8 +32,8 @@ public class GameScript : MonoBehaviour
   {
     if (Input.GetKeyDown("p"))
     {
-      ChangeLevel("Tiledmaps/tutorial_ex_json");
-      ChangePositions(new Vector3(0.0f, 2.95f, -8));
+      StartTutorial();
+      //StartExtendedTutorial();
     }
   }
 
@@ -42,24 +43,11 @@ public class GameScript : MonoBehaviour
     if (data["start"] != null)
     {
       Debug.Log("received start");
-      ChangeLevel("Tiledmaps/tutorial_ex_json");
-      ChangePositions(new Vector3(0.0f, 2.95f, -8));
+      StartTutorial();
+      //StartExtendedTutorial();
     }
   }
-
-  /*IEnumerator CoRoutine() {
-    yield return new WaitForSeconds(10);
-    tutorialText.text = ("Welcome to survival of the Zargs!");
-    yield return new WaitForSeconds(5);
-    tutorialText.text = ("Cooperate to repair the spaceship");
-    yield return new WaitForSeconds(5);
-    tutorialText.text = ("Press FOCUS to center the camera on your player");
-    yield return new WaitForSeconds(5);
-    tutorialText.text = ("Use the action buttons to vote when required");
-    yield return new WaitForSeconds(5);
-    tutorialText.text = "";
-  }*/
-
+  
   //action
 
   private void StartLevel()
@@ -97,6 +85,11 @@ public class GameScript : MonoBehaviour
     GetCurrentLevel().DisplayInfoBox("Welcome to Survival of the Zargs! Use the ACTION buttons on your device to interact.", 10);
   }
 
+  public void StartExtendedTutorial() {
+    ChangeLevel("Tiledmaps/tutorial_ex_json");
+    ChangePositions(new Vector3(0.0f, 2.75f, -8));
+  }
+
   public void ChangePositions(params Vector3[] vs) {
     if (vs.Length == 1) {
       GameObject.Find("Players").GetComponent<PlayersScript>().MoveAllPlayers(vs[0]);
@@ -115,13 +108,17 @@ public class GameScript : MonoBehaviour
       loader = current_level_.GetComponent<MTLLoader>();
       loader.Clear();
 
+
+     // Destroy(current_level_.GetComponent<LevelScript>());
+      //current_level_.AddComponent<LevelScript>();
+      (current_level_.GetComponent<LevelScript>()).Reset();
+
       loader.level_file = Resources.Load(lvl) as TextAsset;
-      Destroy(current_level_.GetComponent<LevelScript>());
-      current_level_.AddComponent<LevelScript>();
     }
     else
     {
       current_level_.AddComponent<LevelScript>();
+      (current_level_.GetComponent<LevelScript>()).Reset();
       loader = current_level_.AddComponent<MTLLoader>();
       state_ = GameState.PLAY;
       AirConsole.instance.Broadcast("GameStarts");
@@ -151,6 +148,10 @@ public class GameScript : MonoBehaviour
   public LevelScript GetCurrentLevel()
   {
     return current_level_.GetComponent<LevelScript>();
+  }
+
+  public GameState GetState() {
+    return state_;
   }
 }
 

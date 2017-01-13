@@ -43,8 +43,20 @@ public class LevelScript : MonoBehaviour
     } else {
       info_box_.SetActive(false);
     }
+  }	
+  public void Reset()
+  {
+    current_layer_ = -1;
+
+    vote_mode = false;
+    vote_event = "";
+
+    debug_text_current = 0.0f;
+    debug_text_executed = 0.0f;
+    debug_text_wait = 5.0f;
+    debug_text_queue.Clear();
   }
-  void Update ()
+	void Update ()
   {
     if(vote_mode)
     {
@@ -157,7 +169,7 @@ public class LevelScript : MonoBehaviour
       if (pl != null)
       {
         SwitchLayer((pl.GetComponent<PlayerScript>()).layer_);
-        players_.SetFocus(player_id);  
+        players_.SetFocus(player_id);
         player_id = 100;
       }
       player_id++;
@@ -247,6 +259,15 @@ public class LevelScript : MonoBehaviour
               string hint = parts[1];
               int seconds = parts.Length > 2 ? int.Parse(parts[2]) : 5;
               DisplayInfoBox(hint, seconds);
+            }
+            if (action.StartsWith("vote")) {
+              string[] parts = action.Split(':');
+              if (parts[1] == "startengine") {
+                int number_of_players = GameObject.Find("Players").GetComponent<PlayersScript>().PlayerCount();
+                VoteScript vote_script = GameObject.Find("UI").transform.GetChild(1).GetComponent<VoteScript>();
+                vote_script.Init("Enter the start sequence for the engine ...", number_of_players);
+                vote_script.gameObject.SetActive(true);
+              }
             }
             string triggerVote = child.gameObject.GetComponent<ObjectScript>().trigger_vote;
             if (triggerVote != "")

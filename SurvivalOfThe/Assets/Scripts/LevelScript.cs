@@ -19,13 +19,32 @@ public class LevelScript : MonoBehaviour
   private float debug_text_wait = 5.0f;
   private List<string> debug_text_queue = new List<string>();
 
+  private List<KeyValuePair<float, string>> label_queue_ = new List<KeyValuePair<float, string>>();
+  private GameObject info_box_;
+  private Text info_box_text_;
+
   void Start ()
   {
     players_ = GameObject.Find("Players").GetComponent<PlayersScript>();
+    info_box_ = GameObject.Find("UI").transform.GetChild(0).gameObject;
+    info_box_text_ = info_box_.GetComponentInChildren<Text>(true);
 
     AirConsole.instance.onMessage += OnMessage;
-  }	
-	void Update ()
+  }
+  void OnGUI() {
+    if (label_queue_.Count > 0) {
+      if (Time.time < label_queue_[0].Key) { // display queue element 0
+        string text = label_queue_[0].Value;
+        info_box_text_.text = text;
+      } else { // queue element 0 has expired -> remove from queue
+        label_queue_.RemoveAt(0);
+      }
+      info_box_.SetActive(true);
+    } else {
+      info_box_.SetActive(false);
+    }
+  }
+  void Update ()
   {
     if(vote_mode)
     {
@@ -177,7 +196,17 @@ public class LevelScript : MonoBehaviour
     debug_text_queue.Add(msg);
   }
 
-
+  public void DisplayInfoBox(string text, float seconds = 5) {
+    float end_time;
+    if (label_queue_.Count > 0) {
+      // display the new label until *seconds* seconds after the last label in the queue 
+      end_time = label_queue_[label_queue_.Count - 1].Key + seconds;
+    } else {
+      // display the new label until *now* + *seconds*
+      end_time = Time.time + seconds;
+    }
+    label_queue_.Add(new KeyValuePair<float, string>(end_time, text));
+  }
 
   // scripted 
 
@@ -204,6 +233,12 @@ public class LevelScript : MonoBehaviour
               for ( int x=0; x< obj_parts.Length; x++ )
                RemoveObject(obj_parts[x]);
               MessageToDebug("That did something");
+            }
+            if (action.StartsWith("hint")) {
+              string[] parts = action.Split(':');
+              string hint = parts[1];
+              int seconds = parts.Length > 2 ? int.Parse(parts[2]) : 5;
+              DisplayInfoBox(hint, seconds);
             }
             string triggerVote = child.gameObject.GetComponent<ObjectScript>().trigger_vote;
             if (triggerVote != "")

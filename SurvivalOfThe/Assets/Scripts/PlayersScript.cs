@@ -72,6 +72,15 @@ public class PlayersScript : MonoBehaviour
       Debug.Log("Mode Player " + ko.Key.ToString());
     }
   }
+  public void MoveAllPlayers(List<Vector3> vs) {
+    int index = 0;
+    foreach (GameObject player in players_.Values) {
+      if (index < vs.Count) {
+        player.transform.position = vs[index];
+      }
+      index++;
+    }
+  }
 
 
   // airconsole handlers

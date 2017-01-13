@@ -16,19 +16,12 @@ public class GameScript : MonoBehaviour
 {
   private GameState state_ = GameState.JOIN;
   private GameObject current_level_;
-  
-  private List<KeyValuePair<float, string>> label_queue_ = new List<KeyValuePair<float, string>>();
-  private GameObject info_box_;
-  private Text info_box_text_;
 
   void Start()
   {
    // ShowTutorial ();
     current_level_ = new GameObject();
     current_level_.transform.SetParent(transform);
-
-    info_box_ = GameObject.Find("UI").transform.GetChild(0).gameObject;
-    info_box_text_ = info_box_.GetComponentInChildren<Text>(true);
 
     AirConsole.instance.onMessage += OnMessage;
     RefreshWaitingScreen("Waiting for players");
@@ -42,27 +35,13 @@ public class GameScript : MonoBehaviour
     }
   }
 
-  void OnGUI() {
-    if (label_queue_.Count > 0) {
-      if (Time.time < label_queue_[0].Key) { // display queue element 0
-        string text = label_queue_[0].Value;
-        info_box_text_.text = text;
-      } else { // queue element 0 has expired -> remove from queue
-        label_queue_.RemoveAt(0);
-      }
-      info_box_.SetActive(true);
-    } else {
-      info_box_.SetActive(false);
-    }
-  }
-
   //ariconsole handler
   void OnMessage(int from, JToken data)
   {
     if (data["start"] != null)
     {
       Debug.Log("received start");
-      StartExtendedTutorial();
+      StartTutorial();
     }
   }
 
@@ -105,6 +84,35 @@ public class GameScript : MonoBehaviour
       Debug.Log("Couldn't load file");
   }
 
+  public void StartTutorial() {
+    current_level_.AddComponent<LevelScript>();
+    MTLLoader loader = current_level_.AddComponent<MTLLoader>();
+    loader.level_file = Resources.Load("Tiledmaps/tutorial_json") as TextAsset;
+    loader.scale = 10.0f / 4.0f;
+    GameObject.Find("Players").GetComponent<PlayersScript>().join_enabled_ = false;
+
+    if (loader.level_file != null) {
+      loader.Load();
+      (current_level_.GetComponent<LevelScript>()).FocusSomeone();
+      state_ = GameState.PLAY;
+      AirConsole.instance.Broadcast("GameStarts");
+      GameObject.Find("WaitingScreen").SetActive(false);
+      GameObject.Find("Players").GetComponent<PlayersScript>().MoveAllPlayers(new List<Vector3>() {
+        new Vector3(-8.5f, 9.0f, 0),
+        new Vector3(-4.5f, 10.0f, 0),
+        new Vector3(-7.5f, 10.0f, 0),
+        new Vector3(-1.5f, 10.0f, 0),
+        new Vector3(4.5f, 10.0f, 0),
+        new Vector3(10.5f, 10.0f, 0),
+        new Vector3(7.5f, 10.0f, 0),
+        new Vector3(1.5f, 10.0f, 0)
+      });
+      GetCurrentLevel().DisplayInfoBox("Welcome to Survival of the Zargs! Use the ACTION buttons on your device to interact.", 10);
+    } else
+      Debug.Log("Couldn't load file");
+
+  }
+
   public void StartExtendedTutorial()
   {
     current_level_.AddComponent<LevelScript>();
@@ -121,7 +129,7 @@ public class GameScript : MonoBehaviour
       AirConsole.instance.Broadcast("GameStarts");
       GameObject.Find("WaitingScreen").SetActive(false);
       GameObject.Find("Players").GetComponent<PlayersScript>().MoveAllPlayers(new Vector3(0.0f, 2.95f, 0));
-      DisplayLabel("Use action buttons to interact.\nTry to escape the crashed ship.", 40);
+      GetCurrentLevel().DisplayInfoBox("Use action buttons to interact.\nTry to escape the crashed ship.", 10);
     }
     else
       Debug.Log("Couldn't load file");
@@ -137,18 +145,6 @@ public class GameScript : MonoBehaviour
   public LevelScript GetCurrentLevel()
   {
     return current_level_.GetComponent<LevelScript>();
-  }
-
-  public void DisplayLabel(string text, float seconds = 60) {
-    float end_time;
-    if (label_queue_.Count > 0) {
-      // display the new label until *seconds* seconds after the last label in the queue 
-      end_time = label_queue_[label_queue_.Count - 1].Key + seconds;
-    } else {
-      // display the new label until *now* + *seconds*
-      end_time = Time.time + seconds;
-    }
-    label_queue_.Add(new KeyValuePair<float, string>(end_time, text));
   }
 }
 

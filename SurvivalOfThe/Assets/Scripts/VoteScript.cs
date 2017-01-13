@@ -49,6 +49,7 @@ public class VoteScript : MonoBehaviour
 
     question_.text = question;
     code_text_.text = CodeToString();
+    AirConsole.instance.Broadcast("BeginVote");
   }
 
   private string CodeToString() {
@@ -67,6 +68,7 @@ public class VoteScript : MonoBehaviour
     yield return new WaitForSeconds(1);
     game_.State = GameState.PLAY;
     vote_.SetActive(false);
+    AirConsole.instance.Broadcast("EndVote");
   }
 
   // Airconsole handler
@@ -99,7 +101,7 @@ public class VoteScript : MonoBehaviour
           }
         }
       }
-      if (data["action"] != null)
+      if (data["vote"] != null)
       {
         for (int i = 0; i < code_.Length; i++) {
           if (code_[i] != solution_[i]) {

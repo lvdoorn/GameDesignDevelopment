@@ -103,7 +103,7 @@ function action1()
   }
   if (state === "voting")
   {
-    airconsole.message(AirConsole.SCREEN, { action: 1 });
+    airconsole.message(AirConsole.SCREEN, { vote: 1 });
   }
 }
 function action2()
@@ -114,7 +114,7 @@ function action2()
   }
   if (state === "voting")
   {
-    airconsole.message(AirConsole.SCREEN, { action: 2 });
+    airconsole.message(AirConsole.SCREEN, { vote: 2 });
   }
 }
 

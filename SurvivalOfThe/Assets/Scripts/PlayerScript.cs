@@ -141,6 +141,18 @@ public class PlayerScript : MonoBehaviour
           selected_answer = 1;
         }
       }
+      if (data["vote"] != null)
+      {
+        Debug.Log(data["vote"]);
+        if (((int)data["vote"]) == 1)
+        {
+          selected_answer = 0;
+        }
+        if (((int)data["vote"]) == 2)
+        {
+          selected_answer = 1;
+        }
+      }
     }
   }
 

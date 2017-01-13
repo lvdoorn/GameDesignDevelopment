@@ -58,6 +58,11 @@ public class PlayersScript : MonoBehaviour
   {
     Destroy(players_[id]);
     players_.Remove(id);
+
+    if (players_.Count < 3)
+      GameObject.Find("Game").GetComponent<GameScript>().RefreshWaitingScreen(players_.Count + " players connected ... waiting for players");
+    else
+      GameObject.Find("Game").GetComponent<GameScript>().RefreshWaitingScreen(players_.Count + " players connected ... waiting for start");
   }
 
   public GameObject GetPlayer(int id)
@@ -69,7 +74,7 @@ public class PlayersScript : MonoBehaviour
     foreach( KeyValuePair<int,GameObject> ko in players_)
     {
       ko.Value.transform.position = v;
-      Debug.Log("Mode Player " + ko.Key.ToString());
+      Debug.Log("Move Player " + ko.Key.ToString());
     }
   }
 

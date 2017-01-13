@@ -115,6 +115,7 @@ public class MTGameObject
   public int switch_layer = -1;
   public string trigger_vote = "";
   public string turn_off = "";
+  public string trigger_text = "";
 }
 
 
@@ -250,6 +251,8 @@ public class MTGameObject
           obj.trigger_vote = node["properties"]["trigger_vote"];
         if (node["properties"]["turn_off"] != null)
           obj.turn_off = node["properties"]["turn_off"];
+        if (node["properties"]["trigger_text"] != null)
+          obj.trigger_text = node["properties"]["trigger_text"];
       }
 
 

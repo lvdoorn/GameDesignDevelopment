@@ -154,38 +154,6 @@
                  "width":32,
                  "x":512,
                  "y":320.666666666667
-                }, 
-                {
-                 "gid":101,
-                 "height":32,
-                 "id":29,
-                 "name":"end_of_lvl",
-                 "properties":
-                    {
-                     "trigger_text":"This is the end of the prototype|Sry|I hope you liked it| Soo .. Bye"
-                    },
-                 "propertytypes":
-                    {
-                     "trigger_text":"string"
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":64,
-                 "y":319.333333333333
-                }, 
-                {
-                 "gid":102,
-                 "height":32,
-                 "id":32,
-                 "name":"dead_animal_warning",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":480.666666666667,
-                 "y":378.666666666667
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -445,12 +413,12 @@
              "level_layer":"int"
             },
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "width":0,
          "x":0,
          "y":0
         }],
- "nextobjectid":34,
+ "nextobjectid":29,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tileheight":32,

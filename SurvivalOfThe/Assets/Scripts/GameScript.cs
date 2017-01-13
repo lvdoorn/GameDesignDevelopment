@@ -38,7 +38,7 @@ public class GameScript : MonoBehaviour
   {
     if (Input.GetKeyDown("p"))
     {
-     // StartLevel();
+      ChangeLevel("Tiledmaps/tutorial_ex_json");
     }
   }
 
@@ -62,7 +62,7 @@ public class GameScript : MonoBehaviour
     if (data["start"] != null)
     {
       Debug.Log("received start");
-      StartExtendedTutorial();
+      ChangeLevel("Tiledmaps/tutorial_ex_json");
     }
   }
 
@@ -96,36 +96,48 @@ public class GameScript : MonoBehaviour
       state_ = GameState.PLAY;
       AirConsole.instance.Broadcast("GameStarts");
       GameObject.Find("WaitingScreen").SetActive(false);
-    
-
-
-
     }
     else
       Debug.Log("Couldn't load file");
   }
 
-  public void StartExtendedTutorial()
+  public void ChangeLevel(string lvl)//"Tiledmaps/tutorial_ex_json"
   {
-    current_level_.AddComponent<LevelScript>();
-    MTLLoader loader = current_level_.AddComponent<MTLLoader>();
-    loader.level_file = Resources.Load("Tiledmaps/tutorial_ex_json") as TextAsset;
+    LevelScript ls = current_level_.GetComponent<LevelScript>();
+
+    MTLLoader loader;
+    if (ls != null)
+    {
+      loader = current_level_.GetComponent<MTLLoader>();
+      loader.Clear();
+
+      loader.level_file = Resources.Load(lvl) as TextAsset;
+      Destroy(current_level_.GetComponent<LevelScript>());
+      current_level_.AddComponent<LevelScript>();
+    }
+    else
+    {
+      current_level_.AddComponent<LevelScript>();
+      loader = current_level_.AddComponent<MTLLoader>();
+      state_ = GameState.PLAY;
+      AirConsole.instance.Broadcast("GameStarts");
+      GameObject.Find("WaitingScreen").SetActive(false);
+      DisplayLabel("Use action buttons to interact.\nTry to escape the crashed ship.", 5);
+      loader.level_file = Resources.Load(lvl) as TextAsset;
+    }
+       
     //loader.scale = 1.0f;
     GameObject.Find("Players").GetComponent<PlayersScript>().join_enabled_ = false;
 
     if (loader.level_file != null)
     {
       loader.Load();
+    
+      GameObject.Find("Players").GetComponent<PlayersScript>().MoveAllPlayers(new Vector3(0.0f, 2.95f, -8));
       (current_level_.GetComponent<LevelScript>()).FocusSomeone();
-      state_ = GameState.PLAY;
-      AirConsole.instance.Broadcast("GameStarts");
-      GameObject.Find("WaitingScreen").SetActive(false);
-      GameObject.Find("Players").GetComponent<PlayersScript>().MoveAllPlayers(new Vector3(0.0f, 2.95f, 0));
-      DisplayLabel("Use action buttons to interact.\nTry to escape the crashed ship.", 40);
     }
     else
-      Debug.Log("Couldn't load file");
- 
+      Debug.Log("Couldn't load file"); 
   }
   
 

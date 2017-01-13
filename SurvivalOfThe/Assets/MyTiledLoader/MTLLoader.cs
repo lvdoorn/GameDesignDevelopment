@@ -329,7 +329,7 @@ public class MTLLoader : MonoBehaviour
           objscript.switch_layer = obj.switch_layer;
           objscript.turn_off = obj.turn_off;
           objscript.trigger_vote = obj.trigger_vote;
-
+          objscript.trigger_text = obj.trigger_text;
 
           // create collision boxes
           if (obj.gid != 0)

@@ -157,7 +157,7 @@ public class LevelScript : MonoBehaviour
       if (pl != null)
       {
         SwitchLayer((pl.GetComponent<PlayerScript>()).layer_);
-        players_.SetFocus(player_id);
+        players_.SetFocus(player_id);  
         player_id = 100;
       }
       player_id++;
@@ -186,14 +186,22 @@ public class LevelScript : MonoBehaviour
     {
       if(vote == 0 )
       {
+        MessageToDebug("Shuting down extended life support systems...");
+        MessageToDebug("3rd deck stasis pots malfunction...");
+        MessageToDebug("1st deck stasis pots malfunction...");
         RemoveObject("fire1");
         RemoveObject("fire2");
+        RemoveObject("animal_stasis_pot_1");
+        RemoveObject("animal_stasis_pot_2");
+        RemoveObject("animal_stasis_pot_3");
+        RemoveObject("animal_stasis_pot_4");
+        GameObject.Find("Level").transform.GetChild(0).GetChild(2).FindChild("dead_animal_warning").gameObject.GetComponent<ObjectScript>().trigger_text = "Oh my god the stasis pots....They are dead| ... We killed them";
       }
     }
   }
   public void MessageToDebug(string msg)
   {
-    debug_text_queue.Add(msg);
+    DisplayInfoBox(msg,3);
   }
 
   public void DisplayInfoBox(string text, float seconds = 5) {
@@ -219,7 +227,7 @@ public class LevelScript : MonoBehaviour
       {
         if (child.childCount > 0)
         {
-          float d = Vector3.Distance(child.GetChild(0).position, player_position);
+          float d = Vector2.Distance(new Vector2(child.GetChild(0).position.x, child.GetChild(0).position.y), new Vector2(player_position.x, player_position.y) );
           if (d < 0.3f)
           {
             Debug.Log(child.gameObject.name);
@@ -264,7 +272,7 @@ public class LevelScript : MonoBehaviour
         if (child.childCount > 0)
         {
           Vector2 tv = obj.GetComponent<BoxCollider2D>().offset;
-          float d = Vector3.Distance(child.GetChild(0).position  , obj.transform.position + new Vector3(tv.x, tv.y, 0));
+          float d = Vector2.Distance( new Vector2( child.GetChild(0).position.x, child.GetChild(0).position.y), new Vector2(obj.transform.position.x, obj.transform.position.y) + tv);
           //Debug.Log(d);
           // one time 
           if ((d < 0.3f) && child.gameObject.GetComponent<ObjectScript>().wasOutside(player_id))
@@ -273,6 +281,7 @@ public class LevelScript : MonoBehaviour
 
             int switch_layer = child.gameObject.GetComponent<ObjectScript>().switch_layer;
             string t = child.gameObject.GetComponent<ObjectScript>().turn_off;
+            string text_trigger = child.gameObject.GetComponent<ObjectScript>().trigger_text;
             if (switch_layer != -1)
             {
               PlayerScript ps = obj.GetComponent<PlayerScript>();
@@ -307,6 +316,18 @@ public class LevelScript : MonoBehaviour
                   child.gameObject.GetComponent<ObjectScript>().tmp_objects.Add(p);
                 }
               }              
+            }
+           
+            if (text_trigger != "")
+            {
+              Debug.Log("TextTrigger");
+              string[] parts = text_trigger.Split('|');
+
+              for(int x=0; x< parts.Length; x++)
+              {
+                MessageToDebug(parts[x]);
+              }
+              child.gameObject.GetComponent<ObjectScript>().trigger_text = "";
             }
           }
 
@@ -362,7 +383,7 @@ public class LevelScript : MonoBehaviour
         if (child.childCount > 0)
         {
           Vector2 tv = obj.GetComponent<BoxCollider2D>().offset;
-          float d = Vector3.Distance(child.GetChild(0).position, obj.transform.position + new Vector3(tv.x, tv.y, 0));
+          float d = Vector2.Distance(new Vector2(child.GetChild(0).position.x, child.GetChild(0).position.y), new Vector2(obj.transform.position.x, obj.transform.position.y) + tv);
 
           if ((d < 0.5f))
           {

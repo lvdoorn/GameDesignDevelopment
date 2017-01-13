@@ -7,6 +7,7 @@ public class ObjectScript : MonoBehaviour
   public string action = "";
   public int switch_layer = -1;
   public string trigger_vote = "";
+  public string trigger_text = "";
   public string turn_off = "";
 
   public List<GameObject> tmp_objects = new List<GameObject>();

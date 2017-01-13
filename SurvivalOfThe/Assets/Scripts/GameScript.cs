@@ -31,7 +31,7 @@ public class GameScript : MonoBehaviour
   {
     if (Input.GetKeyDown("p"))
     {
-      StartLevel();
+     // StartLevel();
     }
   }
 
@@ -47,10 +47,10 @@ public class GameScript : MonoBehaviour
 
   private void ShowTutorial()
   {
-    StartCoroutine(CoRoutine());
+    //StartCoroutine(CoRoutine());
   }
 
-  IEnumerator CoRoutine() {
+  /*IEnumerator CoRoutine() {
     yield return new WaitForSeconds(10);
     tutorialText.text = ("Welcome to survival of the Zargs!");
     yield return new WaitForSeconds(5);
@@ -61,7 +61,7 @@ public class GameScript : MonoBehaviour
     tutorialText.text = ("Use the action buttons to vote when required");
     yield return new WaitForSeconds(5);
     tutorialText.text = "";
-  }
+  }*/
 
   //action
 
@@ -106,10 +106,12 @@ public class GameScript : MonoBehaviour
       AirConsole.instance.Broadcast("GameStarts");
       GameObject.Find("WaitingScreen").SetActive(false);
       GameObject.Find("Players").GetComponent<PlayersScript>().MoveAllPlayers(new Vector3(0.0f, 2.95f, 0));
-
+      (current_level_.GetComponent<LevelScript>()).MessageToDebug("Use action buttons to interact."); 
+      (current_level_.GetComponent<LevelScript>()).MessageToDebug("Try to escape the crashed ship. ");
     }
     else
       Debug.Log("Couldn't load file");
+ 
   }
   
 

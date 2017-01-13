@@ -14,7 +14,12 @@ public class LevelScript : MonoBehaviour
   private bool vote_mode = false;
   private string vote_event = "";
 
-	void Start ()
+  private float debug_text_current = 0.0f;
+  private float debug_text_executed = 0.0f;
+  private float debug_text_wait = 5.0f;
+  private List<string> debug_text_queue = new List<string>();
+
+  void Start ()
   {
     players_ = GameObject.Find("Players").GetComponent<PlayersScript>();
 
@@ -51,10 +56,30 @@ public class LevelScript : MonoBehaviour
     }
     if (Input.GetKeyDown(KeyCode.V))
       BeginVoteMode("disable_pipe_system","Test");
+
+    debug_text_current = Time.time;
+    if (debug_text_executed != 0.0f)
+    {
+      if (debug_text_current - debug_text_executed > debug_text_wait)
+      {
+        debug_text_executed = 0.0f;
+        GameObject.Find("DebugTextText").GetComponent<Text>().text = "";
+      }
+    }
+    else
+    {
+      if( debug_text_queue.Count >0 )
+      {
+        debug_text_executed = debug_text_current;
+        GameObject.Find("DebugTextText").GetComponent<Text>().text = debug_text_queue[0];
+        debug_text_queue.RemoveAt(0);
+      }
+    }
   }
   public void Init()
   {
     players_ = GameObject.Find("Players").GetComponent<PlayersScript>();
+
   }
 
   // airconsole handlers
@@ -147,6 +172,10 @@ public class LevelScript : MonoBehaviour
       }
     }
   }
+  public void MessageToDebug(string msg)
+  {
+    debug_text_queue.Add(msg);
+  }
 
 
 
@@ -174,6 +203,7 @@ public class LevelScript : MonoBehaviour
           
               for ( int x=0; x< obj_parts.Length; x++ )
                RemoveObject(obj_parts[x]);
+              MessageToDebug("That did something");
             }
             string triggerVote = child.gameObject.GetComponent<ObjectScript>().trigger_vote;
             if (triggerVote != "")
@@ -231,7 +261,9 @@ public class LevelScript : MonoBehaviour
               {
                 objs.Add(GameObject.Find(p));
               }
-              
+              MessageToDebug("Holding that.. I need to stay here");
+              MessageToDebug("To deactivate that permanently we need a main console");
+
               foreach (GameObject p in objs)
               {
                 if (p != null)

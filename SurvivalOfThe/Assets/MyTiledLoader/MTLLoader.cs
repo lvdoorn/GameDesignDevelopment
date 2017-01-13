@@ -312,7 +312,7 @@ public class MTLLoader : MonoBehaviour
           DestroyImmediate(gobj.GetComponent<MeshCollider>());
 
 
-          Material material = new Material(Shader.Find("Unlit/Transparent"));
+          Material material = new Material(shad_);
           material.mainTexture = overlay;
           meshRenderer.material = material;
 
@@ -489,10 +489,8 @@ public class MTLLoader : MonoBehaviour
             {
               MTTile mt_tile = mt_ts.tiles[tileType-1];
 
-              Debug.Log(tileType - 1);
-              Debug.Log(mt_ts.tiles.Count);
-
-              bool f = true;
+              //Debug.Log(tileType - 1);
+              //Debug.Log(mt_ts.tiles.Count);        
 
               foreach (KeyValuePair<int, MTObject> iobj in mt_tile.objects)
               {
@@ -515,7 +513,7 @@ public class MTLLoader : MonoBehaviour
 
                   Rigidbody2D body = level_layer_collision_boxes.AddComponent<Rigidbody2D>();
                   body.isKinematic = true;
-                  f = false;
+              
                 }
 
                 b2d.offset =  off;        

@@ -1,8 +1,12 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR 
+
+using UnityEngine;
 using System.Collections;
 using System;
 using System.Collections.Generic;
 using SimpleJSON;
+
+
 
 [Serializable]
 public class MTLevel
@@ -346,3 +350,4 @@ public class MTGameObject
 
 }
 
+#endif

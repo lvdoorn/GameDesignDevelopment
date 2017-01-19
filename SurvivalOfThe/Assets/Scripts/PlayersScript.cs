@@ -114,10 +114,9 @@ public class PlayersScript : MonoBehaviour
           Debug.Log("received action1");
           GameObject player = players_[from];
           Vector3 pos = player.transform.position;
-          GameObject lvl = GameObject.Find("Level");
-          if (lvl != null)
+          LevelScript ls = GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel();
+          if (ls != null)
           {
-            LevelScript ls = lvl.GetComponent<LevelScript>();
             ls.TriggerObject(pos);
           }
         }

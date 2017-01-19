@@ -22,8 +22,8 @@ public class GameScript : MonoBehaviour
   void Start()
   {
    // ShowTutorial ();
-    current_level_ = new GameObject();
-    current_level_.transform.SetParent(transform);
+    //current_level_ = new GameObject();
+    //current_level_.transform.SetParent(transform);
 
     State = GameState.JOIN;
 
@@ -53,7 +53,7 @@ public class GameScript : MonoBehaviour
   
   //action
 
-  private void StartLevel()
+  /*private void StartLevel()
   {
     current_level_.AddComponent<LevelScript>();
     MTLLoader loader = current_level_.AddComponent<MTLLoader>();
@@ -71,10 +71,10 @@ public class GameScript : MonoBehaviour
     }
     else
       Debug.Log("Couldn't load file");
-  }
+  }*/
 
   public void StartTutorial() {
-    ChangeLevel("Tiledmaps/tutorial_json", 10.0f / 4.0f);
+    ChangeLevel("tutorial", 10.0f / 4.0f);
     ChangePositions(
       new Vector3(-8.5f, 9.0f, -8),
       new Vector3(-4.5f, 10.0f, -8),
@@ -89,7 +89,7 @@ public class GameScript : MonoBehaviour
   }
 
   public void StartExtendedTutorial() {
-    ChangeLevel("Tiledmaps/tutorial_ex_json");
+    ChangeLevel("tutorial_ex");
     ChangePositions(new Vector3(0.0f, 2.75f, -8));
     GetCurrentLevel().DisplayInfoBox("Use action buttons to interact.\nTry to escape the crashed ship.", 5);
   }
@@ -104,43 +104,59 @@ public class GameScript : MonoBehaviour
 
   public void ChangeLevel(string lvl, float scale = 1.0f)//"Tiledmaps/tutorial_ex_json"
   {
-    LevelScript ls = current_level_.GetComponent<LevelScript>();
-
-    MTLLoader loader;
-    if (ls != null)
-    {
-      loader = current_level_.GetComponent<MTLLoader>();
-      loader.Clear();
+    current_level_ = gameObject.transform.FindChild(lvl).gameObject;
+    current_level_.SetActive(true);
 
 
-     // Destroy(current_level_.GetComponent<LevelScript>());
-      //current_level_.AddComponent<LevelScript>();
-      (current_level_.GetComponent<LevelScript>()).Reset();
-
-      loader.level_file = Resources.Load(lvl) as TextAsset;
-    }
-    else
-    {
-      current_level_.AddComponent<LevelScript>();
-      (current_level_.GetComponent<LevelScript>()).Reset();
-      loader = current_level_.AddComponent<MTLLoader>();
-      State = GameState.PLAY;
-      AirConsole.instance.Broadcast("GameStarts");
-      GameObject.Find("WaitingScreen").SetActive(false);
-      loader.level_file = Resources.Load(lvl) as TextAsset;
-    }
-       
-    loader.scale = scale;
-    Scale = scale;
     GameObject.Find("Players").GetComponent<PlayersScript>().join_enabled_ = false;
+    State = GameState.PLAY;
 
-    if (loader.level_file != null)
-    {
-      loader.Load();
-      (current_level_.GetComponent<LevelScript>()).FocusSomeone();
-    }
-    else
-      Debug.Log("Couldn't load file"); 
+    AirConsole.instance.Broadcast("GameStarts");
+ 
+    gameObject.transform.FindChild("WaitingScreen").gameObject.SetActive(false);
+
+    current_level_.GetComponent<LevelScript>().Init();
+    current_level_.GetComponent<LevelScript>().FocusSomeone();
+
+
+    //  LevelScript ls = current_level_.GetComponent<LevelScript>();
+
+    /* //MTLLoader loader;
+     if (ls != null)
+     {
+       //loader = current_level_.GetComponent<MTLLoader>();
+      // loader.Clear();
+
+
+      // Destroy(current_level_.GetComponent<LevelScript>());
+       //current_level_.AddComponent<LevelScript>();
+       //(current_level_.GetComponent<LevelScript>()).Reset();
+       current_level_ = gameObject.transform.FindChild(lvl).gameObject;
+
+     //  loader.level_file = Resources.Load(lvl) as TextAsset;
+     }
+     else
+     {
+       current_level_.AddComponent<LevelScript>();
+       (current_level_.GetComponent<LevelScript>()).Reset();
+      // loader = current_level_.AddComponent<MTLLoader>();
+       State = GameState.PLAY;
+       AirConsole.instance.Broadcast("GameStarts");
+       GameObject.Find("WaitingScreen").SetActive(false);
+      // loader.level_file = Resources.Load(lvl) as TextAsset;
+     }
+
+     loader.scale = scale;
+     Scale = scale;
+     GameObject.Find("Players").GetComponent<PlayersScript>().join_enabled_ = false;
+
+     if (loader.level_file != null)
+     {
+       loader.Load();
+       (current_level_.GetComponent<LevelScript>()).FocusSomeone();
+     }
+     else
+       Debug.Log("Couldn't load file"); */
   }
   
 
@@ -151,7 +167,10 @@ public class GameScript : MonoBehaviour
 
   public LevelScript GetCurrentLevel()
   {
-    return current_level_.GetComponent<LevelScript>();
+    if(current_level_ != null)
+      return current_level_.GetComponent<LevelScript>();
+
+     return null;    
   }
 }
 

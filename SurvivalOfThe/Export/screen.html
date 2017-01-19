@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en-us">
   <head>
     <meta charset="utf-8">
@@ -73,13 +73,15 @@
     </div>
     <script type='text/javascript'>
   var Module = {
-    TOTAL_MEMORY: 1073741824,
+    TOTAL_MEMORY: 268435456,
     errorhandler: null,			// arguments: err, url, line. This function must return 'true' if the error is handled, otherwise 'false'
     compatibilitycheck: null,
+    backgroundColor: "#222C36",
+    splashStyle: "Light",
     dataUrl: "Release/Export.data",
     codeUrl: "Release/Export.js",
+    asmUrl: "Release/Export.asm.js",
     memUrl: "Release/Export.mem",
-    
   };
 </script>
 <script src="Release/UnityLoader.js"></script>

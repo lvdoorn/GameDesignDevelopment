@@ -2,6 +2,9 @@
 #if !UNITY_WEBPLAYER
 #define USE_FileIO
 #endif
+
+
+#if (UNITY_EDITOR)
 /* * * * *
  * A simple JSON Parser / builder
  * ------------------------------
@@ -1304,3 +1307,5 @@ namespace SimpleJSON
     }
   }
 }
+
+#endif

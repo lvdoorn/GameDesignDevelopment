@@ -8,28 +8,28 @@
 
 <body onload="init()">
     <div id="left_side">
-        <div id="action_container">
-            <div id="action1"  class="button"  ontouchstart="action1()" onmousedown="action1()">
-              <div class="button_label" id="action1lbl">ACTION 1</div>
-            </div>
-            <div id="action2" class="button" ontouchstart="action2()" onmousedown="action2()">
-              <div class="button_label" id="action2lbl">ACTION 2</div>
-            </div>
+      <div id="action_container">
+        <div id="action1" class="button" ontouchstart="action1()" onmousedown="action1()">
+          <div class="button_label" id="action1lbl">Interact</div>
         </div>
-        <div id="inventory_container">
-            <div class="inventory_item"   ontouchstart="itemUsed(1)" onmousedown="itemUsed(1)">
-                <div class="button_label">ITEM 1</div>
-            </div>
-            <div class="inventory_item"  ontouchstart="itemUsed(2)" onmousedown="itemUsed(2)">
-                <div class="button_label">ITEM 2</div>
-            </div>
-            <div class="inventory_item"  ontouchstart="itemUsed(3)" onmousedown="itemUsed(3)">
-                <div class="button_label">ITEM 3</div>
-            </div>
-            <div class="inventory_item"  ontouchstart="itemUsed(4)" onmousedown="itemUsed(4)">
-                <div class="button_label">ITEM 4</div>
-            </div>
+        <div id="action2" class="button" ontouchstart="action2()" onmousedown="action2()">
+          <div class="button_label" id="action2lbl"></div>
         </div>
+      </div>
+      <div id="inventory_container">
+        <div class="inventory_item" ontouchstart="itemUsed(1)" onmousedown="itemUsed(1)">
+          <div class="button_label">NO ITEM</div>
+        </div>
+        <div class="inventory_item" ontouchstart="itemUsed(2)" onmousedown="itemUsed(2)">
+          <div class="button_label">NO ITEM</div>
+        </div>
+        <div class="inventory_item" ontouchstart="itemUsed(3)" onmousedown="itemUsed(3)">
+          <div class="button_label">NO ITEM</div>
+        </div>
+        <div class="inventory_item" ontouchstart="itemUsed(4)" onmousedown="itemUsed(4)">
+          <div class="button_label">NO ITEM</div>
+        </div>
+      </div>
     </div>
     <div id="right_side">
       <div id="upper_right">

@@ -15,13 +15,11 @@ public class PlayersScript : MonoBehaviour
 
   void Start()
   {
-    int player_count = 3;
     players_ = new Dictionary<int, GameObject>();
 
     AirConsole.instance.onConnect += OnConnect;
     AirConsole.instance.onDisconnect += OnDisconnect;
     AirConsole.instance.onMessage += OnMessage;
-
 
     SpriteRenderer sr = prefab.GetComponent<SpriteRenderer>();
   }
@@ -181,8 +179,7 @@ public class PlayersScript : MonoBehaviour
     {
       int v = player.Value.GetComponent<PlayerScript>().getVote();
       if (v == 0)
-        tl.Add(player.Key);
-        
+        tl.Add(player.Key);        
     }
     return tl;
   }
@@ -194,7 +191,6 @@ public class PlayersScript : MonoBehaviour
       int v = player.Value.GetComponent<PlayerScript>().getVote();
       if (v == 1)
         tl.Add(player.Key);
-
     }
     return tl;
   }

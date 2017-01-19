@@ -53,27 +53,8 @@ public class GameScript : MonoBehaviour
   
   //action
 
-  /*private void StartLevel()
+  public void StartTutorial()
   {
-    current_level_.AddComponent<LevelScript>();
-    MTLLoader loader = current_level_.AddComponent<MTLLoader>();
-    loader.level_file = Resources.Load("Tiledmaps/test_3.json") as TextAsset;
-    //loader.scale = 1.0f;
-    GameObject.Find("Players").GetComponent<PlayersScript>().join_enabled_ = false;
-
-    if (loader.level_file != null)
-    {
-      loader.Load();
-      (current_level_.GetComponent<LevelScript>()).FocusSomeone();
-      State = GameState.PLAY;
-      AirConsole.instance.Broadcast("GameStarts");
-      GameObject.Find("WaitingScreen").SetActive(false);
-    }
-    else
-      Debug.Log("Couldn't load file");
-  }*/
-
-  public void StartTutorial() {
     ChangeLevel("tutorial", 10.0f / 4.0f);
     ChangePositions(
       new Vector3(-8.5f, 9.0f, -8),
@@ -88,7 +69,8 @@ public class GameScript : MonoBehaviour
     GetCurrentLevel().DisplayInfoBox("Welcome to Survival of the Zargs! Use the ACTION buttons on your device to interact.", 10);
   }
 
-  public void StartExtendedTutorial() {
+  public void StartExtendedTutorial()
+  {
     ChangeLevel("tutorial_ex");
     ChangePositions(new Vector3(0.0f, 2.75f, -8));
     GetCurrentLevel().DisplayInfoBox("Use action buttons to interact.\nTry to escape the crashed ship.", 5);
@@ -102,7 +84,7 @@ public class GameScript : MonoBehaviour
     }
   }
 
-  public void ChangeLevel(string lvl, float scale = 1.0f)//"Tiledmaps/tutorial_ex_json"
+  public void ChangeLevel(string lvl, float scale = 1.0f)
   {
     current_level_ = gameObject.transform.FindChild(lvl).gameObject;
     current_level_.SetActive(true);

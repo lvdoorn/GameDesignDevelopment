@@ -157,6 +157,7 @@ public class MTLLoader : MonoBehaviour
 
         level_layer_tile_layer.transform.SetParent(level_layer.transform);
         level_layer_tile_layer.name = "TileLayers";
+        //level_layer_tile_layer.transform.position = new Vector3(0, 0, .0f);
 
         level_layer_collision_boxes.transform.SetParent(level_layer.transform);
         level_layer_collision_boxes.name = "Tiles";
@@ -164,6 +165,7 @@ public class MTLLoader : MonoBehaviour
         level_layer_objects = new GameObject();
         level_layer_objects.transform.SetParent(level_layer.transform);
         level_layer_objects.name = "Objects";
+      //  level_layer_objects.transform.position = new Vector3(0, 0, 1.0f);
       }
            
 
@@ -177,6 +179,7 @@ public class MTLLoader : MonoBehaviour
         main_obj.name = obj.name;
 
         main_obj.transform.SetParent(level_layer_objects.transform);
+    
 
         Texture2D ts = tileset_textures[0];
         MTTileset mt_ts = lvl.tilesets[0];
@@ -263,7 +266,7 @@ public class MTLLoader : MonoBehaviour
                 Debug.Log("Create Collision ___");
                 BoxCollider2D b2d = main_obj.AddComponent<BoxCollider2D>();
                 b2d.transform.SetParent(main_obj.transform);
-               // b2d.size = new Vector2((float)obj2.width * scaleX, (float)obj2.height * scaleY);
+                b2d.size = new Vector2((float)obj2.width * scaleX, (float)obj2.height * scaleY);
                 // Vector3 off = new Vector3((float)(x * lvl.tilewidth) * scaleX, -(float)(y * lvl.tileheight) * scaleY, 0);
                 // off += new Vector3(obj2.x * scaleX, -(obj2.y) * scaleY, 0);
                 // off -= new Vector3(-(float)obj2.width * scaleX / 2.0f, (float)obj2.height * scaleY / 2.0f, 0);
@@ -403,39 +406,42 @@ public class MTLLoader : MonoBehaviour
      }
      else
      {
-       level_layer = new GameObject();
-       level_layer.name = "LevelLayer" + layer.level_layer.ToString();
-       level_layer.transform.SetParent(transform);
-       level_layers.Add(layer.level_layer, level_layer);
+        level_layer = new GameObject();
+        level_layer.name = "LevelLayer" + layer.level_layer.ToString();
+        level_layer.transform.SetParent(transform);
+        level_layers.Add(layer.level_layer, level_layer);
 
-       level_layer_tile_layer = new GameObject();
-       level_layer_collision_boxes = new GameObject();
+        level_layer_tile_layer = new GameObject();
+        level_layer_collision_boxes = new GameObject();
 
-       level_layer_tile_layer.transform.SetParent(level_layer.transform);
-       level_layer_tile_layer.name = "TileLayers";
+        level_layer_tile_layer.transform.SetParent(level_layer.transform);
+        level_layer_tile_layer.name = "TileLayers";
+      //  level_layer_tile_layer.transform.position = new Vector3(0, 0, 4.0f);
 
-       level_layer_collision_boxes.transform.SetParent(level_layer.transform);
-       level_layer_collision_boxes.name = "Tiles";
+        level_layer_collision_boxes.transform.SetParent(level_layer.transform);
+        level_layer_collision_boxes.name = "Tiles";
+       // level_layer_collision_boxes.transform.position = new Vector3(0, 0, 3.0f);
 
-       GameObject level_layer_objects = new GameObject();
-       level_layer_objects.transform.SetParent(level_layer.transform);
-       level_layer_objects.name = "Objects";
-     }
+        GameObject level_layer_objects = new GameObject();
+        level_layer_objects.transform.SetParent(level_layer.transform);
+        level_layer_objects.name = "Objects";
+       // level_layer_objects.transform.position = new Vector3(0, 0, 1.0f);
+      }
 
      List<GameObject> tiles_layer = new List<GameObject>();
 
-    GameObject overlayObject = GameObject.CreatePrimitive(PrimitiveType.Plane);
+    GameObject overlayObject = new GameObject();
     if (overlayObject == null)
       Debug.Log("couldn't create overlay");
 
     overlayObject.transform.SetParent(level_layer_tile_layer.transform);
-    overlayObject.transform.localPosition = new Vector3(0.0f, 0.0f, 0.01f);
+    overlayObject.transform.localPosition = new Vector3(0.0f, 0.0f, 1-0.01f *level_layer_tile_layer.transform.childCount);
     // overlayObject.layer = 7 + lvl.layers.Count-c;
     layer_objects.Add(c, overlayObject);
 
 
     overlayObject.transform.localEulerAngles = new Vector3(-90, 0, 0);
-    overlayObject.transform.localPosition = new Vector3(0.0f, 0.0f, 0.01f);
+    overlayObject.transform.localPosition = new Vector3(0.0f, 0.0f,1-0.01f * level_layer_tile_layer.transform.childCount);
     overlayObject.name = layer.name;
 
 
@@ -486,10 +492,17 @@ public class MTLLoader : MonoBehaviour
              // add new sprite            
              Rect tr = new Rect(xIndex * (int)mt_ts.tilewidth, (yIndex * (int)mt_ts.tileheight), (int)mt_ts.tilewidth, (int)mt_ts.tileheight);
              sp = Sprite.Create(ts, tr, new Vector2(0, 0));
-              
-            
-             tile_sprites[tileType] = sp;
-           }
+
+             Sprite[] sprites = Resources.LoadAll<Sprite>("Tiledmaps/Tilesets/"+mt_ts.name);
+              Debug.Log(tileType - mt_ts.firstgid);
+              Debug.Log(mt_ts.name);
+              Debug.Log(sprites.Length);
+
+              tile_sprites[tileType] = sprites[tileType- mt_ts.firstgid] ;
+              sp = sprites[tileType - mt_ts.firstgid];
+            }
+
+
            GameObject got = new GameObject();
            got.transform.SetParent(overlayObject.transform);
 
@@ -497,16 +510,16 @@ public class MTLLoader : MonoBehaviour
            float scaleY = (10.0f * this.scale) / (float)(lvl.tileheight * lvl.height);
 
    
-           got.transform.position = new Vector3(x * mt_ts.tilewidth * scaleX, -y * mt_ts.tileheight * scaleY, 0) + new Vector3(-(10.0f * scale) / 2.0f, (10.0f * scale) / 2.0f, 0);// - new Vector3(-(float)32 * scaleX / 2.0f, -(float)32 * scaleY / 2.0f, 0);
-            float sn = scaleX * (1.0f / sp.bounds.size.x) * mt_ts.tilewidth + 0.01f;
-             
-             got.transform.localScale = new Vector3( sn,sn, 1.0f);
+           got.transform.localPosition = new Vector3(x * mt_ts.tilewidth * scaleX,0, -y * mt_ts.tileheight * scaleY) + new Vector3(-(10.0f * scale) / 2.0f,0, (10.0f * scale) / 2.0f) - new Vector3(-(float)32 * scaleX / 2.0f, 0,(float)32 * scaleY / 2.0f);
+            float sn = scaleX * (1.0f / sp.bounds.size.x) * mt_ts.tilewidth;
+         
+           got.transform.localScale = new Vector3( sn,sn, 1.0f);
 
           //  Debug.Log(sp.bounds.size.x);
 
            SpriteRenderer sr = got.AddComponent<SpriteRenderer>();
            sr.sprite = sp;
-           sr.flipY = true;
+           //sr.flipY = true;
 
           }  
 

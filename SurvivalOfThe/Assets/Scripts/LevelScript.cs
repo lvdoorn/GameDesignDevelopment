@@ -14,11 +14,6 @@ public class LevelScript : MonoBehaviour
   private bool vote_mode = false;
   private string vote_event = "";
 
-  private float debug_text_current = 0.0f;
-  private float debug_text_executed = 0.0f;
-  private float debug_text_wait = 5.0f;
-  private List<string> debug_text_queue = new List<string>();
-
   private List<KeyValuePair<float, string>> label_queue_ = new List<KeyValuePair<float, string>>();
   private GameObject info_box_;
   private Text info_box_text_;
@@ -50,11 +45,6 @@ public class LevelScript : MonoBehaviour
 
     vote_mode = false;
     vote_event = "";
-
-    debug_text_current = 0.0f;
-    debug_text_executed = 0.0f;
-    debug_text_wait = 5.0f;
-    debug_text_queue.Clear();
   }
 	void Update ()
   {
@@ -88,24 +78,6 @@ public class LevelScript : MonoBehaviour
     if (Input.GetKeyDown(KeyCode.V))
       BeginVoteMode("disable_pipe_system","Test");
 
-    debug_text_current = Time.time;
-    if (debug_text_executed != 0.0f)
-    {
-      if (debug_text_current - debug_text_executed > debug_text_wait)
-      {
-        debug_text_executed = 0.0f;
-        GameObject.Find("DebugTextText").GetComponent<Text>().text = "";
-      }
-    }
-    else
-    {
-      if( debug_text_queue.Count >0 )
-      {
-        debug_text_executed = debug_text_current;
-        GameObject.Find("DebugTextText").GetComponent<Text>().text = debug_text_queue[0];
-        debug_text_queue.RemoveAt(0);
-      }
-    }
   }
   public void Init()
   {
@@ -288,7 +260,7 @@ public class LevelScript : MonoBehaviour
   public void CheckMoveTrigger(GameObject obj)
   {
     int player_id = obj.GetComponent<PlayerScript>().getId();
-    GameObject lobjs = GameObject.Find("LevelLayer" + current_layer_.ToString()).transform.FindChild("Objects").gameObject;
+    GameObject lobjs = gameObject.transform.FindChild("LevelLayer" + current_layer_.ToString()).transform.FindChild("Objects").gameObject;
     if (lobjs != null)
     {
       foreach (Transform child in lobjs.transform)
@@ -385,9 +357,9 @@ public class LevelScript : MonoBehaviour
 
   public void RemoveObject(string name)
   {
-    for( int x=0; x < GameObject.Find("Level").transform.childCount; x++)
+    for( int x=0; x < gameObject.transform.childCount; x++)
     {
-      Transform ll = GameObject.Find("Level").transform.GetChild(x);
+      Transform ll = gameObject.transform.GetChild(x);
       Transform o = ll.FindChild("Objects").FindChild(name);
       if (o != null)
       {

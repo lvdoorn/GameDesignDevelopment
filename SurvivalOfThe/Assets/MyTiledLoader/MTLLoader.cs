@@ -286,9 +286,39 @@ public class MTLLoader : MonoBehaviour
             }
           }
 
+          ObjectScript objscript = main_obj.AddComponent<ObjectScript>();
+          objscript.action = obj.action;
+          objscript.switch_layer = obj.switch_layer;
+          objscript.turn_off = obj.turn_off;
+          objscript.trigger_vote = obj.trigger_vote;
+          objscript.trigger_text = obj.trigger_text;
 
-        }
-        else
+          if (obj.sound != "")
+          {
+            string[] parts = obj.sound.Split('|');
+
+            AudioSource audio_src = main_obj.AddComponent<AudioSource>();
+
+            AudioClip clip1 = (AudioClip)Resources.Load("Sound/" + parts[1]);
+            audio_src.clip = clip1;
+       
+
+            if (parts[0] == "once")
+            {
+              audio_src.Stop();
+              objscript.trigger_audio = "once";
+              audio_src.playOnAwake = false;
+            }
+            else
+            {
+              audio_src.loop = true;
+              audio_src.Play();
+            }
+          }
+
+
+          }
+          else
         {
           Texture2D overlay = new Texture2D((int)(obj.width), (int)(obj.height));
 
@@ -335,6 +365,31 @@ public class MTLLoader : MonoBehaviour
           objscript.turn_off = obj.turn_off;
           objscript.trigger_vote = obj.trigger_vote;
           objscript.trigger_text = obj.trigger_text;
+
+          if( obj.sound != ""  )
+          {
+            string[] parts = obj.sound.Split('|');
+
+            AudioSource audio_src = main_obj.AddComponent<AudioSource>();
+
+            AudioClip clip1 = (AudioClip)Resources.Load("Sound/"+parts[1]);
+            audio_src.clip = clip1;
+      
+
+            if (parts[0] == "once")
+            {
+              audio_src.Stop();
+              objscript.trigger_audio = "once";
+              audio_src.playOnAwake = false;
+            }
+            else
+            {
+              audio_src.loop = true;
+              audio_src.Play();
+            }
+
+           
+          }
 
           // create collision boxes
           if (obj.gid != 0)

@@ -27,6 +27,8 @@ public class LevelScript : MonoBehaviour
     AirConsole.instance.onMessage += OnMessage;
   }
   void OnGUI() {
+   // Debug.Log("onGui" + label_queue_.Count);
+
     if (label_queue_.Count > 0) {
       if (Time.time < label_queue_[0].Key) { // display queue element 0
         string text = label_queue_[0].Value;
@@ -82,7 +84,10 @@ public class LevelScript : MonoBehaviour
   public void Init()
   {
     players_ = GameObject.Find("Players").GetComponent<PlayersScript>();
-
+    info_box_ = GameObject.Find("UI").transform.GetChild(1).gameObject;
+    info_box_text_ = info_box_.GetComponentInChildren<Text>(true);
+    info_box_.SetActive(false);
+    label_queue_.Clear();
   }
 
   // airconsole handlers
@@ -187,6 +192,7 @@ public class LevelScript : MonoBehaviour
   }
   public void MessageToDebug(string msg)
   {
+    Debug.Log("Display " + msg);
     DisplayInfoBox(msg,3);
   }
 
@@ -250,6 +256,13 @@ public class LevelScript : MonoBehaviour
               string[] parts = triggerVote.Split('|');
               BeginVoteMode(parts[0], parts[1]);
             }
+            if (child.gameObject.GetComponent<ObjectScript>().trigger_audio != "")
+            {
+              if (child.gameObject.GetComponent<ObjectScript>().trigger_audio == "once")
+              {
+                child.gameObject.GetComponent<AudioSource>().Play();
+              }
+            }
           }
         }
       }
@@ -293,6 +306,7 @@ public class LevelScript : MonoBehaviour
               }
               TempDisableObjects(obj);
             }
+       
             if (t != "")
             {
               List<GameObject> objs = new List<GameObject>();
@@ -304,6 +318,8 @@ public class LevelScript : MonoBehaviour
               MessageToDebug("Holding that.. I need to stay here");
               MessageToDebug("To deactivate that permanently we need a main console");
 
+            
+
               foreach (GameObject p in objs)
               {
                 if (p != null)
@@ -311,7 +327,16 @@ public class LevelScript : MonoBehaviour
                   p.SetActive(false);
                   child.gameObject.GetComponent<ObjectScript>().tmp_objects.Add(p);
                 }
-              }              
+              }
+
+              if (child.gameObject.GetComponent<ObjectScript>().trigger_audio != "")
+              {
+                if (child.gameObject.GetComponent<ObjectScript>().trigger_audio == "once")
+                {
+                  child.gameObject.GetComponent<AudioSource>().Play();
+                  Debug.Log("Play Audio ");
+                }
+              }
             }
            
             if (text_trigger != "")
@@ -341,6 +366,14 @@ public class LevelScript : MonoBehaviour
                 }
                 child.gameObject.GetComponent<ObjectScript>().tmp_objects.Clear();
               }
+           /*   if (child.gameObject.GetComponent<ObjectScript>().trigger_audio != "")
+              {
+                if (child.gameObject.GetComponent<ObjectScript>().trigger_audio == "once")
+                {
+                  child.gameObject.GetComponent<AudioSource>().Play();
+                  Debug.Log("Play Audio ");
+                }
+              }*/
             }
 
             child.gameObject.GetComponent<ObjectScript>().was_outside = true;

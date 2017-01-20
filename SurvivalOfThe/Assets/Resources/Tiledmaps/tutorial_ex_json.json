@@ -14,7 +14,7 @@
              "level_layer":"int"
             },
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":40,
          "x":0,
          "y":0
@@ -33,7 +33,7 @@
              "level_layer":"int"
             },
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":40,
          "x":0,
          "y":0
@@ -50,11 +50,13 @@
                  "name":"console_bot",
                  "properties":
                     {
-                     "action":"destroy:exit_bot|exit_bot_2"
+                     "action":"destroy:exit_bot|exit_bot_2",
+                     "sound":"once|InterfaceDeck"
                     },
                  "propertytypes":
                     {
-                     "action":"string"
+                     "action":"string",
+                     "sound":"string"
                     },
                  "rotation":0,
                  "type":"",
@@ -116,8 +118,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":448.666666666667,
-                 "y":256.666666666667
+                 "x":448.667,
+                 "y":256.667
                 }, 
                 {
                  "gid":85,
@@ -129,7 +131,7 @@
                  "visible":true,
                  "width":32,
                  "x":512,
-                 "y":256.333333333333
+                 "y":256.333
                 }, 
                 {
                  "gid":85,
@@ -140,8 +142,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":447.666666666667,
-                 "y":320.333333333333
+                 "x":447.667,
+                 "y":320.333
                 }, 
                 {
                  "gid":85,
@@ -153,7 +155,7 @@
                  "visible":true,
                  "width":32,
                  "x":512,
-                 "y":320.666666666667
+                 "y":320.667
                 }, 
                 {
                  "gid":101,
@@ -173,7 +175,7 @@
                  "visible":true,
                  "width":32,
                  "x":64,
-                 "y":319.333333333333
+                 "y":319.333
                 }, 
                 {
                  "gid":102,
@@ -184,12 +186,12 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":480.666666666667,
-                 "y":378.666666666667
+                 "x":480.667,
+                 "y":378.667
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "width":0,
          "x":0,
          "y":0
@@ -284,10 +286,12 @@
                  "name":"console_mid",
                  "properties":
                     {
+                     "sound":"once|InterfaceDeck",
                      "trigger_vote":"disable_pipe_system|Shut off pipe system?"
                     },
                  "propertytypes":
                     {
+                     "sound":"string",
                      "trigger_vote":"string"
                     },
                  "rotation":0,
@@ -326,7 +330,7 @@
              "level_layer":"int"
             },
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":40,
          "x":0,
          "y":0
@@ -345,7 +349,7 @@
              "level_layer":"int"
             },
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":40,
          "x":0,
          "y":0
@@ -362,10 +366,12 @@
                  "name":"button_top",
                  "properties":
                     {
+                     "sound":"once|switch1",
                      "turn_off":"fire1|fire2"
                     },
                  "propertytypes":
                     {
+                     "sound":"string",
                      "turn_off":"string"
                     },
                  "rotation":0,
@@ -402,11 +408,13 @@
                  "name":"fire1",
                  "properties":
                     {
-                     "animation":"fire"
+                     "animation":"fire",
+                     "sound":"always|fire-1"
                     },
                  "propertytypes":
                     {
-                     "animation":"string"
+                     "animation":"string",
+                     "sound":"string"
                     },
                  "rotation":0,
                  "type":"",
@@ -422,11 +430,13 @@
                  "name":"fire2",
                  "properties":
                     {
-                     "animation":"fire"
+                     "animation":"fire",
+                     "sound":"always|fire-1"
                     },
                  "propertytypes":
                     {
-                     "animation":"string"
+                     "animation":"string",
+                     "sound":"string"
                     },
                  "rotation":0,
                  "type":"",
@@ -801,15 +811,15 @@
                      "name":"",
                      "objects":[
                             {
-                             "height":27.2727272727273,
+                             "height":27.2727,
                              "id":1,
                              "name":"",
                              "rotation":0,
                              "type":"",
                              "visible":true,
-                             "width":27.4545454545455,
+                             "width":27.4545,
                              "x":2,
-                             "y":3.81818181818182
+                             "y":3.81818
                             }],
                      "opacity":1,
                      "type":"objectgroup",

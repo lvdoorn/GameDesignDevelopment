@@ -120,6 +120,7 @@ public class MTGameObject
   public string trigger_vote = "";
   public string turn_off = "";
   public string trigger_text = "";
+  public string sound = "";
 }
 
 
@@ -257,6 +258,8 @@ public class MTGameObject
           obj.turn_off = node["properties"]["turn_off"];
         if (node["properties"]["trigger_text"] != null)
           obj.trigger_text = node["properties"]["trigger_text"];
+        if (node["properties"]["sound"] != null)
+          obj.sound = node["properties"]["sound"];
       }
 
 

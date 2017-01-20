@@ -45,9 +45,9 @@ public class PlayersScript : MonoBehaviour
     players_.Add(id,clone);
 
     if(players_.Count < 3)
-      GameObject.Find("Game").GetComponent<GameScript>().RefreshWaitingScreen(players_.Count+" players connected ... waiting for players");
+      GameObject.Find("Game").GetComponent<GameScript>().RefreshWaitingScreen("Waiting for players", players_.Count+" players connected");
     else
-      GameObject.Find("Game").GetComponent<GameScript>().RefreshWaitingScreen(players_.Count + " players connected ... waiting for start");
+      GameObject.Find("Game").GetComponent<GameScript>().RefreshWaitingScreen("Start", players_.Count + " players connected");
 
     SetFocus(id);
   }
@@ -58,9 +58,9 @@ public class PlayersScript : MonoBehaviour
     players_.Remove(id);
 
     if (players_.Count < 3)
-      GameObject.Find("Game").GetComponent<GameScript>().RefreshWaitingScreen(players_.Count + " players connected ... waiting for players");
+      GameObject.Find("Game").GetComponent<GameScript>().RefreshWaitingScreen("Waiting for players", players_.Count + " players connected");
     else
-      GameObject.Find("Game").GetComponent<GameScript>().RefreshWaitingScreen(players_.Count + " players connected ... waiting for start");
+      GameObject.Find("Game").GetComponent<GameScript>().RefreshWaitingScreen("Start", players_.Count + " players connected");
   }
 
   public GameObject GetPlayer(int id)

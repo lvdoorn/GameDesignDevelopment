@@ -181,7 +181,7 @@ public class LevelScript : MonoBehaviour
         RemoveObject("animal_stasis_pot_2");
         RemoveObject("animal_stasis_pot_3");
         RemoveObject("animal_stasis_pot_4");
-        GameObject.Find("Level").transform.GetChild(0).GetChild(2).FindChild("dead_animal_warning").gameObject.GetComponent<ObjectScript>().trigger_text = "Oh my god the stasis pots....They are dead| ... We killed them";
+        GameObject.Find("tutorial_ex").transform.GetChild(0).GetChild(2).FindChild("dead_animal_warning").gameObject.GetComponent<ObjectScript>().trigger_text = "Oh my god the stasis pots....They are dead| ... We killed them";
       }
     }
   }

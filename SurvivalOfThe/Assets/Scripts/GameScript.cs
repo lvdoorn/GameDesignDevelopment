@@ -28,7 +28,7 @@ public class GameScript : MonoBehaviour
     State = GameState.JOIN;
 
     AirConsole.instance.onMessage += OnMessage;
-    RefreshWaitingScreen("Waiting for players");
+    RefreshWaitingScreen("Waiting for players" , "0 players connected");
 
   }
   void Update()
@@ -142,9 +142,10 @@ public class GameScript : MonoBehaviour
   }
   
 
-  public void RefreshWaitingScreen(string text)
+  public void RefreshWaitingScreen(string text, string text2)
   {
     GameObject.Find("WaitingScreenText").GetComponent<Text>().text = text;
+    GameObject.Find("WaitingScreenText2").GetComponent<Text>().text = text2;
   }
 
   public LevelScript GetCurrentLevel()

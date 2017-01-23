@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class VoteScript : MonoBehaviour
 {
-  private PlayersScript players_;
   private GameScript game_;
   private GameObject vote_;
   private Text question_;
@@ -22,7 +21,6 @@ public class VoteScript : MonoBehaviour
   {
     vote_ = GameObject.Find("UI").transform.GetChild(0).gameObject;
     game_ = GameObject.Find("Game").GetComponent<GameScript>();
-    players_ = GameObject.Find("Players").GetComponent<PlayersScript>();
     question_ = GameObject.Find("UI").transform.GetChild(0).GetChild(0).GetComponent<Text>();
     code_text_ = GameObject.Find("UI").transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<Text>();
 
@@ -105,12 +103,12 @@ public class VoteScript : MonoBehaviour
       {
         for (int i = 0; i < code_.Length; i++) {
           if (code_[i] != solution_[i]) {
-            game_.GetCurrentLevel().DisplayInfoBox("That code did not start the engine...", 2);
+            game_.DisplayInfoBox("That code did not start the engine...", 2);
             StartCoroutine(FadeBackToGame());
             return;
           }
         }
-        game_.GetCurrentLevel().DisplayInfoBox("The engine started !", 2);
+        game_.DisplayInfoBox("The engine started !", 2);
         StartCoroutine(FadeBackToGame());
         game_.StartExtendedTutorial();
       }

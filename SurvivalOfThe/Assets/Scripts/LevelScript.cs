@@ -14,33 +14,12 @@ public class LevelScript : MonoBehaviour
   private bool vote_mode = false;
   private string vote_event = "";
 
-  private List<KeyValuePair<float, string>> label_queue_ = new List<KeyValuePair<float, string>>();
-  private GameObject info_box_;
-  private Text info_box_text_;
-
   void Start ()
   {
     players_ = GameObject.Find("Players").GetComponent<PlayersScript>();
-    info_box_ = GameObject.Find("UI").transform.GetChild(1).gameObject;
-    info_box_text_ = info_box_.GetComponentInChildren<Text>(true);
 
     AirConsole.instance.onMessage += OnMessage;
   }
-  void OnGUI() {
-   // Debug.Log("onGui" + label_queue_.Count);
-
-    if (label_queue_.Count > 0) {
-      if (Time.time < label_queue_[0].Key) { // display queue element 0
-        string text = label_queue_[0].Value;
-        info_box_text_.text = text;
-      } else { // queue element 0 has expired -> remove from queue
-        label_queue_.RemoveAt(0);
-      }
-      info_box_.SetActive(true);
-    } else {
-      info_box_.SetActive(false);
-    }
-  }	
   public void Reset()
   {
     current_layer_ = -1;
@@ -48,7 +27,7 @@ public class LevelScript : MonoBehaviour
     vote_mode = false;
     vote_event = "";
   }
-	void Update ()
+  void Update ()
   {
     if(vote_mode)
     {
@@ -84,10 +63,6 @@ public class LevelScript : MonoBehaviour
   public void Init()
   {
     players_ = GameObject.Find("Players").GetComponent<PlayersScript>();
-    info_box_ = GameObject.Find("UI").transform.GetChild(1).gameObject;
-    info_box_text_ = info_box_.GetComponentInChildren<Text>(true);
-    info_box_.SetActive(false);
-    label_queue_.Clear();
   }
 
   // airconsole handlers
@@ -193,19 +168,7 @@ public class LevelScript : MonoBehaviour
   public void MessageToDebug(string msg)
   {
     Debug.Log("Display " + msg);
-    DisplayInfoBox(msg,3);
-  }
-
-  public void DisplayInfoBox(string text, float seconds = 5) {
-    float end_time;
-    if (label_queue_.Count > 0) {
-      // display the new label until *seconds* seconds after the last label in the queue 
-      end_time = label_queue_[label_queue_.Count - 1].Key + seconds;
-    } else {
-      // display the new label until *now* + *seconds*
-      end_time = Time.time + seconds;
-    }
-    label_queue_.Add(new KeyValuePair<float, string>(end_time, text));
+    GameObject.Find("Game").GetComponent<GameScript>().DisplayInfoBox(msg,3);
   }
 
   // scripted 
@@ -240,7 +203,8 @@ public class LevelScript : MonoBehaviour
               string[] parts = action.Split(':');
               string hint = parts[1];
               int seconds = parts.Length > 2 ? int.Parse(parts[2]) : 5;
-              DisplayInfoBox(hint, seconds);
+              string img = parts.Length > 3 ? parts[3] : "Info";
+              GameObject.Find("Game").GetComponent<GameScript>().DisplayInfoBox(hint, seconds, img);
             }
             if (action.StartsWith("vote")) {
               string[] parts = action.Split(':');

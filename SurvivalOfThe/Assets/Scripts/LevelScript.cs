@@ -38,26 +38,26 @@ public class LevelScript : MonoBehaviour
       }
       else
       {
-        string yes = "Yes(Action1) [";
+        string yes = "Yes [";
         foreach(int k in players_.VotesYes( ) )
         {
           yes += k.ToString() + ", ";
         }
         yes += "]";
 
-        string no = "No(Action2) [";
+        string no = "No [";
         foreach (int k in players_.VotesNo())
         {
           no += k.ToString() + ", ";
         }
         no += "]";
 
-        GameObject.Find("Game").transform.GetChild(1).GetChild(1).GetChild(1).GetComponent<Text>().text = yes;
-        GameObject.Find("Game").transform.GetChild(1).GetChild(1).GetChild(2).GetComponent<Text>().text = no;
+        GameObject.Find("Game").transform.GetChild(1).GetChild(1).GetChild(2).GetComponent<Text>().text = yes;
+        GameObject.Find("Game").transform.GetChild(1).GetChild(1).GetChild(3).GetComponent<Text>().text = no;
       }
     }
     if (Input.GetKeyDown(KeyCode.V))
-      BeginVoteMode("disable_pipe_system","Test");
+      BeginVoteMode("disable_pipe_system","Test","test text");
 
   }
   public void Init()
@@ -128,7 +128,7 @@ public class LevelScript : MonoBehaviour
     }
   }
 
-  private void BeginVoteMode(string type, string question )
+  private void BeginVoteMode(string type, string question, string addiional )
   {
     vote_mode = true;
     vote_event = type;
@@ -138,6 +138,7 @@ public class LevelScript : MonoBehaviour
     v.z = 0;
     GameObject.Find("Game").transform.GetChild(1).position =  v;
     GameObject.Find("Game").transform.GetChild(1).GetChild(1).GetChild(0).GetComponent<Text>().text = question;
+    GameObject.Find("Game").transform.GetChild(1).GetChild(1).GetChild(1).GetComponent<Text>().text = addiional;
     GameObject.Find("Players").GetComponent<PlayersScript>().SetVoteMode();
     AirConsole.instance.Broadcast("BeginVote");
   }
@@ -218,7 +219,12 @@ public class LevelScript : MonoBehaviour
             if (triggerVote != "")
             {
               string[] parts = triggerVote.Split('|');
-              BeginVoteMode(parts[0], parts[1]);
+              if(parts.Length > 2)
+              {
+                BeginVoteMode(parts[0], parts[1], parts[2]);
+              }
+              else
+              BeginVoteMode(parts[0], parts[1], "");
             }
             if (child.gameObject.GetComponent<ObjectScript>().trigger_audio != "")
             {

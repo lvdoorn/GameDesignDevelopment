@@ -90,7 +90,6 @@ body {
     display: inline-block;
     height: 33%;
     width: 100%;
-    background-color: #222;
     position: relative;
 }
 .container {
@@ -108,6 +107,7 @@ body {
     width: 50%;
     top: 50%;
     margin-top: -6px;
+    float:left;
 }
 #player_id {
     position: absolute;

@@ -68,15 +68,18 @@ function updateText()
   {
     div.innerHTML = "Interact";
     div2.innerHTML = "";
+    document.getElementById("action2").style.visibility = "hidden";
   }
   if (state == "waiting")
   {
     div.innerHTML = "Start game";
+    document.getElementById("action2").style.visibility = "hidden";
   }
   if (state == "voting")
   {
     div.innerHTML = "Yes";
     div2.innerHTML = "No";
+    document.getElementById("action2").style.visibility = "visible";
   }
 }
 

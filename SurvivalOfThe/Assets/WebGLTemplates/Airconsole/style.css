@@ -8,10 +8,10 @@ body {
     font-family: 'PressStart2P', sans-serif;
     color: white;
     text-align: center;
-    background-color: white;
+    background-color: black;
 }
 #left_side {
-    background-color: white;
+    background-color: black;
     width: 50%;
     float: left;
 }
@@ -84,6 +84,8 @@ body {
     width: 50%;
     top: 50%;
     margin-top: -6px;
+        font-size:2.0vw;
+    float:center;
 }
 
 .button {
@@ -107,7 +109,8 @@ body {
     width: 50%;
     top: 50%;
     margin-top: -6px;
-    float:left;
+    float:center;
+    font-size:3.0vw;
 }
 #player_id {
     position: absolute;

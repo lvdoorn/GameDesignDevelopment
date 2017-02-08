@@ -102,28 +102,20 @@ public class GameScript : MonoBehaviour
 
   public void StartTutorial()
   {
-    ChangeLevel("tutorial", 10.0f / 4.0f);
     ChangePositions(
-      new Vector3(-8.5f, 9.0f, -8),
-      new Vector3(-4.5f, 10.0f, -8),
-      new Vector3(-7.5f, 10.0f, -8),
-      new Vector3(-1.5f, 10.0f, -8),
-      new Vector3(4.5f, 10.0f, -8),
-      new Vector3(10.5f, 10.0f, -8),
-      new Vector3(7.5f, 10.0f, -8),
-      new Vector3(1.5f, 10.0f, -8)
+      new Vector3(-1.75f, 2.5f, 3),
+      new Vector3(-0.25f, 3.5f, 3),
+      new Vector3(-0.25f, 1.5f, 3),
+      new Vector3(-2.25f, 3.5f, 3),
+      new Vector3(-2.25f, 1.5f, 3),
+      new Vector3(1.75f, 3.5f, 3),
+      new Vector3(1.75f, 1.5f, 3),
+      new Vector3(-4.0f, 3.5f, 3),
+      new Vector3(-4.0f, 1.5f, 3)
     );
-    DisplayInfoBox("Welcome to Survival of the Zargs! Use the ACTION buttons on your device to interact.", 10, "Alien");
-  }
-
-  public void StartExtendedTutorial()
-  {
-    
-    ChangeLevel("tutorial_ex");
-    ChangePositions(new Vector3(0.0f, 2.75f, -8));
-    DisplayInfoBox("Use action buttons to interact.\nTry to escape the crashed ship.", 5, "Alien");
-
-    ShowIntermission("We should escape the space ship\r\n maybe.. \r\n if we don't wanna die");
+    ChangeLevel("tutorial");
+    ShowIntermission("A long time ago in a galaxy far, far away....\n\n....a spaceship crashed....");
+    DisplayInfoBox("Welcome to Survival of the Zargs! Use the ACTION buttons on your device to interact.", 20, "Alien");
   }
 
   public void ShowIntermission(string text)

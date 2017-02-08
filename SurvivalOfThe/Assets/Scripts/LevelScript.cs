@@ -162,14 +162,14 @@ public class LevelScript : MonoBehaviour
         RemoveObject("animal_stasis_pot_2");
         RemoveObject("animal_stasis_pot_3");
         RemoveObject("animal_stasis_pot_4");
-        GameObject.Find("tutorial_ex").transform.GetChild(0).GetChild(2).FindChild("dead_animal_warning").gameObject.GetComponent<ObjectScript>().trigger_text = "Oh my god the stasis pots....They are dead| ... We killed them";
+        GameObject.Find("tutorial").transform.GetChild(0).GetChild(2).FindChild("dead_animal_warning").gameObject.GetComponent<ObjectScript>().trigger_text = "Oh my god the stasis pots....They are dead| ... We killed them";
       }
     }
   }
-  public void MessageToDebug(string msg)
+  public void MessageToDebug(string msg, string icon = "Info")
   {
     Debug.Log("Display " + msg);
-    GameObject.Find("Game").GetComponent<GameScript>().DisplayInfoBox(msg,3);
+    GameObject.Find("Game").GetComponent<GameScript>().DisplayInfoBox(msg,3,icon);
   }
 
   // scripted 
@@ -313,8 +313,8 @@ public class LevelScript : MonoBehaviour
               {
                 objs.Add(GameObject.Find(p));
               }
-              MessageToDebug("Holding that.. I need to stay here");
-              MessageToDebug("To deactivate that permanently we need a main console");
+              MessageToDebug("Holding that.. I need to stay here", "Player");
+              MessageToDebug("To deactivate that permanently we need a main console", "Player");
 
             
 
@@ -338,7 +338,7 @@ public class LevelScript : MonoBehaviour
             }
             if (item_trigger != "")
             {
-              MessageToDebug("Thats mine now");
+              MessageToDebug("Thats mine now", "Player");
               obj.GetComponent<PlayerScript>().addItem(item_trigger);
               Destroy(child.gameObject);
             }

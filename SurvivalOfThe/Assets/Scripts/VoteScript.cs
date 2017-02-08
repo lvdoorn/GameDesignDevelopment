@@ -15,7 +15,16 @@ public class VoteScript : MonoBehaviour
   private char[] code_;
   private int selected_;
 
-  private char[] solution_ = { '1', '3', '0', '6', '3', '9', '2' };
+  private char[] solution_;
+  
+  [Header("Engine Code Number Objects")]
+  public GameObject[] EngineNumbers;
+  
+  [Header("GameObjects to remove on success")]
+  public GameObject[] RemoveOnSuccess;
+
+  [Header("Tileset used to display numbers")]
+  public Texture2D Tileset;
 
   void Start()
   {
@@ -23,13 +32,31 @@ public class VoteScript : MonoBehaviour
     game_ = GameObject.Find("Game").GetComponent<GameScript>();
     question_ = GameObject.Find("UI").transform.GetChild(0).GetChild(0).GetComponent<Text>();
     code_text_ = GameObject.Find("UI").transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<Text>();
+    
+    int index = 0;
+    solution_ = new char[EngineNumbers.Length];
+    foreach (GameObject engine_number in EngineNumbers)
+    {
+      int number = Random.Range(0, 10);
+      Material mat = engine_number.GetComponentInChildren<MeshRenderer>().material;
+      
+      Texture2D tex = new Texture2D(mat.mainTexture.width, mat.mainTexture.height);
+      for (int x = 0; x < tex.width; x++) {
+        for (int y = 0; y < tex.height; y++) {
+          tex.SetPixel(x, y, Tileset.GetPixel((1 + number) * 32 - x - 1, Tileset.height - (index % 2 == 0 ? 0 : 3) * 32 - y - 1));
+        }
+      }
+      tex.filterMode = FilterMode.Point;
+      tex.wrapMode = TextureWrapMode.Clamp;
+      tex.Apply();
+
+      mat.mainTexture = tex;
+      solution_[index] = (char)('0' + number);
+
+      index++;
+    }
 
     AirConsole.instance.onMessage += OnMessage;
-  }
-
-  void Update()
-  {
-    
   }
 
   public void Init(string question, int number_of_players) {
@@ -99,7 +126,7 @@ public class VoteScript : MonoBehaviour
           }
         }
       }
-      if (data["vote"] != null)
+      if (data["vote"] != null && (int)data["vote"] == 1)
       {
         for (int i = 0; i < code_.Length; i++) {
           if (code_[i] != solution_[i]) {
@@ -110,7 +137,10 @@ public class VoteScript : MonoBehaviour
         }
         game_.DisplayInfoBox("The engine started !", 2);
         StartCoroutine(FadeBackToGame());
-        game_.StartExtendedTutorial();
+        foreach (GameObject go in RemoveOnSuccess) {
+          Destroy(go);
+        }
+        game_.ShowIntermission("We should escape the space ship\r\n maybe.. \r\n if we don't wanna die");
       }
     }
   }

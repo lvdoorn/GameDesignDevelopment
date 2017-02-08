@@ -121,6 +121,7 @@ public class MTGameObject
   public string turn_off = "";
   public string trigger_text = "";
   public string sound = "";
+  public string item = "";
 }
 
 
@@ -260,6 +261,8 @@ public class MTGameObject
           obj.trigger_text = node["properties"]["trigger_text"];
         if (node["properties"]["sound"] != null)
           obj.sound = node["properties"]["sound"];
+        if (node["properties"]["item"] != null)
+          obj.item = node["properties"]["item"];
       }
 
 

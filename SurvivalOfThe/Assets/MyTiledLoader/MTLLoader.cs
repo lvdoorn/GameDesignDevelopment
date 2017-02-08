@@ -292,6 +292,7 @@ public class MTLLoader : MonoBehaviour
           objscript.turn_off = obj.turn_off;
           objscript.trigger_vote = obj.trigger_vote;
           objscript.trigger_text = obj.trigger_text;
+          objscript.item = obj.item;
 
           if (obj.sound != "")
           {
@@ -365,8 +366,9 @@ public class MTLLoader : MonoBehaviour
           objscript.turn_off = obj.turn_off;
           objscript.trigger_vote = obj.trigger_vote;
           objscript.trigger_text = obj.trigger_text;
+          objscript.item = obj.item;
 
-          if( obj.sound != ""  )
+          if ( obj.sound != ""  )
           {
             string[] parts = obj.sound.Split('|');
 

@@ -57,7 +57,7 @@ public class LevelScript : MonoBehaviour
       }
     }
     if (Input.GetKeyDown(KeyCode.V))
-      BeginVoteMode("disable_pipe_system","Test","test text");
+      players_.GetComponent<PlayersScript>().GetFirstPlayer().GetComponent<PlayerScript>().addItem("fire_extinguisher");
 
   }
   public void Init()
@@ -174,6 +174,32 @@ public class LevelScript : MonoBehaviour
 
   // scripted 
 
+  public void ExtinguishFires(Vector3 player_position)
+  {
+    Debug.Log("ExtinguishFires");
+    float scale = GameObject.Find("Game").GetComponent<GameScript>().Scale;
+    Vector2 player_position_2d = new Vector2(player_position.x, player_position.y);
+    GameObject lobjs = GameObject.Find("LevelLayer" + current_layer_.ToString()).transform.FindChild("Objects").gameObject;
+    if (lobjs != null)
+    {
+      foreach (Transform child in lobjs.transform)
+      {
+        float d = Vector2.Distance(new Vector2(child.position.x, child.position.y), new Vector2(player_position.x, player_position.y));
+        if (d <  0.6f)
+        {
+          Debug.Log(child.gameObject.name);
+          string objname = child.gameObject.name;       
+          if (objname.StartsWith("fire"))
+          {
+            RemoveObject(objname);
+          }
+        }      
+      }
+    }
+    else
+      Debug.Log("couldn't find obj");
+  }
+
   public void TriggerObject(Vector3 player_position)
   {
     float scale = GameObject.Find("Game").GetComponent<GameScript>().Scale;
@@ -261,6 +287,8 @@ public class LevelScript : MonoBehaviour
             int switch_layer = child.gameObject.GetComponent<ObjectScript>().switch_layer;
             string t = child.gameObject.GetComponent<ObjectScript>().turn_off;
             string text_trigger = child.gameObject.GetComponent<ObjectScript>().trigger_text;
+            string item_trigger = child.gameObject.GetComponent<ObjectScript>().item;
+
             if (switch_layer != -1)
             {
               PlayerScript ps = obj.GetComponent<PlayerScript>();
@@ -308,8 +336,14 @@ public class LevelScript : MonoBehaviour
                 }
               }
             }
-           
-            if (text_trigger != "")
+            if (item_trigger != "")
+            {
+              MessageToDebug("Thats mine now");
+              obj.GetComponent<PlayerScript>().addItem(item_trigger);
+              Destroy(child.gameObject);
+            }
+
+              if (text_trigger != "")
             {
               Debug.Log("TextTrigger");
               string[] parts = text_trigger.Split('|');

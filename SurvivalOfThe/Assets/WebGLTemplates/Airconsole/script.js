@@ -14,6 +14,7 @@ function init()
   airconsole = new AirConsole({"orientation": "landscape"});
   airconsole.onMessage = function (from, data)
   {
+    console.log(data);
     if (from == AirConsole.SCREEN && data.vibrate)
     {
       navigator.vibrate(data.vibrate);
@@ -31,6 +32,13 @@ function init()
     if (from == AirConsole.SCREEN && data == "EndVote")
     {
       state = "playing";
+    }
+    if (from == AirConsole.SCREEN && data.addItem)
+    {
+      console.log("addItem");
+      var elem = document.getElementById("inventory_item_" + data.slot);
+      elem.style.backgroundImage = "url('" + data.addItem + ".png')";
+      console.log(elem.style.backgroundImage);
     }
 
     if (from == AirConsole.SCREEN )
@@ -125,6 +133,7 @@ function itemUsed(id)
 {
   console.log("item");
   console.log(id);
+  airconsole.message(AirConsole.SCREEN, { itemUsed: id });
 }
 
 function requestFocus()

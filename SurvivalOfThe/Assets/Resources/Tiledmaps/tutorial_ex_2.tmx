@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="32" tileheight="32" nextobjectid="34">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="32" tileheight="32" nextobjectid="42">
  <tileset firstgid="1" name="tileset" tilewidth="32" tileheight="32" tilecount="240" columns="20">
   <image source="Tilesets/tileset.png" width="640" height="400"/>
   <tile id="0">
@@ -216,12 +216,6 @@
 </data>
  </layer>
  <objectgroup name="BOT_O" visible="0">
-  <object id="11" name="console_bot" gid="82" x="672" y="189" width="32" height="32">
-   <properties>
-    <property name="action" value="destroy:exit_bot|exit_bot_2"/>
-    <property name="sound" value="once|InterfaceDeck"/>
-   </properties>
-  </object>
   <object id="12" name="exit_bot" gid="21" x="96.0568" y="352.094" width="32" height="32"/>
   <object id="17" name="stairs_bot" gid="5" x="160" y="479.333" width="32" height="32">
    <properties>
@@ -238,9 +232,20 @@
     <property name="trigger_text" value="This is the end of the prototype|Sry|I hope you liked it| Soo .. Bye"/>
    </properties>
   </object>
-  <object id="32" name="dead_animal_warning" gid="102" x="480.667" y="378.667" width="32" height="32"/>
+  <object id="36" name="dead_animal_warning" gid="222" x="479" y="385" width="32" height="32"/>
+  <object id="37" name="console_bot" gid="102" x="671.5" y="193" width="32" height="32">
+   <properties>
+    <property name="action" value="destroy:exit_bot|exit_bot_2"/>
+    <property name="sound" value="once|InterfaceDeck"/>
+   </properties>
+  </object>
+  <object id="39" name="fire_extinguisher" gid="121" x="736.5" y="480" width="32" height="32">
+   <properties>
+    <property name="item" value="fire_extinguisher"/>
+   </properties>
+  </object>
  </objectgroup>
- <layer name="MID_1" width="40" height="40" visible="0">
+ <layer name="MID_1" width="40" height="40">
   <properties>
    <property name="level_layer" type="int" value="1"/>
   </properties>
@@ -287,7 +292,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="MID_2" width="40" height="40" visible="0">
+ <layer name="MID_2" width="40" height="40">
   <properties>
    <property name="level_layer" type="int" value="1"/>
   </properties>
@@ -348,14 +353,14 @@
     <property name="switch_layer" type="int" value="0"/>
    </properties>
   </object>
-  <object id="23" name="console_mid" gid="83" x="895.5" y="329.333" width="32" height="32">
+  <object id="40" name="console_mid" gid="103" x="896.5" y="333.5" width="32" height="32">
    <properties>
     <property name="sound" value="once|InterfaceDeck"/>
     <property name="trigger_vote" value="disable_pipe_system|Shut down extended systems?| Shutting off this system means disabling all extended system (upper level, stasis chambers,.. )"/>
    </properties>
   </object>
  </objectgroup>
- <layer name="TOP_1" width="40" height="40">
+ <layer name="TOP_1" width="40" height="40" visible="0">
   <properties>
    <property name="level_layer" type="int" value="2"/>
   </properties>
@@ -402,7 +407,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="TOP_2" width="40" height="40">
+ <layer name="TOP_2" width="40" height="40" visible="0">
   <properties>
    <property name="level_layer" type="int" value="2"/>
   </properties>
@@ -449,7 +454,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="TOP_O">
+ <objectgroup name="TOP_O" visible="0">
   <properties>
    <property name="level_layer" type="int" value="2"/>
   </properties>

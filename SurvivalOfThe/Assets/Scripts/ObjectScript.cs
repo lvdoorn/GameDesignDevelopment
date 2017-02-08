@@ -10,6 +10,7 @@ public class ObjectScript : MonoBehaviour
   public string trigger_text = "";
   public string turn_off = "";
   public string trigger_audio = "";
+  public string item = "";
 
   public List<GameObject> tmp_objects = new List<GameObject>();
 

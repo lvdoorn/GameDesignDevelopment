@@ -67,6 +67,19 @@ public class PlayersScript : MonoBehaviour
   {
     return (players_.ContainsKey(id) ? players_[id] : null );
   }
+  public GameObject GetFirstPlayer()
+  {
+    for(int x=0; x <100;x++)
+    {
+      GameObject g = GetPlayer(x);
+      if(g != null)
+      {
+        return g;
+      }
+    }
+    return null;
+  }
+
   public void MoveAllPlayers(Vector3 v)
   {
     foreach( KeyValuePair<int,GameObject> ko in players_)

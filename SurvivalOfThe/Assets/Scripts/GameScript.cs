@@ -29,6 +29,7 @@ public class GameScript : MonoBehaviour
   private List<InfoBoxMessage> label_queue_ = new List<InfoBoxMessage>();
   private GameObject info_box_;
   private Text info_box_text_;
+  private bool in_intermission = false;
 
   void Start()
   {
@@ -51,6 +52,13 @@ public class GameScript : MonoBehaviour
     {
       StartTutorial();
       //StartExtendedTutorial();
+    }
+    if(in_intermission)
+    {
+      GameObject screen = GameObject.Find("Game").transform.FindChild("UI").FindChild("IntermissionScreen").gameObject;
+      screen.transform.FindChild("IntermissionText").position += new Vector3(0, 1.0f, 0);
+      if (screen.transform.FindChild("IntermissionText").position.y > 380  + screen.transform.FindChild("IntermissionText").GetComponent<Text>().preferredHeight +20.0f )
+        EndIntermission();
     }
   }
   void OnGUI() {
@@ -110,10 +118,42 @@ public class GameScript : MonoBehaviour
 
   public void StartExtendedTutorial()
   {
+    
     ChangeLevel("tutorial_ex");
     ChangePositions(new Vector3(0.0f, 2.75f, -8));
     DisplayInfoBox("Use action buttons to interact.\nTry to escape the crashed ship.", 5, "Alien");
+
+    ShowIntermission("We should escape the space ship\r\n maybe.. \r\n if we don't wanna die");
   }
+
+  public void ShowIntermission(string text)
+  {
+    GetCurrentLevel().gameObject.SetActive(false);
+    GameObject game = GameObject.Find("Game");
+    GameObject screen = GameObject.Find("Game").transform.FindChild("UI").FindChild("IntermissionScreen").gameObject;
+
+    screen.SetActive(true);
+
+    Vector3 v = GameObject.Find("MainCamera").transform.position;
+    v.z = 0;
+    Vector3 tp = screen.transform.position;
+    tp.y = -120.0f;
+    screen.transform.FindChild("IntermissionText").position = tp;
+
+    screen.transform.FindChild("IntermissionText").GetComponent<Text>().text = text;
+    in_intermission = true;
+
+  }
+
+  public void EndIntermission()
+  {
+    GetCurrentLevel().gameObject.SetActive(true);
+    GameObject screen = GameObject.Find("Game").transform.FindChild("UI").FindChild("IntermissionScreen").gameObject;
+
+    screen.SetActive(false);
+    in_intermission = false;
+  }
+
 
   public void ChangePositions(params Vector3[] vs) {
     if (vs.Length == 1) {

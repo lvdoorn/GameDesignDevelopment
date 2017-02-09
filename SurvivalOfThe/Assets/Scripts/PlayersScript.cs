@@ -13,7 +13,7 @@ public class PlayersScript : MonoBehaviour
 
   public bool join_enabled_ = true;
 
-  void Start()
+  void Awake()
   {
     players_ = new Dictionary<int, GameObject>();
 
@@ -22,10 +22,6 @@ public class PlayersScript : MonoBehaviour
     AirConsole.instance.onMessage += OnMessage;
 
     SpriteRenderer sr = prefab.GetComponent<SpriteRenderer>();
-  }
-
-  void Update()
-  {
   }
 
   // player handling
@@ -98,7 +94,9 @@ public class PlayersScript : MonoBehaviour
   {
     foreach( KeyValuePair<int,GameObject> ko in players_)
     {
-      ko.Value.transform.position = v;
+      ko.Value.transform.position = new Vector3(v.x, v.y, -8);
+      PlayerScript ps = ko.Value.GetComponent<PlayerScript>();
+      ps.layer_ = (int)v.z;
       Debug.Log("Move Player " + ko.Key.ToString());
     }
   }
@@ -111,7 +109,9 @@ public class PlayersScript : MonoBehaviour
       if (index >= vs.Length) {
         index -= vs.Length;
       }
-      player.transform.position = vs[index];
+      player.transform.position = new Vector3(vs[index].x, vs[index].y, -8);
+      PlayerScript ps = player.GetComponent<PlayerScript>();
+      ps.layer_ = (int)vs[index].z;
       index++;
     }
   }

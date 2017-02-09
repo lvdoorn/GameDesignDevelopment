@@ -40,7 +40,21 @@ public class PlayersScript : MonoBehaviour
     clone.GetComponent<PlayerScript>().enabled = true;
     clone.GetComponent<PlayerScript>().setId(id);
 
-    clone.GetComponent<PlayerScript>().layer_ = 2;   
+    clone.GetComponent<PlayerScript>().layer_ = 2;
+    if( players_.Count == 1 )
+      clone.GetComponent<SpriteRenderer>().color = Color.blue;
+    if (players_.Count == 2)
+      clone.GetComponent<SpriteRenderer>().color = Color.yellow;
+    if (players_.Count == 3)
+      clone.GetComponent<SpriteRenderer>().color = Color.red;
+    if (players_.Count == 4)
+      clone.GetComponent<SpriteRenderer>().color = Color.green;
+    if (players_.Count == 5)
+      clone.GetComponent<SpriteRenderer>().color = Color.magenta;
+    if (players_.Count == 6)
+      clone.GetComponent<SpriteRenderer>().color = Color.grey;
+    if (players_.Count == 7)
+      clone.GetComponent<SpriteRenderer>().color = Color.cyan;
 
     players_.Add(id,clone);
 
@@ -106,7 +120,7 @@ public class PlayersScript : MonoBehaviour
   // airconsole handlers
   void OnConnect(int device_id)
   {
-    if(join_enabled_)
+    if(join_enabled_ && players_.Count <8)
       AddPlayer(device_id);
   }
 

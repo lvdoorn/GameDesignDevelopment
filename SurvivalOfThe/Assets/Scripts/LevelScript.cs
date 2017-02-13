@@ -57,7 +57,8 @@ public class LevelScript : MonoBehaviour
       }
     }
     if (Input.GetKeyDown(KeyCode.V))
-      players_.GetComponent<PlayersScript>().GetFirstPlayer().GetComponent<PlayerScript>().addItem("fire_extinguisher");
+      BeginPuzzle();
+     // players_.GetComponent<PlayersScript>().GetFirstPlayer().GetComponent<PlayerScript>().addItem("fire_extinguisher");
 
   }
   public void Init()
@@ -166,6 +167,27 @@ public class LevelScript : MonoBehaviour
       }
     }
   }
+  public void BeginPuzzle()
+  {
+    int number_of_players = GameObject.Find("Players").GetComponent<PlayersScript>().PlayerCount();
+
+    PuzzleScript puzzle_script = GameObject.Find("Game").transform.FindChild("UI").FindChild("Puzzle").GetComponent<PuzzleScript>();
+    puzzle_script.Init( number_of_players);
+    GameObject.Find("Game").transform.FindChild("UI").FindChild("Puzzle").gameObject.SetActive(true);
+    
+
+
+
+
+  }
+  public void EndPuzzle()
+  {
+    GameObject.Find("Game").transform.FindChild("UI").FindChild("Puzzle").gameObject.SetActive(false);
+    RemoveObject("puzzle_door");
+    GameObject.Find("Game").GetComponent<GameScript>().ChangeLevel("next");
+  }
+
+
   public void MessageToDebug(string msg, string icon = "Info")
   {
     Debug.Log("Display " + msg);
@@ -174,7 +196,7 @@ public class LevelScript : MonoBehaviour
 
   // scripted 
 
-  public void ExtinguishFires(Vector3 player_position)
+  /*public void ExtinguishFires(Vector3 player_position)
   {
     Debug.Log("ExtinguishFires");
     float scale = GameObject.Find("Game").GetComponent<GameScript>().Scale;
@@ -198,6 +220,56 @@ public class LevelScript : MonoBehaviour
     }
     else
       Debug.Log("couldn't find obj");
+  }*/
+
+  public void ExecuteIfInRange(GameObject player, string name_filter, string action, string add)
+  {
+    Debug.Log(action);
+    float scale = GameObject.Find("Game").GetComponent<GameScript>().Scale;
+    Vector3 player_position = player.transform.position;
+    Vector2 player_position_2d = new Vector2(player_position.x, player_position.y);
+    GameObject lobjs = GameObject.Find("LevelLayer" + current_layer_.ToString()).transform.FindChild("Objects").gameObject;
+    if (lobjs != null)
+    {
+      foreach (Transform child in lobjs.transform)
+      {
+        float d = Vector2.Distance(new Vector2(child.position.x, child.position.y), new Vector2(player_position.x, player_position.y));
+        if (d < 0.6f)
+        {
+          Debug.Log(child.gameObject.name);
+          string objname = child.gameObject.name;
+          if (objname.StartsWith(name_filter))
+          {
+            if (action == "pickup")
+            {
+              player.GetComponent<PlayerScript>().addItem(add);
+            }
+            if (action == "remove")
+            {
+              RemoveObject(objname);
+            }
+            if (action == "condition_remove")
+            {
+              string obj_action = child.gameObject.GetComponent<ObjectScript>().action;
+              string[] parts = obj_action.Split('|');
+              Debug.Log(obj_action);
+              if(parts.Length> 0)
+              {
+                if(parts[0] == "condition_remove")
+                {
+                  if (child.gameObject.GetComponent<ObjectScript>().IsMultipleTriggered(int.Parse(parts[2])))
+                    RemoveObject(objname);
+                  player.GetComponent<PlayerScript>().removeItem("sample_dna");
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    else
+      Debug.Log("couldn't find obj");
+    
   }
 
   public void TriggerObject(Vector3 player_position)
@@ -233,15 +305,27 @@ public class LevelScript : MonoBehaviour
               string img = parts.Length > 3 ? parts[3] : "Info";
               GameObject.Find("Game").GetComponent<GameScript>().DisplayInfoBox(hint, seconds, img);
             }
-            if (action.StartsWith("vote")) {
+            if (action.StartsWith("vote"))
+            {
               string[] parts = action.Split(':');
-              if (parts[1] == "startengine") {
+              if (parts[1] == "startengine")
+              {
                 int number_of_players = GameObject.Find("Players").GetComponent<PlayersScript>().PlayerCount();
                 VoteScript vote_script = GameObject.Find("UI").GetComponent<VoteScript>();
                 vote_script.Init("Enter the start sequence for the engine ...\nUse the DIRECTION keys to enter the code.\nSubmit the code with the ACTION key.", number_of_players);
               }
+              if (parts[1] == "open_med_station")
+              {
+                VoteScript vote_script = GameObject.Find("UI").GetComponent<VoteScript>();
+                char [] key = { '1','2','3'};
+                vote_script.Init("Code required", key, "open_med_station");
+              }
             }
-            string triggerVote = child.gameObject.GetComponent<ObjectScript>().trigger_vote;
+            if (action.StartsWith("trigger_puzzle"))
+            {
+              BeginPuzzle();
+            }
+              string triggerVote = child.gameObject.GetComponent<ObjectScript>().trigger_vote;
             if (triggerVote != "")
             {
               string[] parts = triggerVote.Split('|');
@@ -338,12 +422,15 @@ public class LevelScript : MonoBehaviour
             }
             if (item_trigger != "")
             {
-              MessageToDebug("Thats mine now", "Player");
-              obj.GetComponent<PlayerScript>().addItem(item_trigger);
-              Destroy(child.gameObject);
+  
+              if (obj.GetComponent<PlayerScript>().addItem(item_trigger))
+              {
+                Destroy(child.gameObject);
+                MessageToDebug("Thats mine now", "Player");
+              }
             }
 
-              if (text_trigger != "")
+             if (text_trigger != "")
             {
               Debug.Log("TextTrigger");
               string[] parts = text_trigger.Split('|');
@@ -353,6 +440,10 @@ public class LevelScript : MonoBehaviour
                 MessageToDebug(parts[x]);
               }
               child.gameObject.GetComponent<ObjectScript>().trigger_text = "";
+              if(child.gameObject.name == "end_of_lvl")
+              {
+                GameObject.Find("Game").GetComponent<GameScript>().StartMiningStation();
+              }
             }
           }
 

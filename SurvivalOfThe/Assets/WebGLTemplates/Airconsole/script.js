@@ -40,6 +40,12 @@ function init()
       elem.style.backgroundImage = "url('" + data.addItem + ".png')";
       console.log(elem.style.backgroundImage);
     }
+    if (from == AirConsole.SCREEN && data.removeItem) {
+      console.log("removeItem");
+      var elem = document.getElementById("inventory_item_" + data.slot);
+      elem.style.backgroundImage = "url('btn_item.png')";
+      console.log(elem.style.backgroundImage);
+    }
 
     if (from == AirConsole.SCREEN )
       updateText();

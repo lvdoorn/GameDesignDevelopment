@@ -95,6 +95,7 @@ public class GameScript : MonoBehaviour
       Debug.Log("received start");
       StartTutorial();
       //StartExtendedTutorial();
+     // StartMiningStation();
     }
   }
   
@@ -117,6 +118,12 @@ public class GameScript : MonoBehaviour
     ShowIntermission("A long time ago in a galaxy far, far away....\n\n....a spaceship crashed....");
     DisplayInfoBox("Welcome to Survival of the Zargs! Use the ACTION buttons on your device to interact.", 20, "Alien");
   }
+  public void StartMiningStation()
+  {
+    ChangePositions(new Vector3(-0.0078125f, 4.0f, 0) );
+    ChangeLevel("mining_station");
+    ShowIntermission("The crew of the space ship has found a cave. It seems to have been used as a mining station. As they enter with the intent to recover fuel the door closes behind them...");
+  }
 
   public void ShowIntermission(string text)
   {
@@ -134,7 +141,6 @@ public class GameScript : MonoBehaviour
 
     screen.transform.FindChild("IntermissionText").GetComponent<Text>().text = text;
     in_intermission = true;
-
   }
 
   public void EndIntermission()

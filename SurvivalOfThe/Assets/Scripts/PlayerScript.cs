@@ -167,11 +167,23 @@ public class PlayerScript : MonoBehaviour
         Debug.Log("used item");
         Debug.Log(items_[(int)data["itemUsed"]]);
         string it = items_[(int)data["itemUsed"]];
-        if (it != ""  )
+        if (it != "")
         {
-          if (it ==  "fire_extinguisher")
+          if (it == "fire_extinguisher")
           {
-            GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExtinguishFires(gameObject.transform.position);
+            GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject, "fire", "remove", "");
+          }
+          if (it == "dna_sampler")
+          {
+            GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject, "sample_dna", "pickup", "sample_dna");
+          }
+          if (it == "dynamite")
+          {
+            GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject, "exit", "remove", "");
+          }
+          if (it == "sample_dna")
+          {
+            GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject, "dna_door", "condition_remove", "2");
           }
         }
       }
@@ -218,32 +230,49 @@ public class PlayerScript : MonoBehaviour
     return selected_answer;
   }
 
-  public void addItem(string item)
+  public bool addItem(string item)
   {
+    int id = -1;
+    bool exists = false;
     for(int x=0; x< 4; x++)
     {
-      if(items_[x] == "")
+      if(items_[x] == "" && id == -1)
       {
-        items_[x] = item;
-        var message = new
-        {
-          addItem = item,
-          slot = x
-        };
-        AirConsole.instance.Message(id_, message);
-        Debug.Log("sent item add");
-        x = 4;
+        id = x;
       }
+      if (items_[x] == item)
+        exists = true;
     }
+    if(id != -1 && !exists)
+    {
+      items_[id] = item;
+      var message = new
+      {
+        addItem = item,
+        slot = id
+      };
+      AirConsole.instance.Message(id_, message);
+      Debug.Log("sent item add");
+      return true;
+    }
+    return false;
   }
   public void removeItem(string item)
   {
     for (int x = 0; x < 4; x++)
     {
-      if (items_[x] == item)
+      if (items_[x].Equals( item) )
       {
         items_[x] = "";
+  
+        var message = new
+        {
+          removeItem = item,
+          slot = x
+        };
         x = 4;
+        AirConsole.instance.Message(id_, message);
+        Debug.Log("sent item remove");
       }
     }
   }

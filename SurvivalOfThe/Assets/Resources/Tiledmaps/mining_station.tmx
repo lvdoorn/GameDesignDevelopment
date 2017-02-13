@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="32" tileheight="32" nextobjectid="24">
+ <tileset firstgid="1" name="tileset_mining" tilewidth="32" tileheight="32" tilecount="100" columns="10">
+  <image source="Tilesets/tileset_mining.png" width="320" height="320"/>
+  <tile id="0">
+   <objectgroup draworder="index">
+    <object id="1" x="0" y="0" width="32" height="32"/>
+   </objectgroup>
+  </tile>
+  <tile id="1">
+   <objectgroup draworder="index"/>
+  </tile>
+  <tile id="2">
+   <objectgroup draworder="index">
+    <object id="1" x="0" y="4.5" width="32" height="24.25"/>
+   </objectgroup>
+  </tile>
+  <tile id="3">
+   <objectgroup draworder="index">
+    <object id="1" x="11.8182" y="-0.0909091" width="6.27273" height="32.0909"/>
+   </objectgroup>
+  </tile>
+  <tile id="4">
+   <objectgroup draworder="index">
+    <object id="1" x="10" y="0" width="11.5" height="32"/>
+   </objectgroup>
+  </tile>
+ </tileset>
+ <layer name="ground_floor" width="40" height="40">
+  <properties>
+   <property name="level_layer" type="int" value="0"/>
+  </properties>
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
+0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,1,2,2,1,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,1,0,
+0,0,0,0,0,0,0,1,2,2,2,2,2,2,1,0,0,0,1,2,2,1,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,1,0,
+0,0,0,0,0,0,0,1,2,2,2,2,2,2,1,1,1,1,1,2,2,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,1,0,
+0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,
+0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,
+0,0,0,0,0,0,0,1,2,2,2,2,2,2,1,1,1,1,1,2,2,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,1,0,
+0,0,0,0,0,0,0,1,2,2,2,2,2,2,1,0,0,0,1,2,2,1,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,1,0,
+0,0,0,0,0,0,0,1,2,2,2,2,2,2,1,0,0,0,1,2,2,1,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,1,0,
+0,0,0,0,0,0,0,1,2,2,2,2,2,2,1,0,0,0,1,2,2,1,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,1,0,
+0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,1,2,2,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,2,2,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,1,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,1,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,1,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,1,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,1,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,1,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,1,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,1,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,1,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
+0,0,0,0,0,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,5,2,2,2,2,2,0,
+0,0,0,0,0,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,5,2,2,2,2,2,0,
+0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,2,2,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup name="ground_floor_objs">
+  <properties>
+   <property name="level_layer" type="int" value="0"/>
+  </properties>
+  <object id="1" name="med_station_console" gid="11" x="640.333" y="448.333" width="32.3333" height="32.3333">
+   <properties>
+    <property name="action" value="vote:open_med_station"/>
+   </properties>
+  </object>
+  <object id="2" name="dna_door" gid="3" x="608.091" y="864" width="32" height="32">
+   <properties>
+    <property name="action" value="condition_remove|sample_dna|2"/>
+   </properties>
+  </object>
+  <object id="5" name="puzzle_door" gid="3" x="607.94" y="1014.06" width="32" height="32"/>
+  <object id="6" name="puzzle_door_console" gid="11" x="640.667" y="960" width="32" height="32">
+   <properties>
+    <property name="action" value="trigger_puzzle"/>
+   </properties>
+  </object>
+  <object id="7" name="sample_dna" gid="21" x="1084.67" y="109.333" width="32" height="32"/>
+  <object id="8" name="sample_dna" gid="21" x="933.333" y="309.333" width="32" height="32"/>
+  <object id="9" name="sample_dna" gid="21" x="1091.33" y="314.667" width="32" height="32"/>
+  <object id="10" name="sample_dna" gid="21" x="931.333" y="110" width="32" height="32"/>
+  <object id="11" name="dna_sampler" gid="22" x="1111.33" y="494" width="32" height="32">
+   <properties>
+    <property name="item" value="dna_sampler"/>
+   </properties>
+  </object>
+  <object id="12" name="dynamite" gid="23" x="1017.33" y="906" width="32" height="32">
+   <properties>
+    <property name="item" value="dynamite"/>
+    <property name="trigger_text" value="once|this must have been placed here to destroy the tunnel, but not been triggered"/>
+   </properties>
+  </object>
+  <object id="13" name="fuel" gid="24" x="608" y="1184" width="32" height="32">
+   <properties>
+    <property name="item" value="fuel"/>
+   </properties>
+  </object>
+  <object id="14" name="exit" gid="3" x="608.333" y="48" width="32" height="32"/>
+  <object id="15" name="dna_sampler" gid="22" x="890" y="660" width="32" height="32">
+   <properties>
+    <property name="item" value="dna_sampler"/>
+   </properties>
+  </object>
+  <object id="16" name="doc" gid="25" x="1142" y="146" width="32" height="32">
+   <properties>
+    <property name="trigger_text" value="the code is 123"/>
+   </properties>
+  </object>
+  <object id="18" name="exit" gid="3" x="640.333" y="48.0417" width="32" height="32"/>
+  <object id="19" name="puzzle_door" gid="3" x="639.94" y="1014.06" width="32" height="32"/>
+  <object id="20" name="dna_door" gid="3" x="640" y="864" width="32" height="32">
+   <properties>
+    <property name="action" value="condition_remove|sample_dna|2"/>
+   </properties>
+  </object>
+  <object id="22" name="med_station_door" gid="4" x="671.833" y="480.167" width="32" height="32"/>
+  <object id="23" name="med_station_door" gid="4" x="671.833" y="512.167" width="32" height="32"/>
+ </objectgroup>
+</map>

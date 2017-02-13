@@ -13,9 +13,12 @@ public class PlayersScript : MonoBehaviour
 
   public bool join_enabled_ = true;
 
+  private Dictionary<int, int> players_number_;
+
   void Awake()
   {
     players_ = new Dictionary<int, GameObject>();
+    players_number_ = new Dictionary<int, int>();
 
     AirConsole.instance.onConnect += OnConnect;
     AirConsole.instance.onDisconnect += OnDisconnect;
@@ -53,6 +56,7 @@ public class PlayersScript : MonoBehaviour
       clone.GetComponent<SpriteRenderer>().color = Color.cyan;
 
     players_.Add(id,clone);
+    players_number_.Add(id, players_.Count-1);
 
     if(players_.Count < 3)
       GameObject.Find("Game").GetComponent<GameScript>().RefreshWaitingScreen("Waiting for players", players_.Count+" players connected");
@@ -88,6 +92,10 @@ public class PlayersScript : MonoBehaviour
       }
     }
     return null;
+  }
+  public int GetPlayerNumber(int i)
+  {
+    return players_number_[i];
   }
 
   public void MoveAllPlayers(Vector3 v)

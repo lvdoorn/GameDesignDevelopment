@@ -26,6 +26,8 @@ public class VoteScript : MonoBehaviour
   [Header("Tileset used to display numbers")]
   public Texture2D Tileset;
 
+  private string vote_type_ = "startengine";
+
   void Start()
   {
     vote_ = GameObject.Find("UI").transform.GetChild(0).gameObject;
@@ -59,7 +61,8 @@ public class VoteScript : MonoBehaviour
     AirConsole.instance.onMessage += OnMessage;
   }
 
-  public void Init(string question, int number_of_players) {
+  public void Init(string question, int number_of_players)
+  {
     if (game_.State == GameState.VOTE || vote_.activeSelf)
       return;
 
@@ -75,6 +78,29 @@ public class VoteScript : MonoBehaviour
     question_.text = question;
     code_text_.text = CodeToString();
     AirConsole.instance.Broadcast("BeginVote");
+  }
+  public void Init(string question,  char [] code,  string vote_type)
+  {
+    if (game_.State == GameState.VOTE || vote_.activeSelf)
+      return;
+
+    vote_.SetActive(true);
+    game_.State = GameState.VOTE;
+
+    solution_ = code;
+    selected_ = 0;
+
+    Debug.Log(code.Length);
+    code_ = new char[code.Length];
+    for (int i = 0; i < code.Length; i++)
+    {
+      code_[i] = '0';
+    }
+
+    question_.text = question;
+    code_text_.text = CodeToString();
+    AirConsole.instance.Broadcast("BeginVote");
+    vote_type_ = vote_type;
   }
 
   private string CodeToString() {
@@ -128,19 +154,28 @@ public class VoteScript : MonoBehaviour
       }
       if (data["vote"] != null && (int)data["vote"] == 1)
       {
-        for (int i = 0; i < code_.Length; i++) {
+        for (int i = 0; i < code_.Length ; i++) {
           if (code_[i] != solution_[i]) {
-            game_.DisplayInfoBox("That code did not start the engine...", 2);
+            if(vote_type_ == "startengine")
+              game_.DisplayInfoBox("That code did not start the engine...", 2);
+            else
+              game_.DisplayInfoBox("That code did not work...", 2);
             StartCoroutine(FadeBackToGame());
             return;
           }
         }
-        game_.DisplayInfoBox("The engine started !", 2);
+        if (vote_type_ == "startengine")
+          game_.DisplayInfoBox("The engine started !", 2);
         StartCoroutine(FadeBackToGame());
         foreach (GameObject go in RemoveOnSuccess) {
           Destroy(go);
         }
-        game_.ShowIntermission("We should escape the space ship\r\n maybe.. \r\n if we don't wanna die");
+        if (vote_type_ == "startengine")
+          game_.ShowIntermission("We should escape the space ship\r\n maybe.. \r\n if we don't wanna die");
+        if (vote_type_ == "open_med_station")
+        {
+          game_.GetCurrentLevel().RemoveObject("med_station_door");
+        }
       }
     }
   }

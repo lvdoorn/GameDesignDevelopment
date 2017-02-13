@@ -93,9 +93,9 @@ public class GameScript : MonoBehaviour
     if (data["start"] != null)
     {
       Debug.Log("received start");
-      StartTutorial();
+   //   StartTutorial();
       //StartExtendedTutorial();
-     // StartMiningStation();
+      StartMiningStation();
     }
   }
   

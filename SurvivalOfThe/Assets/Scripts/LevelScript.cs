@@ -150,7 +150,8 @@ public class LevelScript : MonoBehaviour
     Debug.Log(vote);
     vote_mode = false;
     GameObject.Find("Game").transform.GetChild(1).gameObject.SetActive(false);
-    if( vote_event == "disable_pipe_system"  )
+    GameObject.Find("Game").GetComponent<GameScript>().PlaySound("InterfaceDeck");
+    if ( vote_event == "disable_pipe_system"  )
     {
       if(vote == 0 )
       {
@@ -174,17 +175,11 @@ public class LevelScript : MonoBehaviour
     PuzzleScript puzzle_script = GameObject.Find("Game").transform.FindChild("UI").FindChild("Puzzle").GetComponent<PuzzleScript>();
     puzzle_script.Init( number_of_players);
     GameObject.Find("Game").transform.FindChild("UI").FindChild("Puzzle").gameObject.SetActive(true);
-    
-
-
-
-
   }
   public void EndPuzzle()
   {
     GameObject.Find("Game").transform.FindChild("UI").FindChild("Puzzle").gameObject.SetActive(false);
     RemoveObject("puzzle_door");
-    GameObject.Find("Game").GetComponent<GameScript>().ChangeLevel("next");
   }
 
 
@@ -222,19 +217,21 @@ public class LevelScript : MonoBehaviour
       Debug.Log("couldn't find obj");
   }*/
 
-  public void ExecuteIfInRange(GameObject player, string name_filter, string action, string add)
+  public void ExecuteIfInRange(GameObject player, float dist, string name_filter, string action, string add, string add2)
   {
     Debug.Log(action);
     float scale = GameObject.Find("Game").GetComponent<GameScript>().Scale;
     Vector3 player_position = player.transform.position;
     Vector2 player_position_2d = new Vector2(player_position.x, player_position.y);
+    Vector2 player_offset = new Vector2(0.1f, 0.1f);
     GameObject lobjs = GameObject.Find("LevelLayer" + current_layer_.ToString()).transform.FindChild("Objects").gameObject;
     if (lobjs != null)
     {
       foreach (Transform child in lobjs.transform)
       {
-        float d = Vector2.Distance(new Vector2(child.position.x, child.position.y), new Vector2(player_position.x, player_position.y));
-        if (d < 0.6f)
+        
+        float d = Vector2.Distance(new Vector2(child.position.x, child.position.y), new Vector2(player_position.x, player_position.y) +player_offset );
+        if (d < dist)
         {
           Debug.Log(child.gameObject.name);
           string objname = child.gameObject.name;
@@ -247,6 +244,16 @@ public class LevelScript : MonoBehaviour
             if (action == "remove")
             {
               RemoveObject(objname);
+              if(add2 != "")
+              {
+                GameObject.Find("Game").GetComponent<GameScript>().PlaySound(add2);
+              }
+            }
+            if (action == "remove_addtext")
+            {
+              RemoveObject(objname);
+              GameObject.Find("LevelLayer" + current_layer_.ToString()).transform.FindChild("Objects").FindChild(add).gameObject.GetComponent<ObjectScript>().trigger_text = add2;
+              GameObject.Find("Game").GetComponent<GameScript>().PlaySound("impactcrunch04");
             }
             if (action == "condition_remove")
             {
@@ -317,8 +324,9 @@ public class LevelScript : MonoBehaviour
               if (parts[1] == "open_med_station")
               {
                 VoteScript vote_script = GameObject.Find("UI").GetComponent<VoteScript>();
-                char [] key = { '1','2','3'};
+                char [] key = { '5','8','9','4','1','3'};// 589413
                 vote_script.Init("Code required", key, "open_med_station");
+         
               }
             }
             if (action.StartsWith("trigger_puzzle"))
@@ -372,6 +380,7 @@ public class LevelScript : MonoBehaviour
             string t = child.gameObject.GetComponent<ObjectScript>().turn_off;
             string text_trigger = child.gameObject.GetComponent<ObjectScript>().trigger_text;
             string item_trigger = child.gameObject.GetComponent<ObjectScript>().item;
+            string action = child.gameObject.GetComponent<ObjectScript>().action;
 
             if (switch_layer != -1)
             {
@@ -427,6 +436,7 @@ public class LevelScript : MonoBehaviour
               {
                 Destroy(child.gameObject);
                 MessageToDebug("Thats mine now", "Player");
+                GameObject.Find("Game").GetComponent<GameScript>().PlaySound("life_pickup");
               }
             }
 
@@ -443,6 +453,18 @@ public class LevelScript : MonoBehaviour
               if(child.gameObject.name == "end_of_lvl")
               {
                 GameObject.Find("Game").GetComponent<GameScript>().StartMiningStation();
+              }
+            }
+            if(action == "changeLevelMiningStation")
+            {
+              if(players_.HaveItem("fuel"))
+              {
+                // GameObject.Find("Game").GetComponent<GameScript>().ChangeLevel("Next"); // 
+                GameObject.Find("Game").GetComponent<GameScript>().ShowIntermission("Now that the fuel has been found the space ship will be able to fly.");
+              }
+              else
+              {
+                MessageToDebug("We still need the fuel", "Player");
               }
             }
           }

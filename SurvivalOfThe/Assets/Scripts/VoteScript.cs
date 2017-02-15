@@ -120,6 +120,7 @@ public class VoteScript : MonoBehaviour
     game_.State = GameState.PLAY;
     vote_.SetActive(false);
     AirConsole.instance.Broadcast("EndVote");
+    GameObject.Find("Game").GetComponent<GameScript>().PlaySound("InterfaceDeck");
   }
 
   // Airconsole handler

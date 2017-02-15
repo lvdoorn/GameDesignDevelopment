@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="32" tileheight="32" nextobjectid="24">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="32" tileheight="32" nextobjectid="43">
  <tileset firstgid="1" name="tileset_mining" tilewidth="32" tileheight="32" tilecount="100" columns="10">
   <image source="Tilesets/tileset_mining.png" width="320" height="320"/>
   <tile id="0">
@@ -17,12 +17,92 @@
   </tile>
   <tile id="3">
    <objectgroup draworder="index">
-    <object id="1" x="11.8182" y="-0.0909091" width="6.27273" height="32.0909"/>
+    <object id="1" x="12.8182" y="0.159091" width="6.27273" height="32.0909"/>
    </objectgroup>
   </tile>
   <tile id="4">
    <objectgroup draworder="index">
-    <object id="1" x="10" y="0" width="11.5" height="32"/>
+    <object id="1" x="0" y="0" width="32" height="32"/>
+   </objectgroup>
+  </tile>
+  <tile id="5">
+   <objectgroup draworder="index">
+    <object id="1" x="0" y="0" width="12.3636" height="32"/>
+   </objectgroup>
+  </tile>
+  <tile id="25">
+   <objectgroup draworder="index">
+    <object id="1" x="1.75" y="2" width="28.5" height="27.75"/>
+   </objectgroup>
+  </tile>
+  <tile id="30">
+   <objectgroup draworder="index">
+    <object id="1" x="1.90909" y="17.1818" width="27" height="14.3636"/>
+   </objectgroup>
+  </tile>
+  <tile id="31">
+   <objectgroup draworder="index">
+    <object id="1" x="5.36364" y="13.2727" width="20.3636" height="14.6364"/>
+   </objectgroup>
+  </tile>
+  <tile id="32">
+   <objectgroup draworder="index">
+    <object id="1" x="4.90909" y="12.9091" width="21.2727" height="14.6364"/>
+   </objectgroup>
+  </tile>
+  <tile id="33">
+   <objectgroup draworder="index">
+    <object id="1" x="7.45455" y="9.45455" width="16.4545" height="21.0909"/>
+   </objectgroup>
+  </tile>
+  <tile id="34">
+   <objectgroup draworder="index">
+    <object id="1" x="6.72727" y="14.8182" width="23.3636" height="11.4545"/>
+   </objectgroup>
+  </tile>
+  <tile id="35">
+   <objectgroup draworder="index">
+    <object id="1" x="10.1818" y="5.27273" width="12.5455" height="19.2727"/>
+   </objectgroup>
+  </tile>
+  <tile id="36">
+   <objectgroup draworder="index">
+    <object id="1" x="5.90909" y="5.09091" width="13.0909" height="19.8182"/>
+   </objectgroup>
+  </tile>
+  <tile id="40">
+   <objectgroup draworder="index">
+    <object id="1" x="3.81818" y="6.90909" width="24.1818" height="24.6364"/>
+   </objectgroup>
+  </tile>
+  <tile id="41">
+   <objectgroup draworder="index">
+    <object id="1" x="4" y="7.18182" width="23.7273" height="24.7273"/>
+   </objectgroup>
+  </tile>
+  <tile id="42">
+   <objectgroup draworder="index">
+    <object id="1" x="8.90909" y="12.3636" width="14.0909" height="16.3636"/>
+   </objectgroup>
+  </tile>
+  <tile id="50">
+   <objectgroup draworder="index">
+    <object id="1" x="3.54545" y="0.0909091" width="24.4545" height="32.0909"/>
+   </objectgroup>
+  </tile>
+  <tile id="51">
+   <objectgroup draworder="index">
+    <object id="1" x="4" y="21.2727" width="24" height="10.5455"/>
+   </objectgroup>
+  </tile>
+  <tile id="60">
+   <objectgroup draworder="index">
+    <object id="1" x="3.36364" y="0.0909091" width="24.3636" height="31.4545"/>
+   </objectgroup>
+  </tile>
+  <tile id="70">
+   <objectgroup draworder="index">
+    <object id="1" x="0" y="0" width="32" height="32"/>
    </objectgroup>
   </tile>
  </tileset>
@@ -78,42 +158,42 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,41,31,0,42,31,0,41,31,0,41,31,0,0,0,
-0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,41,31,0,41,31,0,41,31,0,41,31,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,41,31,0,41,31,0,41,31,0,42,31,0,0,0,
+0,0,0,0,0,0,0,0,0,8,28,27,28,28,0,0,0,0,0,0,0,0,0,0,0,0,41,31,0,41,31,0,41,31,0,41,31,0,0,0,
+0,0,0,0,0,0,0,0,0,0,27,27,28,27,0,0,0,62,0,0,0,0,63,0,0,0,41,31,0,41,31,0,41,31,0,42,31,0,0,0,
 0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,41,31,0,41,31,0,41,31,0,41,31,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,41,31,0,41,31,0,41,31,0,41,31,0,0,0,
+0,0,0,0,0,0,0,0,28,27,27,28,27,27,0,0,0,0,0,0,0,0,0,0,0,0,41,31,0,41,31,0,41,31,0,41,31,0,0,0,
+0,0,0,0,0,0,0,0,27,28,28,27,28,28,0,0,0,0,0,0,0,0,0,0,0,0,41,31,0,41,31,0,41,31,0,41,31,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,41,31,0,41,31,0,42,31,0,41,31,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,64,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,12,0,0,0,0,0,0,0,0,0,0,0,43,0,0,43,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,12,0,0,0,0,0,0,0,0,0,0,0,43,0,0,43,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,52,52,0,52,52,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,61,51,0,51,61,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,43,0,0,43,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,43,0,0,43,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,65,0,0,0,0,66,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,
 0,0,0,0,0,0,7,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,5,
-0,0,0,0,0,0,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,5,
+0,0,0,0,0,0,9,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,5,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,5,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,0,0,0,0,36,36,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,36,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,12,0,0,0,0,0,0,0,0,36,36,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,12,0,0,0,0,0,0,0,0,0,36,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,33,0,34,0,0,10,35,0,37,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,32,34,34,32,0,0,33,35,0,37,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,34,34,34,33,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,12,0,33,0,34,0,0,10,35,0,37,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,32,34,34,32,0,0,33,35,0,37,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,34,34,34,33,0,0,0,0,12,7,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
@@ -138,11 +218,20 @@
     <property name="action" value="trigger_puzzle"/>
    </properties>
   </object>
-  <object id="9" name="sample_dna" gid="21" x="1056.33" y="296.167" width="32" height="32"/>
-  <object id="10" name="sample_dna" gid="21" x="865.333" y="104.5" width="32" height="32"/>
+  <object id="9" name="sample_dna" gid="21" x="1056.33" y="296.167" width="32" height="32">
+   <properties>
+    <property name="trigger_text" value="We could take a DNA sample from the remainings of this native... We just need a sampler"/>
+   </properties>
+  </object>
+  <object id="10" name="sample_dna" gid="21" x="865.333" y="104.5" width="32" height="32">
+   <properties>
+    <property name="trigger_text" value="We could take a DNA sample from the remainings of this native... We just need a sampler"/>
+   </properties>
+  </object>
   <object id="11" name="dna_sampler" gid="22" x="1060" y="574" width="32" height="32">
    <properties>
     <property name="item" value="dna_sampler"/>
+    <property name="trigger_text" value="This can be used to sample DNA."/>
    </properties>
   </object>
   <object id="12" name="dynamite" gid="23" x="1041.83" y="910" width="32" height="32">
@@ -154,20 +243,22 @@
   <object id="13" name="fuel" gid="24" x="608" y="1184" width="32" height="32">
    <properties>
     <property name="item" value="fuel"/>
+    <property name="trigger_text" value="Yesss!!  The fuel for our ship."/>
    </properties>
   </object>
-  <object id="14" name="exit" gid="3" x="608.333" y="48" width="32" height="32"/>
+  <object id="14" name="exit" gid="3" x="608.333" y="96.3333" width="32" height="32"/>
   <object id="15" name="dna_sampler" gid="22" x="933.333" y="582.667" width="32" height="32">
    <properties>
     <property name="item" value="dna_sampler"/>
+    <property name="trigger_text" value="This can be used to sample DNA."/>
    </properties>
   </object>
   <object id="16" name="doc" gid="25" x="1114.83" y="155.333" width="32" height="32">
    <properties>
-    <property name="trigger_text" value="&quot;Dear new medic! The code for the med station is 123.&quot;"/>
+    <property name="trigger_text" value="&quot;Dear new medic! The code for the med station is in the next supply shipment.&quot;"/>
    </properties>
   </object>
-  <object id="18" name="exit" gid="3" x="640.333" y="48.0417" width="32" height="32"/>
+  <object id="18" name="exit" gid="3" x="640.333" y="96.375" width="32" height="32"/>
   <object id="19" name="puzzle_door" gid="3" x="639.94" y="1014.06" width="32" height="32"/>
   <object id="20" name="dna_door" gid="3" x="640" y="864" width="32" height="32">
    <properties>
@@ -176,5 +267,24 @@
   </object>
   <object id="22" name="med_station_door" gid="4" x="671.833" y="480.167" width="32" height="32"/>
   <object id="23" name="med_station_door" gid="4" x="671.833" y="512.167" width="32" height="32"/>
+  <object id="24" name="exit_level" gid="71" x="608" y="14.6667" width="62.6667" height="11.6667">
+   <properties>
+    <property name="action" value="changeLevelMiningStation"/>
+   </properties>
+  </object>
+  <object id="32" name="crate1" gid="26" x="352" y="160" width="32" height="32"/>
+  <object id="33" name="crate2" gid="26" x="415.667" y="129" width="32" height="32"/>
+  <object id="34" name="crate3" gid="26" x="288.333" y="322.333" width="32" height="32"/>
+  <object id="35" name="special_crate" gid="26" x="384.667" y="322" width="32" height="32"/>
+  <object id="36" name="crate4" gid="26" x="383.333" y="290" width="32" height="32"/>
+  <object id="37" name="crate5" gid="26" x="320" y="288.333" width="32" height="32"/>
+  <object id="38" name="crate6" gid="26" x="415.667" y="289.333" width="32" height="32"/>
+  <object id="39" name="crate7" gid="26" x="351" y="320.667" width="32" height="32"/>
+  <object id="40" name="doc_2" gid="25" x="384" y="321.333" width="32" height="32"/>
+  <object id="41" name="pickaxe" gid="38" x="513" y="512" width="32" height="32">
+   <properties>
+    <property name="item" value="pickaxe"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

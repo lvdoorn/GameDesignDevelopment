@@ -109,13 +109,14 @@ public class PlayerScript : MonoBehaviour
         {
           //anim_.Stop();
           anim_.Play("WalkSide");
-
+          GetComponent<AudioSource>().Play();
           //anim_.enabled = true;
         }
         if (!m && moved_)
         {
           //anim_.Stop();
           anim_.Play("Idle");
+          GetComponent<AudioSource>().Stop();
           //anim_.enabled = false;
         }
         moved_ = m;
@@ -171,19 +172,24 @@ public class PlayerScript : MonoBehaviour
         {
           if (it == "fire_extinguisher")
           {
-            GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject, "fire", "remove", "");
+            GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject,0.6f, "fire", "remove", "", "");
           }
           if (it == "dna_sampler")
           {
-            GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject, "sample_dna", "pickup", "sample_dna");
+            GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject, 0.6f, "sample_dna", "pickup", "sample_dna", "");
           }
           if (it == "dynamite")
           {
-            GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject, "exit", "remove", "");
+            GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject, 0.6f, "exit", "remove", "", "synthetic_explosion_1");
           }
           if (it == "sample_dna")
           {
-            GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject, "dna_door", "condition_remove", "2");
+            GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject, 0.6f, "dna_door", "condition_remove", "2", "");
+          }
+          if (it == "pickaxe")
+          {
+            GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject, 0.6f, "special_crate", "remove_addtext", "doc_2", "The code is 589413");
+            GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject, 0.6f, "crate", "remove", "", "impactcrunch04");
           }
         }
       }
@@ -275,6 +281,16 @@ public class PlayerScript : MonoBehaviour
         Debug.Log("sent item remove");
       }
     }
+  }
+  public bool HasItem(string item)
+  {
+    for(int x =0; x <items_.Length; x++)
+    {
+      if (items_[x] == item)
+        return true;
+    }
+
+    return false;
   }
 }
  

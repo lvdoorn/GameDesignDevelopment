@@ -39,6 +39,9 @@ public class PlayersScript : MonoBehaviour
     clone.GetComponent<PlayerScript>().enabled = true;
     clone.GetComponent<PlayerScript>().setId(id);
 
+    clone.GetComponent<AudioSource>().enabled = true;
+    clone.GetComponent<AudioSource>().Stop();
+
     clone.GetComponent<PlayerScript>().layer_ = 2;
     if( players_.Count == 1 )
       clone.GetComponent<SpriteRenderer>().color = Color.blue;
@@ -253,6 +256,20 @@ public class PlayersScript : MonoBehaviour
   }
 
   public int PlayerCount() {
+    return players_.Count;
+  }
+
+  public bool HaveItem(string item)
+  {
+    foreach (KeyValuePair<int, GameObject> player in players_)
+    {
+      if (player.Value.GetComponent<PlayerScript>().HasItem(item))
+        return true;
+    }
+    return false;
+  }
+  public int GetNumberOfPlayers()
+  {
     return players_.Count;
   }
 

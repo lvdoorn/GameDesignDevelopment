@@ -92,10 +92,14 @@ public class GameScript : MonoBehaviour
   {
     if (data["start"] != null)
     {
-      Debug.Log("received start");
-   //   StartTutorial();
-      //StartExtendedTutorial();
-      StartMiningStation();
+      int num_players = GameObject.Find("Players").GetComponent<PlayersScript>().GetNumberOfPlayers();
+      if (num_players >= 3)
+      {
+        Debug.Log("received start");
+        //   StartTutorial();
+        //StartExtendedTutorial();
+        StartMiningStation();
+      }
     }
   }
   
@@ -122,7 +126,7 @@ public class GameScript : MonoBehaviour
   {
     ChangePositions(new Vector3(-0.0078125f, 4.0f, 0) );
     ChangeLevel("mining_station");
-    ShowIntermission("The crew of the space ship has found a cave. It seems to have been used as a mining station. As they enter with the intent to recover fuel the door closes behind them...");
+   // ShowIntermission("The crew of the space ship has found a cave. It seems to have been used as a mining station. As they enter with the intent to recover fuel the door closes behind them...");
   }
 
   public void ShowIntermission(string text)
@@ -207,6 +211,11 @@ public class GameScript : MonoBehaviour
       end_time = Time.time + seconds;
     }
     label_queue_.Add(new InfoBoxMessage() { time = end_time, text = text, image_name = image_name });
+  }
+
+  public void PlaySound(string name)
+  {
+    GameObject.Find("MainCamera").GetComponent<AudioManager>().PlaySingle(name);
   }
 }
 

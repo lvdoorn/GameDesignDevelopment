@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="32" tileheight="32" nextobjectid="43">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="32" tileheight="32" nextobjectid="44">
  <tileset firstgid="1" name="tileset_mining" tilewidth="32" tileheight="32" tilecount="100" columns="10">
   <image source="Tilesets/tileset_mining.png" width="320" height="320"/>
   <tile id="0">
@@ -255,7 +255,11 @@
   </object>
   <object id="16" name="doc" gid="25" x="1114.83" y="155.333" width="32" height="32">
    <properties>
-    <property name="trigger_text" value="&quot;Dear new medic! The code for the med station is in the next supply shipment.&quot;"/>
+    <property name="action">trigger_letter|Dear new medic!
+
+The code for the med station is in the next supply shipment.
+
+Good Luck!</property>
    </properties>
   </object>
   <object id="18" name="exit" gid="3" x="640.333" y="96.375" width="32" height="32"/>
@@ -284,6 +288,18 @@
   <object id="41" name="pickaxe" gid="38" x="513" y="512" width="32" height="32">
    <properties>
     <property name="item" value="pickaxe"/>
+   </properties>
+  </object>
+  <object id="43" name="doc_back" gid="25" x="1017" y="347" width="32" height="32">
+   <properties>
+    <property name="action">trigger_letter|MyLove! 
+
+We are under siege! 
+The last order we received was to destroy the tunnels.
+But I think the bombardment will take care of that. 
+I will come home as soon as possible.  
+
+With Love, Jim.</property>
    </properties>
   </object>
  </objectgroup>

@@ -14,6 +14,8 @@ public class LevelScript : MonoBehaviour
   private bool vote_mode = false;
   private string vote_event = "";
 
+  private bool letter_shown_ = false;
+
   void Start ()
   {
     players_ = GameObject.Find("Players").GetComponent<PlayersScript>();
@@ -182,6 +184,20 @@ public class LevelScript : MonoBehaviour
     RemoveObject("puzzle_door");
   }
 
+  public void ShowLetter(string text)
+  {
+
+    text = text.Replace("\\n", "\n");
+    GameObject.Find("Game").transform.FindChild("UI").FindChild("Letter").gameObject.SetActive(true);
+    GameObject.Find("Game").transform.FindChild("UI").FindChild("Letter").GetChild(0).GetComponent<Text>().text = text;
+    letter_shown_ = true;
+  }
+  public void HideLetter()
+  {
+    GameObject.Find("Game").transform.FindChild("UI").FindChild("Letter").gameObject.SetActive(false);
+    letter_shown_ = false;
+  }
+
 
   public void MessageToDebug(string msg, string icon = "Info")
   {
@@ -249,10 +265,11 @@ public class LevelScript : MonoBehaviour
                 GameObject.Find("Game").GetComponent<GameScript>().PlaySound(add2);
               }
             }
-            if (action == "remove_addtext")
+            if (action == "remove_addletter")
             {
               RemoveObject(objname);
-              GameObject.Find("LevelLayer" + current_layer_.ToString()).transform.FindChild("Objects").FindChild(add).gameObject.GetComponent<ObjectScript>().trigger_text = add2;
+              GameObject.Find("LevelLayer" + current_layer_.ToString()).transform.FindChild("Objects").FindChild(add).gameObject.GetComponent<ObjectScript>().action = add2;
+              GameObject.Find("LevelLayer" + current_layer_.ToString()).transform.FindChild("Objects").FindChild(add).gameObject.GetComponent<ObjectScript>().PlayerWasOutside(player.GetComponent<PlayerScript>().getId());
               GameObject.Find("Game").GetComponent<GameScript>().PlaySound("impactcrunch04");
             }
             if (action == "condition_remove")
@@ -333,6 +350,13 @@ public class LevelScript : MonoBehaviour
             {
               BeginPuzzle();
             }
+            if (action.StartsWith("trigger_letter"))
+            {
+              string[] parts = action.Split('|');
+              ShowLetter(parts[1]);
+            }
+
+
               string triggerVote = child.gameObject.GetComponent<ObjectScript>().trigger_vote;
             if (triggerVote != "")
             {
@@ -360,6 +384,9 @@ public class LevelScript : MonoBehaviour
   }
   public void CheckMoveTrigger(GameObject obj)
   {
+    if (letter_shown_)
+      HideLetter();
+
     int player_id = obj.GetComponent<PlayerScript>().getId();
     GameObject lobjs = gameObject.transform.FindChild("LevelLayer" + current_layer_.ToString()).transform.FindChild("Objects").gameObject;
     if (lobjs != null)
@@ -449,7 +476,7 @@ public class LevelScript : MonoBehaviour
               {
                 MessageToDebug(parts[x]);
               }
-              child.gameObject.GetComponent<ObjectScript>().trigger_text = "";
+              //child.gameObject.GetComponent<ObjectScript>().trigger_text = "";
               if(child.gameObject.name == "end_of_lvl")
               {
                 GameObject.Find("Game").GetComponent<GameScript>().StartMiningStation();

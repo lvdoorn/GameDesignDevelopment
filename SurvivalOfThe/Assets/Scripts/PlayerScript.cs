@@ -188,7 +188,7 @@ public class PlayerScript : MonoBehaviour
           }
           if (it == "pickaxe")
           {
-            GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject, 0.6f, "special_crate", "remove_addtext", "doc_2", "The code is 589413");
+            GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject, 0.6f, "special_crate", "remove_addletter", "doc_2", "trigger_letter|Dear new medic!\n\nThe code is 589413\nRegards,\nYour Supervisor");
             GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject, 0.6f, "crate", "remove", "", "impactcrunch04");
           }
         }

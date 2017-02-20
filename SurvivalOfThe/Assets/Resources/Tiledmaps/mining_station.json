@@ -157,13 +157,11 @@
                  "properties":
                     {
                      "item":"dna_sampler",
-                     "sound":"once|life_pickup",
                      "trigger_text":"This can be used to sample DNA."
                     },
                  "propertytypes":
                     {
                      "item":"string",
-                     "sound":"string",
                      "trigger_text":"string"
                     },
                  "rotation":0,
@@ -181,13 +179,11 @@
                  "properties":
                     {
                      "item":"dynamite",
-                     "sound":"once|life_pickup",
                      "trigger_text":"once|this must have been placed here to destroy the tunnel, but not been triggered"
                     },
                  "propertytypes":
                     {
                      "item":"string",
-                     "sound":"string",
                      "trigger_text":"string"
                     },
                  "rotation":0,
@@ -205,13 +201,11 @@
                  "properties":
                     {
                      "item":"fuel",
-                     "sound":"once|life_pickup",
                      "trigger_text":"Yesss!!  The fuel for our ship."
                     },
                  "propertytypes":
                     {
                      "item":"string",
-                     "sound":"string",
                      "trigger_text":"string"
                     },
                  "rotation":0,
@@ -241,13 +235,11 @@
                  "properties":
                     {
                      "item":"dna_sampler",
-                     "sound":"once|life_pickup",
                      "trigger_text":"This can be used to sample DNA."
                     },
                  "propertytypes":
                     {
                      "item":"string",
-                     "sound":"string",
                      "trigger_text":"string"
                     },
                  "rotation":0,
@@ -264,11 +256,11 @@
                  "name":"doc",
                  "properties":
                     {
-                     "trigger_text":"\"Dear new medic! The code for the med station is in the next supply shipment.\""
+                     "action":"trigger_letter|Dear new medic!\n\nThe code for the med station is in the next supply shipment.\n\nGood Luck!"
                     },
                  "propertytypes":
                     {
-                     "trigger_text":"string"
+                     "action":"string"
                     },
                  "rotation":0,
                  "type":"",
@@ -386,7 +378,7 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":415.666666666667,
+                 "x":415.667,
                  "y":129
                 }, 
                 {
@@ -398,8 +390,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":288.333333333333,
-                 "y":322.333333333333
+                 "x":288.333,
+                 "y":322.333
                 }, 
                 {
                  "gid":26,
@@ -410,7 +402,7 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":384.666666666667,
+                 "x":384.667,
                  "y":322
                 }, 
                 {
@@ -422,7 +414,7 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":383.333333333333,
+                 "x":383.333,
                  "y":290
                 }, 
                 {
@@ -435,7 +427,7 @@
                  "visible":true,
                  "width":32,
                  "x":320,
-                 "y":288.333333333333
+                 "y":288.333
                 }, 
                 {
                  "gid":26,
@@ -446,8 +438,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":415.666666666667,
-                 "y":289.333333333333
+                 "x":415.667,
+                 "y":289.333
                 }, 
                 {
                  "gid":26,
@@ -459,7 +451,7 @@
                  "visible":true,
                  "width":32,
                  "x":351,
-                 "y":320.666666666667
+                 "y":320.667
                 }, 
                 {
                  "gid":25,
@@ -471,7 +463,7 @@
                  "visible":true,
                  "width":32,
                  "x":384,
-                 "y":321.333333333333
+                 "y":321.333
                 }, 
                 {
                  "gid":38,
@@ -480,13 +472,11 @@
                  "name":"pickaxe",
                  "properties":
                     {
-                     "item":"pickaxe",
-                     "sound":"once|life_pickup"
+                     "item":"pickaxe"
                     },
                  "propertytypes":
                     {
-                     "item":"string",
-                     "sound":"string"
+                     "item":"string"
                     },
                  "rotation":0,
                  "type":"",
@@ -494,6 +484,26 @@
                  "width":32,
                  "x":513,
                  "y":512
+                }, 
+                {
+                 "gid":25,
+                 "height":32,
+                 "id":43,
+                 "name":"doc_back",
+                 "properties":
+                    {
+                     "action":"trigger_letter|MyLove! \n\nWe are under siege! \nThe last order we received was to destroy the tunnels.\nBut I think the bombardment will take care of that. \nI will come home as soon as possible.  \n\nWith Love, Jim."
+                    },
+                 "propertytypes":
+                    {
+                     "action":"string"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":1017,
+                 "y":347
                 }],
          "opacity":1,
          "properties":
@@ -510,7 +520,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":43,
+ "nextobjectid":44,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tileheight":32,

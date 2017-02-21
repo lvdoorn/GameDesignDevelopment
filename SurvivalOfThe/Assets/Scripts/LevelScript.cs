@@ -395,7 +395,7 @@ public class LevelScript : MonoBehaviour
       {
         if (child.childCount > 0)
         {
-          Vector2 tv = obj.GetComponent<BoxCollider2D>().offset;
+          Vector2 tv = obj.GetComponent<CircleCollider2D>().offset;
           float d = Vector2.Distance( new Vector2( child.GetChild(0).position.x, child.GetChild(0).position.y), new Vector2(obj.transform.position.x, obj.transform.position.y) + tv);
           //Debug.Log(d);
           // one time 
@@ -555,7 +555,7 @@ public class LevelScript : MonoBehaviour
       {
         if (child.childCount > 0)
         {
-          Vector2 tv = obj.GetComponent<BoxCollider2D>().offset;
+          Vector2 tv = obj.GetComponent<CircleCollider2D>().offset;
           float d = Vector2.Distance(new Vector2(child.GetChild(0).position.x, child.GetChild(0).position.y), new Vector2(obj.transform.position.x, obj.transform.position.y) + tv);
 
           if ((d < 0.5f))

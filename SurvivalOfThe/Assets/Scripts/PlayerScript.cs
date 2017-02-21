@@ -62,7 +62,7 @@ public class PlayerScript : MonoBehaviour
           if (flipped_)
           {
             transform.position -= offset;
-            gameObject.GetComponent<BoxCollider2D>().offset += new Vector2(offset.x, offset.y) / gameObject.transform.localScale.x;
+            gameObject.GetComponent<CircleCollider2D>().offset += new Vector2(offset.x, offset.y) / gameObject.transform.localScale.x;
           }
 
           flipped_ = false;
@@ -75,7 +75,7 @@ public class PlayerScript : MonoBehaviour
           if (!flipped_)
           {
             transform.position += offset;
-            gameObject.GetComponent<BoxCollider2D>().offset -= new Vector2(offset.x, offset.y) / gameObject.transform.localScale.x;
+            gameObject.GetComponent<CircleCollider2D>().offset -= new Vector2(offset.x, offset.y) / gameObject.transform.localScale.x;
           }
 
           flipped_ = true;

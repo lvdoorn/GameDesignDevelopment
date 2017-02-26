@@ -98,7 +98,8 @@ public class GameScript : MonoBehaviour
         Debug.Log("received start");
         //   StartTutorial();
         //StartExtendedTutorial();
-        StartMiningStation();
+        //StartMiningStation();
+        StartJungle();
       }
     }
   }
@@ -128,8 +129,13 @@ public class GameScript : MonoBehaviour
     ChangeLevel("mining_station");
    // ShowIntermission("The crew of the space ship has found a cave. It seems to have been used as a mining station. As they enter with the intent to recover fuel the door closes behind them...");
   }
+  public void StartJungle() {
+    ChangePositions(new Vector3(-1.125f, -2.625f, 0), new Vector3(1.125f, -2.625f, 0));
+    ChangeLevel("jungle");
+    // ShowIntermission("...");
+  }
 
-  public void ShowIntermission(string text)
+    public void ShowIntermission(string text)
   {
     GetCurrentLevel().gameObject.SetActive(false);
     GameObject game = GameObject.Find("Game");

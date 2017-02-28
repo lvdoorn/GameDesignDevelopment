@@ -168,6 +168,52 @@ public class LevelScript : MonoBehaviour
         RemoveObject("animal_stasis_pot_4");
         GameObject.Find("tutorial").transform.GetChild(0).GetChild(2).FindChild("dead_animal_warning").gameObject.GetComponent<ObjectScript>().trigger_text = "Oh my god the stasis pots....They are dead| ... We killed them";
       }
+    } else if (vote_event.StartsWith("collect_fruit_")) {
+      if (vote == 0) {
+        // 2 fruit kinds are enough, but the players may decide to collect all 3
+        string msg = "Yum yum! ";
+        GameScript game = GameObject.Find("Game").GetComponent<GameScript>();
+        Fruits fruit = Fruits.NONE;
+        string selector = "";
+        if (vote_event.EndsWith("red")) {
+          fruit = Fruits.RED;
+          selector = "red_";
+        } else if (vote_event.EndsWith("purple")) {
+          fruit = Fruits.PURPLE;
+          selector = "purple_";
+        } else if (vote_event.EndsWith("blue")) {
+          fruit = Fruits.BLUE;
+          selector = "blue_";
+        }
+
+        // display infos
+        bool removeBorders = false;
+        game.CollectedFruits |= fruit;
+        if (game.CollectedFruits == Fruits.ALL) { // collected ALL fruits
+          msg += "Now we definitely have enough food for our trip. Let's go!";
+        } else if ((game.CollectedFruits & ~fruit) != 0) { // collected 2 fruits
+          msg += "I guess we could continue our trip with that food...\r\nBut.. maybe.. we should collect some more?";
+          removeBorders = true;
+        } else { // collected first fruit
+          msg += "Great! But we definitely need MORE food!";
+        }
+        game.DisplayInfoBox(msg, 10, "Player");
+        
+        // transform fruit trees and remove borders
+        Transform objects = game.GetCurrentLevel().transform.GetChild(0).GetChild(2);
+        for (int i = 0; i < objects.childCount; i++) {
+          GameObject obj = objects.GetChild(i).gameObject;
+          if (obj.name.StartsWith(selector)) {
+            if (obj.name.EndsWith("_left") || obj.name.EndsWith("_right")) {
+              Destroy(obj);
+            }
+          } else if (removeBorders && obj.name == "border") {
+            Destroy(obj);
+          }
+        }
+      } else {
+        GameObject.Find("Game").GetComponent<GameScript>().DisplayInfoBox("But they look so tasty!", 3, "Player");
+      }
     }
   }
   public void BeginPuzzle()
@@ -199,10 +245,10 @@ public class LevelScript : MonoBehaviour
   }
 
 
-  public void MessageToDebug(string msg, string icon = "Info")
+  public void MessageToDebug(string msg, string icon = "Info", int seconds = 3)
   {
     Debug.Log("Display " + msg);
-    GameObject.Find("Game").GetComponent<GameScript>().DisplayInfoBox(msg,3,icon);
+    GameObject.Find("Game").GetComponent<GameScript>().DisplayInfoBox(msg,seconds,icon);
   }
 
   // scripted 
@@ -493,6 +539,10 @@ public class LevelScript : MonoBehaviour
               {
                 MessageToDebug("We still need the fuel", "Player");
               }
+            }
+            if (action == "changeLevelJungle") {
+              // GameObject.Find("Game").GetComponent<GameScript>().ChangeLevel("Next"); // 
+              GameObject.Find("Game").GetComponent<GameScript>().ShowIntermission("Now that we have collected delicious fruits, we will not starve on our continuing trip.");
             }
           }
 

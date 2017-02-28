@@ -13,11 +13,21 @@ public enum GameState
   VOTE =2
 }
 
+public enum Fruits : byte
+{
+  NONE = 0,
+  RED = 1,
+  PURPLE = 2,
+  BLUE = 4,
+  ALL = RED | PURPLE | BLUE
+}
+
 public class GameScript : MonoBehaviour
 {
   private GameObject current_level_;
   public float Scale { get; set; }
   public GameState State { get; set; }
+  public Fruits CollectedFruits { get; set; }
 
   public struct InfoBoxMessage {
     public float time;
@@ -41,6 +51,7 @@ public class GameScript : MonoBehaviour
     info_box_text_ = info_box_.GetComponentInChildren<Text>(true);
 
     State = GameState.JOIN;
+    CollectedFruits = Fruits.NONE;
 
     AirConsole.instance.onMessage += OnMessage;
     RefreshWaitingScreen("Waiting for players" , "0 players connected");

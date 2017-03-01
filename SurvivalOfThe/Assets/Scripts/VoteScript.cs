@@ -30,10 +30,10 @@ public class VoteScript : MonoBehaviour
 
   void Start()
   {
-    vote_ = GameObject.Find("UI").transform.GetChild(0).gameObject;
+    vote_ = transform.Find("Vote").gameObject;
     game_ = GameObject.Find("Game").GetComponent<GameScript>();
-    question_ = GameObject.Find("UI").transform.GetChild(0).GetChild(0).GetComponent<Text>();
-    code_text_ = GameObject.Find("UI").transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<Text>();
+    question_ = transform.Find("Vote/Question").GetComponent<Text>();
+    code_text_ = transform.Find("Vote/Code/Text").GetComponent<Text>();
     
     int index = 0;
     solution_ = new char[EngineNumbers.Length];

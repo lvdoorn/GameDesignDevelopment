@@ -24,6 +24,7 @@ public class PlayerScript : MonoBehaviour
   private string [] items_ = new string[4];
 
   private GameScript game_;
+  public string Nickname;
 
   void Start()
   {

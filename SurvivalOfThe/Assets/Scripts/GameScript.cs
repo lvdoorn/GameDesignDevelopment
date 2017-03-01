@@ -111,9 +111,9 @@ public class GameScript : MonoBehaviour
         //StartExtendedTutorial();
         //StartMiningStation();
 
-        StartWoods();
+        //StartWoods();
 
-        //StartJungle();
+        StartJungle();
       }
     }
   }

@@ -290,7 +290,7 @@ public class LevelScript : MonoBehaviour
     float scale = GameObject.Find("Game").GetComponent<GameScript>().Scale;
     Vector3 player_position = player.transform.position;
     Vector2 player_position_2d = new Vector2(player_position.x, player_position.y);
-    Vector2 player_offset = new Vector2(0.1f, 0.1f);
+    Vector2 player_offset = new Vector2(0.1f, -0.1f);
     GameObject lobjs = GameObject.Find("LevelLayer" + current_layer_.ToString()).transform.FindChild("Objects").gameObject;
     if (lobjs != null)
     {
@@ -307,6 +307,14 @@ public class LevelScript : MonoBehaviour
             if (action == "pickup")
             {
               player.GetComponent<PlayerScript>().addItem(add);
+            }
+            if (action == "remove_this")
+            {
+              Destroy(child.gameObject);
+              if(add2 != "")
+              {
+                GameObject.Find("Game").GetComponent<GameScript>().PlaySound(add2);
+              }
             }
             if (action == "remove")
             {
@@ -622,6 +630,7 @@ public class LevelScript : MonoBehaviour
       }
     }   
   }
+
   private void TempDisableObjects(GameObject obj)
   {
     int player_id = obj.GetComponent<PlayerScript>().getId();

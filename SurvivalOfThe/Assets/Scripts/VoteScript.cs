@@ -4,6 +4,7 @@ using System.Collections;
 using NDream.AirConsole;
 using Newtonsoft.Json.Linq;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class VoteScript : MonoBehaviour
 {
@@ -17,11 +18,8 @@ public class VoteScript : MonoBehaviour
 
   private char[] solution_;
   
-  [Header("Engine Code Number Objects")]
-  public GameObject[] EngineNumbers;
-  
-  [Header("GameObjects to remove on success")]
-  public GameObject[] RemoveOnSuccess;
+  private GameObject[] EngineNumbers = new GameObject[8];
+  private List<GameObject> RemoveOnSuccess = new List<GameObject>();
 
   [Header("Tileset used to display numbers")]
   public Texture2D Tileset;
@@ -34,6 +32,16 @@ public class VoteScript : MonoBehaviour
     game_ = GameObject.Find("Game").GetComponent<GameScript>();
     question_ = transform.Find("Vote/Question").GetComponent<Text>();
     code_text_ = transform.Find("Vote/Code/Text").GetComponent<Text>();
+    
+    Transform objects = GameObject.Find("Game").transform.Find("tutorial/LevelLayer3/Objects");
+    foreach (Transform obj in objects) {
+      if (obj.name.StartsWith("door")) {
+        RemoveOnSuccess.Add(obj.gameObject);
+      } else if (obj.name.StartsWith("engine_number_")) {
+        int number = int.Parse(obj.name.Substring(14, 1));
+        EngineNumbers[number - 1] = obj.gameObject;
+      }
+    }
     
     int index = 0;
     solution_ = new char[EngineNumbers.Length];
@@ -115,8 +123,7 @@ public class VoteScript : MonoBehaviour
     return result;
   }
 
-  IEnumerator FadeBackToGame() {
-    yield return new WaitForSeconds(1);
+  void BackToGame() {
     game_.State = GameState.PLAY;
     vote_.SetActive(false);
     AirConsole.instance.Broadcast("EndVote");
@@ -161,13 +168,13 @@ public class VoteScript : MonoBehaviour
               game_.DisplayInfoBox("That code did not start the engine...", 2);
             else
               game_.DisplayInfoBox("That code did not work...", 2);
-            StartCoroutine(FadeBackToGame());
+            BackToGame();
             return;
           }
         }
         if (vote_type_ == "startengine")
           game_.DisplayInfoBox("The engine started !", 2);
-        StartCoroutine(FadeBackToGame());
+        BackToGame();
         foreach (GameObject go in RemoveOnSuccess) {
           Destroy(go);
         }

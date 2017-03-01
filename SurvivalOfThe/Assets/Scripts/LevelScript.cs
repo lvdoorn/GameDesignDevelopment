@@ -59,7 +59,7 @@ public class LevelScript : MonoBehaviour
       }
     }
     if (Input.GetKeyDown(KeyCode.V))
-      BeginPuzzle();
+      BeginPuzzle("bridge");
      // players_.GetComponent<PlayersScript>().GetFirstPlayer().GetComponent<PlayerScript>().addItem("fire_extinguisher");
 
   }
@@ -170,12 +170,17 @@ public class LevelScript : MonoBehaviour
       }
     }
   }
-  public void BeginPuzzle()
+  public void BeginPuzzle(string name)
   {
     int number_of_players = GameObject.Find("Players").GetComponent<PlayersScript>().PlayerCount();
 
     PuzzleScript puzzle_script = GameObject.Find("Game").transform.FindChild("UI").FindChild("Puzzle").GetComponent<PuzzleScript>();
-    puzzle_script.Init( number_of_players);
+    //if(name != "")
+   // {
+   //   Sprite sp = Resources.Load<Sprite>("Sprites/"+name);
+   //   GameObject.Find("Game").transform.FindChild("UI").FindChild("Puzzle").GetComponent<Image>().sprite = sp;
+   // }
+    puzzle_script.Init( number_of_players, name);
     GameObject.Find("Game").transform.FindChild("UI").FindChild("Puzzle").gameObject.SetActive(true);
   }
   public void EndPuzzle()
@@ -348,7 +353,11 @@ public class LevelScript : MonoBehaviour
             }
             if (action.StartsWith("trigger_puzzle"))
             {
-              BeginPuzzle();
+              BeginPuzzle("mining_station");
+            }
+            if (action.StartsWith("trigger_puzzle2"))
+            {
+              BeginPuzzle("bridge");
             }
             if (action.StartsWith("trigger_letter"))
             {
@@ -413,7 +422,7 @@ public class LevelScript : MonoBehaviour
             {
               PlayerScript ps = obj.GetComponent<PlayerScript>();
               ps.setLayer(switch_layer);
-            
+
               if (ps.hasFocus())
               {
                 SetFocus(ps.getId());
@@ -424,7 +433,7 @@ public class LevelScript : MonoBehaviour
               }
               TempDisableObjects(obj);
             }
-       
+
             if (t != "")
             {
               List<GameObject> objs = new List<GameObject>();
@@ -436,7 +445,7 @@ public class LevelScript : MonoBehaviour
               MessageToDebug("Holding that.. I need to stay here", "Player");
               MessageToDebug("To deactivate that permanently we need a main console", "Player");
 
-            
+
 
               foreach (GameObject p in objs)
               {
@@ -458,7 +467,7 @@ public class LevelScript : MonoBehaviour
             }
             if (item_trigger != "")
             {
-  
+
               if (obj.GetComponent<PlayerScript>().addItem(item_trigger))
               {
                 Destroy(child.gameObject);
@@ -467,24 +476,24 @@ public class LevelScript : MonoBehaviour
               }
             }
 
-             if (text_trigger != "")
+            if (text_trigger != "")
             {
               Debug.Log("TextTrigger");
               string[] parts = text_trigger.Split('|');
 
-              for(int x=0; x< parts.Length; x++)
+              for (int x = 0; x < parts.Length; x++)
               {
                 MessageToDebug(parts[x]);
               }
               //child.gameObject.GetComponent<ObjectScript>().trigger_text = "";
-              if(child.gameObject.name == "end_of_lvl")
+              if (child.gameObject.name == "end_of_lvl")
               {
                 GameObject.Find("Game").GetComponent<GameScript>().StartMiningStation();
               }
             }
-            if(action == "changeLevelMiningStation")
+            if (action == "changeLevelWoods")
             {
-              if(players_.HaveItem("fuel"))
+              if (players_.HaveItem("fuel"))
               {
                 // GameObject.Find("Game").GetComponent<GameScript>().ChangeLevel("Next"); // 
                 GameObject.Find("Game").GetComponent<GameScript>().ShowIntermission("Now that the fuel has been found the space ship will be able to fly.");
@@ -492,6 +501,22 @@ public class LevelScript : MonoBehaviour
               else
               {
                 MessageToDebug("We still need the fuel", "Player");
+              }
+            }
+            if (action == "changeLevelMiningStation")
+            {
+              GameObject.Find("Game").GetComponent<GameScript>().ShowIntermission("There! A station built into a mountain. Maybe we can find fuel there.");
+              GameObject.Find("Game").GetComponent<GameScript>().StartMiningStation();
+            }
+            if (action == "changeLevelJungle")
+            {
+              GameObject.Find("Game").GetComponent<GameScript>().ShowIntermission("FOOOD");
+            }
+            if (action == "exitGame")
+            {
+              if (players_.HaveItem("fuel"))
+              {
+                GameObject.Find("Game").GetComponent<GameScript>().ShowIntermission("End!!");
               }
             }
           }

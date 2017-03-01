@@ -98,7 +98,8 @@ public class GameScript : MonoBehaviour
         Debug.Log("received start");
         //   StartTutorial();
         //StartExtendedTutorial();
-        StartMiningStation();
+        //StartMiningStation();
+        StartWoods();
       }
     }
   }
@@ -124,9 +125,17 @@ public class GameScript : MonoBehaviour
   }
   public void StartMiningStation()
   {
+    GameObject.Find("MainCamera").GetComponent<Camera>().backgroundColor = new Color(0, 0, 0);
     ChangePositions(new Vector3(-0.0078125f, 4.0f, 0) );
     ChangeLevel("mining_station");
    // ShowIntermission("The crew of the space ship has found a cave. It seems to have been used as a mining station. As they enter with the intent to recover fuel the door closes behind them...");
+  }
+
+  public void StartWoods()
+  {
+    ChangePositions(new Vector3(2.7f, -0.212f, 0));
+    ChangeLevel("woods");
+    GameObject.Find("MainCamera").GetComponent<Camera>().backgroundColor = new Color(0,92/255.0f,9 / 255.0f);
   }
 
   public void ShowIntermission(string text)

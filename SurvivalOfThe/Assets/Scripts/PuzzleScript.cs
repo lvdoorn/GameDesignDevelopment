@@ -12,7 +12,8 @@ public class PuzzleScript : MonoBehaviour
   bool[] positions_switched;
   int [] [] rotated;
 
-  public Texture2D main_texture_ = null;
+  public Texture2D mining_texture_ = null;
+  public Texture2D bridge_texture_ = null;
 
   void Start()
   {
@@ -24,14 +25,21 @@ public class PuzzleScript : MonoBehaviour
   }
 
 
-  public void Init(int num_players)
+  public void Init(int num_players, string type)
   {
     sprites_ = new GameObject[num_players][];
     positions_switched = new bool[num_players];
     rotated = new int[num_players] [];
 
-    int tile_width = (int)main_texture_.width / num_players;
-    int tile_height = (int)main_texture_.height / 2;
+    Texture2D tex_used = mining_texture_;
+    if (type == "mining_station")
+      tex_used = mining_texture_;
+
+    if (type == "bridge")
+      tex_used = bridge_texture_;
+
+    int tile_width = (int)tex_used.width / num_players;
+    int tile_height = (int)tex_used.height / 2;
     Debug.Log(tile_width);
     float rat =  (float)tile_width / (float)tile_height;
 
@@ -44,7 +52,7 @@ public class PuzzleScript : MonoBehaviour
       rotated[x] = new int[2];
 
       Rect r1 = new Rect((int)tile_width * x, (int)tile_height, (int)tile_width, (int)tile_height);
-      Sprite s1_1 = Sprite.Create(main_texture_, r1, new Vector2(0.5f, 0.5f));
+      Sprite s1_1 = Sprite.Create(tex_used, r1, new Vector2(0.5f, 0.5f));
 
       GameObject canvas = new GameObject("canvas", typeof(RectTransform));
       Image img = canvas.AddComponent<Image>();
@@ -53,7 +61,7 @@ public class PuzzleScript : MonoBehaviour
       canvas.transform.SetParent(gameObject.transform);
 
       Rect r2 = new Rect((int)tile_width * x, (int)0, (int)tile_width, (int)tile_height);
-      Sprite s2_1 = Sprite.Create(main_texture_, r2, new Vector2(0.5f, 0.5f));
+      Sprite s2_1 = Sprite.Create(tex_used, r2, new Vector2(0.5f, 0.5f));
 
       GameObject canvas2 = new GameObject("canvas", typeof(RectTransform));
       Image img2 = canvas2.AddComponent<Image>();

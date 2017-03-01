@@ -80,7 +80,7 @@ public class MTLLoader : MonoBehaviour
   {
     transform.localScale = new Vector3(scale,scale,scale);
     LevelScript ls =   this.gameObject.GetComponent<LevelScript>();
-    name = "Level";
+    //name = "Level";
     Debug.Log("LoadLevel");
     MTLParser p = new MTLParser();
     lvl = p.Parse(level_file);
@@ -271,7 +271,7 @@ public class MTLLoader : MonoBehaviour
                 // off += new Vector3(obj2.x * scaleX, -(obj2.y) * scaleY, 0);
                 // off -= new Vector3(-(float)obj2.width * scaleX / 2.0f, (float)obj2.height * scaleY / 2.0f, 0);
                 // off += new Vector3(-5.0f, 5.0f, 0);
-                // b2d.offset = main_obj.transform.position;
+                // b2d.offset = main_obj.transform.position;                
                 if (f)
                 {
                   Rigidbody2D body = main_obj.AddComponent<Rigidbody2D>();
@@ -410,11 +410,10 @@ public class MTLLoader : MonoBehaviour
                 BoxCollider2D b2d = main_obj.AddComponent<BoxCollider2D>();
                 b2d.transform.SetParent(main_obj.transform);
                 b2d.size = new Vector2((float)obj2.width * scaleX, (float)obj2.height * scaleY);
-                // Vector3 off = new Vector3((float)(x * lvl.tilewidth) * scaleX, -(float)(y * lvl.tileheight) * scaleY, 0);
-                // off += new Vector3(obj2.x * scaleX, -(obj2.y) * scaleY, 0);
-                // off -= new Vector3(-(float)obj2.width * scaleX / 2.0f, (float)obj2.height * scaleY / 2.0f, 0);
-                // off += new Vector3(-5.0f, 5.0f, 0);
-               // b2d.offset = main_obj.transform.position;
+                Vector3 off = new Vector3(-(obj.width - obj2.width) * scaleX / 2.0f, (obj.height - obj2.height) * scaleY / 2.0f, 0);
+                off += new Vector3(obj2.x * scaleX, -obj2.y * scaleY, 0);
+                b2d.offset = off;
+
                 if (f)
                 {
                   Rigidbody2D body = main_obj.AddComponent<Rigidbody2D>();

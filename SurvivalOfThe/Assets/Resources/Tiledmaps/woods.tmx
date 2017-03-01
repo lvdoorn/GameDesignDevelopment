@@ -149,12 +149,12 @@
  <objectgroup name="Object Layer 1">
   <object id="8" name="exit_jungle" gid="100" x="446" y="32.6667" width="32" height="32">
    <properties>
-    <property name="action" value="changeLevelJungle"/>
+    <property name="action" value="changeLevelToJungle"/>
    </properties>
   </object>
   <object id="10" name="exit_mining_station" gid="100" x="0.666667" y="975.333" width="32" height="32">
    <properties>
-    <property name="action" value="changeLevelMiningStation"/>
+    <property name="action" value="changeLevelToMiningStation"/>
    </properties>
   </object>
   <object id="11" name="exit_game" gid="100" x="1184.17" y="695.333" width="32" height="32">

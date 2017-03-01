@@ -111,9 +111,9 @@ public class GameScript : MonoBehaviour
         //StartExtendedTutorial();
         //StartMiningStation();
 
-        //StartWoods();
+        StartWoods();
 
-        StartJungle();
+        //StartJungle();
       }
     }
   }
@@ -155,7 +155,8 @@ public class GameScript : MonoBehaviour
   {
     ChangePositions(new Vector3(2.7f, -0.212f, 0));
     ChangeLevel("woods");
-    GameObject.Find("MainCamera").GetComponent<Camera>().backgroundColor = new Color(0,92/255.0f,9 / 255.0f);
+    GameObject.Find("MainCamera").GetComponent<Camera>().backgroundColor = new Color(0, 0.0f,0.0f);
+    //  GameObject.Find("MainCamera").GetComponent<Camera>().backgroundColor = new Color(0,92/255.0f,9 / 255.0f);
   }
 
   public void ShowIntermission(string text)

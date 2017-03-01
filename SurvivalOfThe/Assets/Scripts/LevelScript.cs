@@ -231,8 +231,24 @@ public class LevelScript : MonoBehaviour
   }
   public void EndPuzzle()
   {
+    PuzzleScript puzzle_script = GameObject.Find("Game").transform.FindChild("UI").FindChild("Puzzle").GetComponent<PuzzleScript>();
+
     GameObject.Find("Game").transform.FindChild("UI").FindChild("Puzzle").gameObject.SetActive(false);
-    RemoveObject("puzzle_door");
+    if (puzzle_script.type_ == "mining_station")
+    {
+      RemoveObject("puzzle_door");
+    }
+    if (puzzle_script.type_ == "bridge")
+    {
+      RemoveObject("bridge_over");
+      RemoveObject("bridge_over2");
+      RemoveObject("river_cover_1");
+      RemoveObject("river_cover_2");
+      RemoveObject("river_cover_3");
+      RemoveObject("plank_1");
+      RemoveObject("plank_2");
+      RemoveObject("plank_3");
+    }
   }
 
   public void ShowLetter(string text)
@@ -341,8 +357,12 @@ public class LevelScript : MonoBehaviour
                 if(parts[0] == "condition_remove")
                 {
                   if (child.gameObject.GetComponent<ObjectScript>().IsMultipleTriggered(int.Parse(parts[2])))
+                  {
                     RemoveObject(objname);
+                    player.GetComponent<PlayerScript>().removeItem("prybar");
+                  }
                   player.GetComponent<PlayerScript>().removeItem("sample_dna");
+                
                 }
               }
             }
@@ -565,7 +585,7 @@ public class LevelScript : MonoBehaviour
             }
             if (action == "changeLevelToJungle")
             {
-              GameObject.Find("Game").GetComponent<GameScript>().ShowIntermission("FOOOD");
+              GameObject.Find("Game").GetComponent<GameScript>().StartJungle();
             }
             if (action == "exitGame")
             {

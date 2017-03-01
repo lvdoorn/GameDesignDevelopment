@@ -15,6 +15,8 @@ public class PuzzleScript : MonoBehaviour
   public Texture2D mining_texture_ = null;
   public Texture2D bridge_texture_ = null;
 
+  public string type_ = "";
+
   void Start()
   {
     AirConsole.instance.onMessage += OnMessage;
@@ -27,6 +29,7 @@ public class PuzzleScript : MonoBehaviour
 
   public void Init(int num_players, string type)
   {
+    type_ = type;
     sprites_ = new GameObject[num_players][];
     positions_switched = new bool[num_players];
     rotated = new int[num_players] [];

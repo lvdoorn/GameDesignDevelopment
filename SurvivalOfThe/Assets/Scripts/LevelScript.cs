@@ -245,6 +245,9 @@ public class LevelScript : MonoBehaviour
       RemoveObject("river_cover_1");
       RemoveObject("river_cover_2");
       RemoveObject("river_cover_3");
+      RemoveObject("plank_1");
+      RemoveObject("plank_2");
+      RemoveObject("plank_3");
     }
   }
 
@@ -346,8 +349,12 @@ public class LevelScript : MonoBehaviour
                 if(parts[0] == "condition_remove")
                 {
                   if (child.gameObject.GetComponent<ObjectScript>().IsMultipleTriggered(int.Parse(parts[2])))
+                  {
                     RemoveObject(objname);
+                    player.GetComponent<PlayerScript>().removeItem("prybar");
+                  }
                   player.GetComponent<PlayerScript>().removeItem("sample_dna");
+                
                 }
               }
             }
@@ -570,7 +577,7 @@ public class LevelScript : MonoBehaviour
             }
             if (action == "changeLevelToJungle")
             {
-              GameObject.Find("Game").GetComponent<GameScript>().ShowIntermission("FOOOD");
+              GameObject.Find("Game").GetComponent<GameScript>().StartJungle();
             }
             if (action == "exitGame")
             {

@@ -172,7 +172,7 @@ public class PlayerScript : MonoBehaviour
         {
           if (it == "fire_extinguisher")
           {
-            GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject,0.6f, "fire", "remove", "", "");
+            GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject, 0.6f, "fire", "remove", "", "");
           }
           if (it == "dna_sampler")
           {
@@ -190,6 +190,10 @@ public class PlayerScript : MonoBehaviour
           {
             GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject, 0.6f, "special_crate", "remove_addletter", "doc_2", "trigger_letter|Dear new medic!\n\nThe code is 589413\nRegards,\nYour Supervisor");
             GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject, 0.6f, "crate", "remove", "", "impactcrunch04");
+          }
+          if (it == "prybar")
+          {
+            GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject, 0.6f, "rock", "condition_remove", "2", "");
           }
         }
       }

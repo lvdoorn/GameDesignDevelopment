@@ -10,7 +10,9 @@ public enum GameState
 {
   JOIN =0,
   PLAY =1,
-  VOTE =2
+  VOTE =2,
+  INTERMISSION = 3,
+  DISCONNECTED = 4
 }
 
 public enum Fruits : byte
@@ -35,19 +37,18 @@ public class GameScript : MonoBehaviour
     public string image_name;
     public bool initialized;
   }
-
+  
   private List<InfoBoxMessage> label_queue_ = new List<InfoBoxMessage>();
   private GameObject info_box_;
   private Text info_box_text_;
-  private bool in_intermission = false;
 
-  void Start()
+  void Awake()
   {
    // ShowTutorial ();
     //current_level_ = new GameObject();
     //current_level_.transform.SetParent(transform);
     
-    info_box_ = GameObject.Find("UI").transform.GetChild(1).gameObject;
+    info_box_ = transform.Find("UI/InfoBox").gameObject;
     info_box_text_ = info_box_.GetComponentInChildren<Text>(true);
 
     State = GameState.JOIN;
@@ -64,7 +65,7 @@ public class GameScript : MonoBehaviour
       StartTutorial();
       //StartExtendedTutorial();
     }
-    if(in_intermission)
+    if(State == GameState.INTERMISSION)
     {
       GameObject screen = GameObject.Find("Game").transform.FindChild("UI").FindChild("IntermissionScreen").gameObject;
       screen.transform.FindChild("IntermissionText").position += new Vector3(0, 1.0f, 0);
@@ -174,7 +175,7 @@ public class GameScript : MonoBehaviour
     screen.transform.FindChild("IntermissionText").position = tp;
 
     screen.transform.FindChild("IntermissionText").GetComponent<Text>().text = text;
-    in_intermission = true;
+    State = GameState.INTERMISSION;
   }
 
   public void EndIntermission()
@@ -183,9 +184,8 @@ public class GameScript : MonoBehaviour
     GameObject screen = GameObject.Find("Game").transform.FindChild("UI").FindChild("IntermissionScreen").gameObject;
 
     screen.SetActive(false);
-    in_intermission = false;
+    State = GameState.PLAY;
   }
-
 
   public void ChangePositions(params Vector3[] vs) {
     if (vs.Length == 1) {
@@ -204,8 +204,6 @@ public class GameScript : MonoBehaviour
     current_level_ = gameObject.transform.FindChild(lvl).gameObject;
     current_level_.SetActive(true);
 
-
-    GameObject.Find("Players").GetComponent<PlayersScript>().join_enabled_ = false;
     State = GameState.PLAY;
 
     AirConsole.instance.Broadcast("GameStarts");
@@ -219,8 +217,8 @@ public class GameScript : MonoBehaviour
 
   public void RefreshWaitingScreen(string text, string text2)
   {
-    GameObject.Find("WaitingScreenText").GetComponent<Text>().text = text;
-    GameObject.Find("WaitingScreenText2").GetComponent<Text>().text = text2;
+    transform.Find("WaitingScreen/Text/WaitingScreenText").gameObject.GetComponent<Text>().text = text;
+    transform.Find("WaitingScreen/Text/WaitingScreenText2").gameObject.GetComponent<Text>().text = text2;
   }
 
   public LevelScript GetCurrentLevel()
@@ -241,6 +239,20 @@ public class GameScript : MonoBehaviour
       end_time = Time.time + seconds;
     }
     label_queue_.Add(new InfoBoxMessage() { time = end_time, text = text, image_name = image_name });
+  }
+
+  public void ShowStatusMessage(string msg, string sound) {
+    StartCoroutine(DoShowStatusMessage(msg, sound));
+  }
+
+  private IEnumerator DoShowStatusMessage(string msg, string sound) {
+    GameObject template = transform.Find("UI/StatusMessage").gameObject;
+    GameObject status = Instantiate<GameObject>(template, template.transform.parent);
+    status.transform.Find("Message").GetComponent<Text>().text = msg;
+    status.SetActive(true);
+    PlaySound(sound);
+    yield return new WaitForSeconds(5);
+    Destroy(status);
   }
 
   public void PlaySound(string name)

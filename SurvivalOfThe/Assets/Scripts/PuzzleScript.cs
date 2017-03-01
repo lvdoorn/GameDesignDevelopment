@@ -125,12 +125,11 @@ public class PuzzleScript : MonoBehaviour
   }
   // Airconsole handler
   void OnMessage(int from, JToken data)
-  {
-
-    int player_number = GameObject.Find("Players").GetComponent<PlayersScript>().GetPlayerNumber(from); 
+  { 
     if (data["direction"] != null)
     {
       string dir = (string)data["direction"];
+      int player_number = GameObject.Find("Players").GetComponent<PlayersScript>().GetPlayerNumber(from);
       if (dir == "R")
       {
         Rotate(player_number, false);

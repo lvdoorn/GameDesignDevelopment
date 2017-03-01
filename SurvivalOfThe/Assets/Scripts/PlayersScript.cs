@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 
 using NDream.AirConsole;
@@ -8,17 +8,16 @@ using Newtonsoft.Json.Linq;
 public class PlayersScript : MonoBehaviour
 {
   private Dictionary<int, GameObject> players_;
-
-  public GameObject prefab;
-
-  public bool join_enabled_ = true;
-
+  private List<int> disconnected_;
   private Dictionary<int, int> players_number_;
+  private GameState saved_state = GameState.PLAY;
+  public GameObject prefab;
 
   void Awake()
   {
     players_ = new Dictionary<int, GameObject>();
     players_number_ = new Dictionary<int, int>();
+    disconnected_ = new List<int>();
 
     AirConsole.instance.onConnect += OnConnect;
     AirConsole.instance.onDisconnect += OnDisconnect;
@@ -27,22 +26,22 @@ public class PlayersScript : MonoBehaviour
     SpriteRenderer sr = prefab.GetComponent<SpriteRenderer>();
   }
 
-  // player handling
-
+  // player handling  
   void AddPlayer(int id)
   {
     GameObject clone = Instantiate(prefab, prefab.transform.position, prefab.transform.rotation) as GameObject;
     Debug.Log("Added Player "+id.ToString());
 
     clone.transform.position = new Vector3(1, 0.28f, 0);
+    clone.GetComponent<PlayerScript>().layer_ = 2;
+        
     clone.GetComponent<SpriteRenderer>().enabled = true;
     clone.GetComponent<PlayerScript>().enabled = true;
-    clone.GetComponent<PlayerScript>().setId(id);
-
     clone.GetComponent<AudioSource>().enabled = true;
-    clone.GetComponent<AudioSource>().Stop();
+    
+    clone.GetComponent<PlayerScript>().setId(id);
+    clone.GetComponent<PlayerScript>().Nickname = AirConsole.instance.GetNickname(id);
 
-    clone.GetComponent<PlayerScript>().layer_ = 2;
     if( players_.Count == 1 )
       clone.GetComponent<SpriteRenderer>().color = Color.blue;
     if (players_.Count == 2)
@@ -58,26 +57,62 @@ public class PlayersScript : MonoBehaviour
     if (players_.Count == 7)
       clone.GetComponent<SpriteRenderer>().color = Color.cyan;
 
-    players_.Add(id,clone);
+    players_.Add(id, clone);
     players_number_.Add(id, players_.Count-1);
 
     if(players_.Count < 3)
       GameObject.Find("Game").GetComponent<GameScript>().RefreshWaitingScreen("Waiting for players", players_.Count+" players connected");
     else
       GameObject.Find("Game").GetComponent<GameScript>().RefreshWaitingScreen("Start", players_.Count + " players connected");
-
+    
+    GameObject.Find("Game").GetComponent<GameScript>().ShowStatusMessage(AirConsole.instance.GetNickname(id) + " has joined", "controller_on");
     SetFocus(id);
   }
 
   void RemovePlayer(int id)
   {
+    string nickname = players_[id].GetComponent<PlayerScript>().Nickname;
     Destroy(players_[id]);
+    int number = players_number_[id];
     players_.Remove(id);
+    players_number_.Remove(id);
+    
+    // shift player numbers
+    foreach (int dev in new List<int>(players_number_.Keys)) {
+      if (players_number_[dev] > number) {
+        players_number_[dev]--;
+      }
+    }
 
+    GameScript game = GameObject.Find("Game").GetComponent<GameScript>();
     if (players_.Count < 3)
-      GameObject.Find("Game").GetComponent<GameScript>().RefreshWaitingScreen("Waiting for players", players_.Count + " players connected");
+      game.RefreshWaitingScreen("Waiting for players", players_.Count + " players connected");
     else
-      GameObject.Find("Game").GetComponent<GameScript>().RefreshWaitingScreen("Start", players_.Count + " players connected");
+      game.RefreshWaitingScreen("Start", players_.Count + " players connected");
+
+    game.ShowStatusMessage(nickname + " has left", "controller_off");
+  }
+
+  void DisconnectPlayer(int id)
+  {
+    GameScript game = GameObject.Find("Game").GetComponent<GameScript>();
+    disconnected_.Add(id);
+    
+    saved_state = game.State;
+    game.State = GameState.DISCONNECTED;
+    game.transform.Find("UI/PauseScreen").gameObject.SetActive(true);
+    game.ShowStatusMessage(players_[id].GetComponent<PlayerScript>().Nickname + " has disconnected!", "controller_off");
+  }
+
+  void ReconnectPlayer(int id) {
+    GameScript game = GameObject.Find("Game").GetComponent<GameScript>();
+    disconnected_.Remove(id);
+    
+    if (disconnected_.Count == 0) {
+      game.transform.Find("UI/PauseScreen").gameObject.SetActive(false);
+      game.State = saved_state;
+    }
+    game.ShowStatusMessage(players_[id].GetComponent<PlayerScript>().Nickname + " has reconnected!", "controller_on");
   }
 
   public GameObject GetPlayer(int id)
@@ -86,15 +121,10 @@ public class PlayersScript : MonoBehaviour
   }
   public GameObject GetFirstPlayer()
   {
-    for(int x=0; x <100;x++)
-    {
-      GameObject g = GetPlayer(x);
-      if(g != null)
-      {
-        return g;
-      }
+    if (players_.Count == 0) {
+      return null;
     }
-    return null;
+    return players_.First().Value;
   }
   public int GetPlayerNumber(int i)
   {
@@ -105,9 +135,7 @@ public class PlayersScript : MonoBehaviour
   {
     foreach( KeyValuePair<int,GameObject> ko in players_)
     {
-      ko.Value.transform.position = new Vector3(v.x, v.y, -8);
-      PlayerScript ps = ko.Value.GetComponent<PlayerScript>();
-      ps.layer_ = (int)v.z;
+      MovePlayer(ko.Value, v);
       Debug.Log("Move Player " + ko.Key.ToString());
     }
   }
@@ -120,25 +148,47 @@ public class PlayersScript : MonoBehaviour
       if (index >= vs.Length) {
         index -= vs.Length;
       }
-      player.transform.position = new Vector3(vs[index].x, vs[index].y, -8);
-      PlayerScript ps = player.GetComponent<PlayerScript>();
-      ps.layer_ = (int)vs[index].z;
+      MovePlayer(player, vs[index]);
       index++;
     }
   }
-
+  public void MovePlayer(GameObject player, Vector3 position) {
+    player.transform.position = new Vector3(position.x, position.y, -8);
+    PlayerScript ps = player.GetComponent<PlayerScript>();
+    ps.layer_ = (int)position.z;
+  }
+  public void MovePlayer(GameObject movedPlayer, GameObject targetPlayer) {
+    Vector3 position = targetPlayer.transform.position;
+    position.z = targetPlayer.GetComponent<PlayerScript>().layer_;
+    MovePlayer(movedPlayer, position);
+  }
 
   // airconsole handlers
   void OnConnect(int device_id)
   {
-    if(join_enabled_ && players_.Count <8)
+    GameScript game = GameObject.Find("Game").GetComponent<GameScript>();
+    if (game.State == GameState.JOIN && players_.Count < 8) {
       AddPlayer(device_id);
+    } else if (game.State == GameState.DISCONNECTED && disconnected_.Contains(device_id)) {
+      ReconnectPlayer(device_id);
+    } else {
+      GameObject.Find("Game").GetComponent<GameScript>().ShowStatusMessage(AirConsole.instance.GetNickname(device_id) + " is spectating", "controller_on");
+    }
   }
 
   void OnDisconnect(int device_id)
   {
-    RemovePlayer(device_id);
+    if (GameObject.Find("Game").GetComponent<GameScript>().State == GameState.JOIN) {
+      if (players_.ContainsKey(device_id)) {
+        RemovePlayer(device_id);
+      }
+    } else {
+      if (players_.ContainsKey(device_id)) {
+        DisconnectPlayer(device_id);
+      }
+    }
   }
+
   void OnMessage(int from, JToken data)
   {
     if (GameObject.Find("Game").GetComponent<GameScript>().State == GameState.PLAY)

@@ -231,8 +231,21 @@ public class LevelScript : MonoBehaviour
   }
   public void EndPuzzle()
   {
+    PuzzleScript puzzle_script = GameObject.Find("Game").transform.FindChild("UI").FindChild("Puzzle").GetComponent<PuzzleScript>();
+
     GameObject.Find("Game").transform.FindChild("UI").FindChild("Puzzle").gameObject.SetActive(false);
-    RemoveObject("puzzle_door");
+    if (puzzle_script.type_ == "mining_station")
+    {
+      RemoveObject("puzzle_door");
+    }
+    if (puzzle_script.type_ == "bridge")
+    {
+      RemoveObject("bridge_over");
+      RemoveObject("bridge_over2");
+      RemoveObject("river_cover_1");
+      RemoveObject("river_cover_2");
+      RemoveObject("river_cover_3");
+    }
   }
 
   public void ShowLetter(string text)

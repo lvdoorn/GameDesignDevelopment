@@ -60,11 +60,15 @@ public class GameScript : MonoBehaviour
   }
   void Update()
   {
-    if (Input.GetKeyDown("p"))
-    {
-      StartTutorial();
-      //StartExtendedTutorial();
-    }
+#if DEBUG
+    if (Input.GetKeyDown("m"))
+      StartMiningStation();
+    if (Input.GetKeyDown("w"))
+      StartWoods();
+    if (Input.GetKeyDown("j"))
+      StartJungle();
+#endif
+
     if(State == GameState.INTERMISSION)
     {
       GameObject screen = GameObject.Find("Game").transform.FindChild("UI").FindChild("IntermissionScreen").gameObject;
@@ -108,13 +112,7 @@ public class GameScript : MonoBehaviour
       if (num_players >= 3)
       {
         Debug.Log("received start");
-        //   StartTutorial();
-        //StartExtendedTutorial();
-        //StartMiningStation();
-
-        StartWoods();
-
-        //StartJungle();
+        StartTutorial();
       }
     }
   }
@@ -146,15 +144,14 @@ public class GameScript : MonoBehaviour
    // ShowIntermission("The crew of the space ship has found a cave. It seems to have been used as a mining station. As they enter with the intent to recover fuel the door closes behind them...");
   }
   public void StartJungle() {
-    ChangePositions(new Vector3(-1.125f, -2.625f, 0), new Vector3(1.125f, -2.625f, 0));
+    ChangePositions(new Vector3(0f, -3.725f, -0.125f));
     ChangeLevel("jungle");
     // ShowIntermission("...");
   }
 
 
-  public void StartWoods()
-  {
-    ChangePositions(new Vector3(2.7f, -0.212f, 0));
+  public void StartWoods(float x = 2.7f, float y = -0.212f, float z = 0f) {
+    ChangePositions(new Vector3(x, y, z));
     ChangeLevel("woods");
     GameObject.Find("MainCamera").GetComponent<Camera>().backgroundColor = new Color(0, 0.0f,0.0f);
     //  GameObject.Find("MainCamera").GetComponent<Camera>().backgroundColor = new Color(0,92/255.0f,9 / 255.0f);

@@ -126,7 +126,7 @@ public class PuzzleScript : MonoBehaviour
   // Airconsole handler
   void OnMessage(int from, JToken data)
   { 
-    if (data["direction"] != null)
+    if (gameObject.activeSelf && data["direction"] != null)
     {
       string dir = (string)data["direction"];
       int player_number = GameObject.Find("Players").GetComponent<PlayersScript>().GetPlayerNumber(from);

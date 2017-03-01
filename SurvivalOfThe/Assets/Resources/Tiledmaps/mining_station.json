@@ -179,7 +179,7 @@
                  "properties":
                     {
                      "item":"dynamite",
-                     "trigger_text":"once|this must have been placed here to destroy the tunnel, but not been triggered"
+                     "trigger_text":"this must have been placed here to destroy the tunnel, but not been triggered"
                     },
                  "propertytypes":
                     {

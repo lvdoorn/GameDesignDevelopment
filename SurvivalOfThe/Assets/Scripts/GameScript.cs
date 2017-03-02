@@ -168,7 +168,7 @@ public class GameScript : MonoBehaviour
   {
     //GameObject.Find("MainCamera").SetActive(false);
 
-    GameObject canvas = GameObject.Find("WaitingScreen").transform.FindChild("Canvas").gameObject;
+    GameObject canvas = GameObject.Find("WaitingScreen").transform.FindChild("Text").gameObject;
     canvas.transform.FindChild("IntroText").gameObject.SetActive(true);
    // canvas.transform.FindChild("WaitingScreenText1").gameObject.SetActive(false);
    // canvas.transform.FindChild("WaitingScreenText2").gameObject.SetActive(false);
@@ -182,7 +182,7 @@ public class GameScript : MonoBehaviour
   }
   public void EndIntro()
   {
-    GameObject canvas = GameObject.Find("WaitingScreen").transform.FindChild("Canvas").gameObject;
+    GameObject canvas = GameObject.Find("WaitingScreen").transform.FindChild("Text").gameObject;
     GameObject.Find("Game").transform.FindChild("MainCamera").gameObject.SetActive(true);
     GameObject.Find("Game").transform.FindChild("IntroCamera").gameObject.SetActive(false);
     GameObject.Find("Game").transform.FindChild("Intro").gameObject.SetActive(false);
@@ -251,7 +251,7 @@ public class GameScript : MonoBehaviour
    // GameObject.Find("WaitingScreenText1").GetComponent<Text>().text = text;
    // GameObject.Find("WaitingScreenText2").GetComponent<Text>().text = text2;
 
-    transform.Find("WaitingScreen/Text/WaitingScreenText").gameObject.GetComponent<Text>().text = text;
+    transform.Find("WaitingScreen/Text/WaitingScreenText1").gameObject.GetComponent<Text>().text = text;
     transform.Find("WaitingScreen/Text/WaitingScreenText2").gameObject.GetComponent<Text>().text = text2;
   }
 

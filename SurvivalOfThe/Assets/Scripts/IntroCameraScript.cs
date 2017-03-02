@@ -24,7 +24,7 @@ public class IntroCameraScript : MonoBehaviour
     lines_.Insert(0,"Warning!");
 
 
-    canvas_ = GameObject.Find("WaitingScreen").transform.FindChild("Canvas").gameObject;
+    canvas_ = GameObject.Find("WaitingScreen").transform.FindChild("Text").gameObject;
   }
   public void Activate()
   {
@@ -46,7 +46,7 @@ public class IntroCameraScript : MonoBehaviour
           }
           else
           {
-            GameObject canvas = GameObject.Find("WaitingScreen").transform.FindChild("Canvas").gameObject;
+            GameObject canvas = GameObject.Find("WaitingScreen").transform.FindChild("Text").gameObject;
             canvas.transform.FindChild("IntroText").gameObject.SetActive(true);
             reached_ = true;
             last_ = Time.time;
@@ -99,7 +99,7 @@ public class IntroCameraScript : MonoBehaviour
   {
     if (lines_.Count > 0)
     {
-      GameObject canvas = GameObject.Find("WaitingScreen").transform.FindChild("Canvas").gameObject;
+      GameObject canvas = GameObject.Find("WaitingScreen").transform.FindChild("Text").gameObject;
       canvas.transform.FindChild("IntroText").gameObject.GetComponent<Text>().text += lines_[0]+"\r\n";
       lines_.RemoveAt(0);
       line_count++;

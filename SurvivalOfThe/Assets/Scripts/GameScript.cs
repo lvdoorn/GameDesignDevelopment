@@ -56,6 +56,8 @@ public class GameScript : MonoBehaviour
     AirConsole.instance.onMessage += OnMessage;
     RefreshWaitingScreen("Waiting for players" , "0 players connected");
 
+    //StartIntro();
+
   }
   void Update()
   {
@@ -111,7 +113,8 @@ public class GameScript : MonoBehaviour
         //StartExtendedTutorial();
         //StartMiningStation();
 
-        StartWoods();
+        //StartWoods();
+        StartIntro();
 
         //StartJungle();
       }
@@ -157,6 +160,33 @@ public class GameScript : MonoBehaviour
     ChangeLevel("woods");
     GameObject.Find("MainCamera").GetComponent<Camera>().backgroundColor = new Color(0, 0.0f,0.0f);
     //  GameObject.Find("MainCamera").GetComponent<Camera>().backgroundColor = new Color(0,92/255.0f,9 / 255.0f);
+
+  }
+
+  public void StartIntro()
+  {
+    //GameObject.Find("MainCamera").SetActive(false);
+
+    GameObject canvas = GameObject.Find("WaitingScreen").transform.FindChild("Canvas").gameObject;
+    canvas.transform.FindChild("IntroText").gameObject.SetActive(true);
+   // canvas.transform.FindChild("WaitingScreenText1").gameObject.SetActive(false);
+   // canvas.transform.FindChild("WaitingScreenText2").gameObject.SetActive(false);
+   // canvas.transform.FindChild("WaitingScreenText3").gameObject.SetActive(false);
+  //  canvas.transform.FindChild("WaitingScreenText4").gameObject.SetActive(false);
+
+
+    GameObject.Find("Game").transform.FindChild("IntroCamera").gameObject.SetActive(true);
+    GameObject.Find("Game").transform.FindChild("IntroCamera").gameObject.GetComponent<IntroCameraScript>().Activate();
+    GameObject.Find("Game").transform.FindChild("Intro").gameObject.SetActive(true);
+  }
+  public void EndIntro()
+  {
+    GameObject canvas = GameObject.Find("WaitingScreen").transform.FindChild("Canvas").gameObject;
+    GameObject.Find("Game").transform.FindChild("MainCamera").gameObject.SetActive(true);
+    GameObject.Find("Game").transform.FindChild("IntroCamera").gameObject.SetActive(false);
+    GameObject.Find("Game").transform.FindChild("Intro").gameObject.SetActive(false);
+    canvas.transform.FindChild("IntroText").gameObject.SetActive(false);
+    StartTutorial();
   }
 
   public void ShowIntermission(string text)
@@ -219,7 +249,7 @@ public class GameScript : MonoBehaviour
 
   public void RefreshWaitingScreen(string text, string text2)
   {
-    GameObject.Find("WaitingScreenText").GetComponent<Text>().text = text;
+    GameObject.Find("WaitingScreenText1").GetComponent<Text>().text = text;
     GameObject.Find("WaitingScreenText2").GetComponent<Text>().text = text2;
   }
 

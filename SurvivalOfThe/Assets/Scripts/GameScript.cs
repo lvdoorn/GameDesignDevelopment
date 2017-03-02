@@ -291,7 +291,11 @@ public class GameScript : MonoBehaviour
 
   public void PlaySound(string name)
   {
-    GameObject.Find("MainCamera").GetComponent<AudioManager>().PlaySingle(name);
+    GameObject obj = GameObject.Find("MainCamera");
+    if (obj != null)
+      GameObject.Find("MainCamera").GetComponent<AudioManager>().PlaySingle(name);
+    else
+      GameObject.Find("IntroCamera").GetComponent<AudioManager>().PlaySingle(name);
   }
 }
 

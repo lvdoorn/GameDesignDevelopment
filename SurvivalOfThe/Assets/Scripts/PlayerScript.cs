@@ -24,6 +24,7 @@ public class PlayerScript : MonoBehaviour
   private string [] items_ = new string[4];
 
   private GameScript game_;
+  public string Nickname;
 
   void Start()
   {
@@ -194,6 +195,10 @@ public class PlayerScript : MonoBehaviour
           if (it == "prybar")
           {
             GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject, 0.6f, "rock", "condition_remove", "2", "");
+          }
+		  if (it == "machete")
+          {
+            GameObject.Find("Game").GetComponent<GameScript>().GetCurrentLevel().ExecuteIfInRange(gameObject, 0.4f, "grass", "remove_this", "", "machete_cut");
           }
         }
       }

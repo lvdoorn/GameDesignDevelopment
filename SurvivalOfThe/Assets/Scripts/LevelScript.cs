@@ -306,7 +306,7 @@ public class LevelScript : MonoBehaviour
     float scale = GameObject.Find("Game").GetComponent<GameScript>().Scale;
     Vector3 player_position = player.transform.position;
     Vector2 player_position_2d = new Vector2(player_position.x, player_position.y);
-    Vector2 player_offset = new Vector2(0.1f, 0.1f);
+    Vector2 player_offset = new Vector2(0.1f, -0.1f);
     GameObject lobjs = GameObject.Find("LevelLayer" + current_layer_.ToString()).transform.FindChild("Objects").gameObject;
     if (lobjs != null)
     {
@@ -323,6 +323,14 @@ public class LevelScript : MonoBehaviour
             if (action == "pickup")
             {
               player.GetComponent<PlayerScript>().addItem(add);
+            }
+            if (action == "remove_this")
+            {
+              Destroy(child.gameObject);
+              if(add2 != "")
+              {
+                GameObject.Find("Game").GetComponent<GameScript>().PlaySound(add2);
+              }
             }
             if (action == "remove")
             {
@@ -407,7 +415,7 @@ public class LevelScript : MonoBehaviour
               {
                 int number_of_players = GameObject.Find("Players").GetComponent<PlayersScript>().PlayerCount();
                 VoteScript vote_script = GameObject.Find("UI").GetComponent<VoteScript>();
-                vote_script.Init("Enter the start sequence for the engine ...\nUse the DIRECTION keys to enter the code.\nSubmit the code with the ACTION key.", number_of_players);
+                vote_script.Init("Enter the start sequence for the engine ...\nUse the DIRECTION keys to enter the code.\nSubmit the code by pressing YES.", number_of_players);
               }
               if (parts[1] == "open_med_station")
               {
@@ -466,6 +474,7 @@ public class LevelScript : MonoBehaviour
     GameObject lobjs = gameObject.transform.FindChild("LevelLayer" + current_layer_.ToString()).transform.FindChild("Objects").gameObject;
     if (lobjs != null)
     {
+      GameScript game = GameObject.Find("Game").GetComponent<GameScript>();
       foreach (Transform child in lobjs.transform)
       {
         if (child.childCount > 0)
@@ -538,7 +547,7 @@ public class LevelScript : MonoBehaviour
               {
                 Destroy(child.gameObject);
                 MessageToDebug("Thats mine now", "Player");
-                GameObject.Find("Game").GetComponent<GameScript>().PlaySound("life_pickup");
+                game.PlaySound("life_pickup");
               }
             }
 
@@ -554,15 +563,16 @@ public class LevelScript : MonoBehaviour
               //child.gameObject.GetComponent<ObjectScript>().trigger_text = "";
               if (child.gameObject.name == "end_of_lvl")
               {
-                GameObject.Find("Game").GetComponent<GameScript>().StartMiningStation();
+                game.StartWoods();
               }
             }
-            if (action == "changeLevelWoods")
+            if (action == "changeLevelMiningStation")
             {
               if (players_.HaveItem("fuel"))
               {
-                // GameObject.Find("Game").GetComponent<GameScript>().ChangeLevel("Next"); // 
-                GameObject.Find("Game").GetComponent<GameScript>().ShowIntermission("Now that the fuel has been found the space ship will be able to fly.");
+                game.StartWoods(-4.5f, -1.375f, 0f);
+                game.ShowIntermission("Now that the fuel has been found the space ship will be able to fly.");
+                game.GetCurrentLevel().RemoveObject("exit_mining_station");
               }
               else
               {
@@ -572,24 +582,37 @@ public class LevelScript : MonoBehaviour
 
             if (action == "changeLevelToMiningStation")
             {
-              GameObject.Find("Game").GetComponent<GameScript>().ShowIntermission("There! A station built into a mountain. Maybe we can find fuel there.");
-              GameObject.Find("Game").GetComponent<GameScript>().StartMiningStation();
+              game.StartMiningStation();
+              game.ShowIntermission("There! A station built into a mountain. Maybe we can find fuel there.");
             }
             if (action == "changeLevelToJungle")
             {
-              GameObject.Find("Game").GetComponent<GameScript>().StartJungle();
+              game.StartJungle();
+              game.ShowIntermission("This place looks beautiful...\r\nMaybe we can find some food here.");
             }
             if (action == "exitGame")
             {
-              if (players_.HaveItem("fuel"))
+              int fruits = 0;
+              bool poisoned = false;
+              if ((game.CollectedFruits & Fruits.PURPLE) != 0) fruits++;
+              if ((game.CollectedFruits & Fruits.BLUE) != 0) fruits++;
+              if ((game.CollectedFruits & Fruits.RED) != 0) {
+                fruits++;
+                poisoned = true;
+              }
+
+              if (players_.HaveItem("fuel") && fruits >= 2)
               {
-                GameObject.Find("Game").GetComponent<GameScript>().ShowIntermission("End!!");
+                if (poisoned)
+                  game.ShowIntermission("Bad End!!");
+                else
+                  game.ShowIntermission("Good End!!");
               }
             }
             if (action == "changeLevelJungle") {
-              // GameObject.Find("Game").GetComponent<GameScript>().ChangeLevel("Next"); // 
-              GameObject.Find("Game").GetComponent<GameScript>().ShowIntermission("Now that we have collected delicious fruits, we will not starve on our continuing trip.");
-
+              game.StartWoods(-0.75f, 4.125f, 0f); 
+              game.ShowIntermission("Now that we have collected delicious fruits, we won't starve on our continuing trip.");
+              game.GetCurrentLevel().RemoveObject("exit_jungle");
             }
           }
 
@@ -642,6 +665,7 @@ public class LevelScript : MonoBehaviour
       }
     }   
   }
+
   private void TempDisableObjects(GameObject obj)
   {
     int player_id = obj.GetComponent<PlayerScript>().getId();

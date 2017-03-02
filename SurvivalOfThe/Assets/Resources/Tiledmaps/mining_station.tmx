@@ -237,7 +237,7 @@
   <object id="12" name="dynamite" gid="23" x="1041.83" y="910" width="32" height="32">
    <properties>
     <property name="item" value="dynamite"/>
-    <property name="trigger_text" value="once|this must have been placed here to destroy the tunnel, but not been triggered"/>
+    <property name="trigger_text" value="this must have been placed here to destroy the tunnel, but not been triggered"/>
    </properties>
   </object>
   <object id="13" name="fuel" gid="24" x="608" y="1184" width="32" height="32">

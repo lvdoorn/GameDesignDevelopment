@@ -12,6 +12,7 @@ public class IntroCameraScript : MonoBehaviour
   private int line_count=0;
   private GameObject canvas_;
   private bool active_ = false;
+  private bool faded_ =false;
 
 	// Use this for initialization
 	void Start ()
@@ -37,8 +38,9 @@ public class IntroCameraScript : MonoBehaviour
     if (active_)
     {
       if (!reached_)
-      {
-        if (Fade())
+      {        
+
+        if (faded_)
         {
           if (transform.position.z > -12.0f)
           {
@@ -51,7 +53,17 @@ public class IntroCameraScript : MonoBehaviour
             reached_ = true;
             last_ = Time.time;
             NextLine();
+
+            if(GameObject.Find("WaitingScreen").transform.FindChild("AudioSource").GetComponent<AudioSource>().volume < 1.00f)
+            {
+              GameObject.Find("WaitingScreen").transform.FindChild("AudioSource").GetComponent<AudioSource>().volume += 0.05f;
+            }
           }
+        }
+        else
+        {
+          if (Fade())
+            faded_ = true;
         }
       }
       else
@@ -71,26 +83,45 @@ public class IntroCameraScript : MonoBehaviour
   private bool Fade()
   {
     Color w1 = canvas_.transform.FindChild("WaitingScreenText1").gameObject.GetComponent<Text>().color;
+    float val = GameObject.Find("WaitingScreen").transform.FindChild("AudioSource").GetComponent<AudioSource>().volume;
 
-    if (w1.a <= 0.0f)
+    if (w1.a >= 0.01f)
+    {
+
+      Color w2 = canvas_.transform.FindChild("WaitingScreenText2").gameObject.GetComponent<Text>().color;
+      Color w3 = canvas_.transform.FindChild("WaitingScreenText3").gameObject.GetComponent<Text>().color;
+      Color w4 = canvas_.transform.FindChild("WaitingScreenText4").gameObject.GetComponent<Text>().color;
+
+      w1.a -= 0.01f;
+      canvas_.transform.FindChild("WaitingScreenText1").gameObject.GetComponent<Text>().color = w1;
+
+      w2.a -= 0.01f;
+      canvas_.transform.FindChild("WaitingScreenText2").gameObject.GetComponent<Text>().color = w2;
+
+      w3.a -= 0.01f;
+      canvas_.transform.FindChild("WaitingScreenText3").gameObject.GetComponent<Text>().color = w3;
+
+      w4.a -= 0.01f;
+      canvas_.transform.FindChild("WaitingScreenText4").gameObject.GetComponent<Text>().color = w4;
+    }
+    if(val >=0.01f)
+    {
+      GameObject.Find("WaitingScreen").transform.FindChild("AudioSource").GetComponent<AudioSource>().volume -= 0.01f;
+    }
+
+    if (w1.a < 0.01f && val <= 0.01f)
+    {
+      Debug.Log("faded");
+      AudioSource audio_src = GameObject.Find("WaitingScreen").transform.FindChild("AudioSource").gameObject.GetComponent<AudioSource>();
+
+      AudioClip clip1 = (AudioClip)Resources.Load("Sound/alarm");
+      audio_src.clip = clip1;
+      audio_src.Play();
+      audio_src.pitch = 0.86f;
+
+
       return true;
-
-    Color w2 = canvas_.transform.FindChild("WaitingScreenText2").gameObject.GetComponent<Text>().color;
-    Color w3 = canvas_.transform.FindChild("WaitingScreenText3").gameObject.GetComponent<Text>().color;
-    Color w4 = canvas_.transform.FindChild("WaitingScreenText4").gameObject.GetComponent<Text>().color;
-
-    w1.a -= 0.01f;
-    canvas_.transform.FindChild("WaitingScreenText1").gameObject.GetComponent<Text>().color = w1;
-
-    w2.a -= 0.01f;
-    canvas_.transform.FindChild("WaitingScreenText2").gameObject.GetComponent<Text>().color = w2;
-
-    w3.a -= 0.01f;
-    canvas_.transform.FindChild("WaitingScreenText3").gameObject.GetComponent<Text>().color = w3;
-
-    w4.a -= 0.01f;
-    canvas_.transform.FindChild("WaitingScreenText4").gameObject.GetComponent<Text>().color = w4;
-   
+    }
 
     return false;
   }

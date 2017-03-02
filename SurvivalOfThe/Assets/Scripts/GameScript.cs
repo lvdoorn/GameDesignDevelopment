@@ -139,7 +139,7 @@ public class GameScript : MonoBehaviour
       new Vector3(-4.0f, 1.5f, 3)
     );
     ChangeLevel("tutorial");
-    ShowIntermission("A long time ago in a galaxy far, far away....\n\n....a spaceship crashed....");
+   // ShowIntermission("A long time ago in a galaxy far, far away....\n\n....a spaceship crashed....");
     DisplayInfoBox("Welcome to Survival of the Zargs! Use the ACTION buttons on your device to interact.", 20, "Alien");
   }
   public void StartMiningStation()

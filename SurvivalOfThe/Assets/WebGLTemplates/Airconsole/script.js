@@ -4,52 +4,45 @@ navigator.vibrate = (navigator.vibrate ||
                          navigator.msVibrate);
 
 var airconsole;
-var state = "waiting";
+var state = "joining";
 
 /**
   * Sets up the communication to the screen.
   */
-function init()
-{
+$(function() {
+  $("#please_wait").hide();
   airconsole = new AirConsole({"orientation": "landscape"});
   airconsole.onMessage = function (from, data)
   {
-    console.log(data);
     if (from == AirConsole.SCREEN && data.vibrate)
     {
       navigator.vibrate(data.vibrate);
-      console.log("Vibrating: " + data.vibrate);
-    }
-    if (from == AirConsole.SCREEN && data == "GameStarts")
-    {
-      state = "playing";
-      console.log("playing");    
-    }
-    if (from == AirConsole.SCREEN && data == "BeginVote")
-    {
-      state = "voting";
-    }
-    if (from == AirConsole.SCREEN && data == "EndVote")
-    {
-      state = "playing";
     }
     if (from == AirConsole.SCREEN && data.addItem)
     {
-      console.log("addItem");
       var elem = document.getElementById("inventory_item_" + data.slot);
       elem.style.backgroundImage = "url('" + data.addItem + ".png')";
-      console.log(elem.style.backgroundImage);
       navigator.vibrate(1000);
     }
     if (from == AirConsole.SCREEN && data.removeItem) {
-      console.log("removeItem");
       var elem = document.getElementById("inventory_item_" + data.slot);
       elem.style.backgroundImage = "url('btn_item.png')";
-      console.log(elem.style.backgroundImage);
     }
-
-    if (from == AirConsole.SCREEN )
-      updateText();
+  };
+  airconsole.onCustomDeviceStateChange = function(from, data) {
+	if (from == AirConsole.SCREEN && data == "Play") {
+      state = "playing";
+    }
+    if (from == AirConsole.SCREEN && data == "Vote") {
+      state = "voting";
+    }
+    if (from == AirConsole.SCREEN && data == "Join") {
+      state = "joining";
+    }
+    if (from == AirConsole.SCREEN && data == "Wait") {
+      state = "waiting";
+    }
+	updateText();
   };
   airconsole.onActivePlayersChange = function (player_number)
   {
@@ -60,41 +53,34 @@ function init()
   {
     updateText();
   };
-}
-/*
-function updateText(player_number)
-{
-  var div = document.getElementById("action1lbl");
-  if (airconsole.getActivePlayerDeviceIds().length == 0) {
-    div.innerHTML = "Waiting for more players.";
-  } else if (player_number == undefined) {
-    div.innerHTML = "This is a 2 player game";
-  } else if (player_number == 0) {
-    div.innerHTML = "You are the player on the left";
-  } else if (player_number == 1) {
-    div.innerHTML = "You are the player on the right";
-  }  
-}*/
+  // wrap in RateLimiter
+  airconsole = new RateLimiter(airconsole);
+});
+
 function updateText()
 {
-  var div = document.getElementById("action1lbl");
-  var div2 = document.getElementById("action2lbl");
-  if(state == "playing")
-  {
-    div.innerHTML = "Interact";
-    div2.innerHTML = "";
-    document.getElementById("action2").style.visibility = "hidden";
-  }
-  if (state == "waiting")
-  {
-    div.innerHTML = "Start game";
-    document.getElementById("action2").style.visibility = "hidden";
-  }
-  if (state == "voting")
-  {
-    div.innerHTML = "Yes";
-    div2.innerHTML = "No";
-    document.getElementById("action2").style.visibility = "visible";
+  if (state == "waiting") {
+	$("#please_wait").show();
+	$("#left_side").hide();
+	$("#right_side").hide();
+  } else {
+	$("#please_wait").hide();
+	$("#left_side").show();
+	$("#right_side").show();
+	
+    if(state == "playing") {
+      $("#action1lbl").html("Interact");
+      $("#action2").hide();
+    }
+    if (state == "joining") {
+      $("#action1lbl").html("Start game");
+      $("#action2").hide();
+    }
+    if (state == "voting") {
+      $("#action1lbl").html("Yes");
+      $("#action2lbl").html("No");
+      $("#action2").show();
+    }
   }
 }
 
@@ -105,47 +91,56 @@ function updateText()
 function move(dir)
 {
   //airconsole.message(AirConsole.SCREEN, { move: amount })
-	airconsole.message(AirConsole.SCREEN, { direction: dir });
-	console.log("move");
+  airconsole.message(AirConsole.SCREEN, { direction: dir });
+  $(".arrow").removeClass("active");
+  if (dir != 'S') {
+    $(".arrow" + dir).addClass("active");
+  }
 }
 function action1()
-{
-  console.log("action");
-  if(state === "waiting")
-  {
+{  
+  if(state === "joining") {
     airconsole.message(AirConsole.SCREEN, { start: 1 });
   }
-  if (state === "playing")
-  {
+  if (state === "playing") {
     airconsole.message(AirConsole.SCREEN, { action: 1 });
   }
-  if (state === "voting")
-  {
+  if (state === "voting") {
     airconsole.message(AirConsole.SCREEN, { vote: 1 });
   }
+  
+  $("#action1").addClass("active");
+  setTimeout(function() {
+    $("#action1").removeClass("active");
+  }, 250);
 }
 function action2()
-{
-  if (state === "playing")
-  {
+{  
+  if (state === "playing") {
     airconsole.message(AirConsole.SCREEN, { action: 2 });
   }
-  if (state === "voting")
-  {
+  if (state === "voting") {
     airconsole.message(AirConsole.SCREEN, { vote: 2 });
   }
+  
+  $("#action2").addClass("active");
+  setTimeout(function() {
+    $("#action2").removeClass("active");
+  }, 250);
 }
 
 function itemUsed(id)
 {
-  console.log("item");
-  console.log(id);
   airconsole.message(AirConsole.SCREEN, { itemUsed: id });
 }
 
 function requestFocus()
 {
-  console.log("request focus");
   airconsole.message(AirConsole.SCREEN, { focus: 1 });
+
+  $(".focus_button").addClass("active");
+  setTimeout(function() {
+    $(".focus_button").removeClass("active");
+  }, 250);
 }
 

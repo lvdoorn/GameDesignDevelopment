@@ -8,11 +8,12 @@ using System.Collections.Generic;
 
 public enum GameState
 {
-  JOIN =0,
-  PLAY =1,
-  VOTE =2,
-  INTERMISSION = 3,
-  DISCONNECTED = 4
+  JOIN,
+  PLAY,
+  VOTE,
+  INTERMISSION,
+  DISCONNECTED,
+  INTRO
 }
 
 public enum Fruits : byte
@@ -28,7 +29,31 @@ public class GameScript : MonoBehaviour
 {
   private GameObject current_level_;
   public float Scale { get; set; }
-  public GameState State { get; set; }
+  private GameState state_;
+  public GameState State {
+    get {
+      return state_;
+    }
+    set {
+      state_ = value;
+      if (AirConsole.instance.IsAirConsoleUnityPluginReady()) {
+        switch (state_) {
+          case GameState.JOIN:
+            AirConsole.instance.SetCustomDeviceState("Join");
+            break;
+          case GameState.PLAY:
+            AirConsole.instance.SetCustomDeviceState("Play");
+            break;
+          case GameState.VOTE:
+            AirConsole.instance.SetCustomDeviceState("Vote");
+            break;
+          default:
+            AirConsole.instance.SetCustomDeviceState("Wait");
+            break;
+        }
+      }
+    }
+  }
   public Fruits CollectedFruits { get; set; }
 
   public struct InfoBoxMessage {
@@ -62,15 +87,6 @@ public class GameScript : MonoBehaviour
   }
   void Update()
   {
-#if DEBUG
-    if (Input.GetKeyDown("m"))
-      StartMiningStation();
-    if (Input.GetKeyDown("w"))
-      StartWoods();
-    if (Input.GetKeyDown("j"))
-      StartJungle();
-#endif
-
     if(State == GameState.INTERMISSION)
     {
       GameObject screen = GameObject.Find("Game").transform.FindChild("UI").FindChild("IntermissionScreen").gameObject;
@@ -166,6 +182,7 @@ public class GameScript : MonoBehaviour
 
   public void StartIntro()
   {
+    State = GameState.INTRO;
     //GameObject.Find("MainCamera").SetActive(false);
 
     GameObject canvas = GameObject.Find("WaitingScreen").transform.FindChild("Text").gameObject;
@@ -235,8 +252,6 @@ public class GameScript : MonoBehaviour
     current_level_.SetActive(true);
 
     State = GameState.PLAY;
-
-    AirConsole.instance.Broadcast("GameStarts");
  
     gameObject.transform.FindChild("WaitingScreen").gameObject.SetActive(false);
 

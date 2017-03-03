@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using NDream.AirConsole;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -134,6 +135,7 @@ public class IntroCameraScript : MonoBehaviour
       canvas.transform.FindChild("IntroText").gameObject.GetComponent<Text>().text += lines_[0]+"\r\n";
       lines_.RemoveAt(0);
       line_count++;
+      AirConsole.instance.Broadcast(new { vibrate = 500 });
     }
     else
     {

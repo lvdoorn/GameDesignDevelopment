@@ -143,13 +143,12 @@ public class LevelScript : MonoBehaviour
     GameObject.Find("Game").transform.GetChild(1).GetChild(1).GetChild(0).GetComponent<Text>().text = question;
     GameObject.Find("Game").transform.GetChild(1).GetChild(1).GetChild(1).GetComponent<Text>().text = addiional;
     GameObject.Find("Players").GetComponent<PlayersScript>().SetVoteMode();
-    AirConsole.instance.Broadcast("BeginVote");
+    GameObject.Find("Game").GetComponent<GameScript>().State = GameState.VOTE;
   }
 
   private void EndVoteMode(int vote)
   {
-    AirConsole.instance.Broadcast("EndVote");
-    Debug.Log(vote);
+    GameObject.Find("Game").GetComponent<GameScript>().State = GameState.PLAY;
     vote_mode = false;
     GameObject.Find("Game").transform.GetChild(1).gameObject.SetActive(false);
     GameObject.Find("Game").GetComponent<GameScript>().PlaySound("InterfaceDeck");

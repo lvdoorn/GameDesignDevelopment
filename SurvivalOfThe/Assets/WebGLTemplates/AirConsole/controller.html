@@ -1,18 +1,20 @@
 <html>
 
 <head>
-    <script type="text/javascript" src="https://www.airconsole.com/api/airconsole-1.4.0.js"></script>
+    <script type="text/javascript" src="//www.airconsole.com/api/airconsole-1.7.0.js"></script>
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script type="text/javascript" src="rate-limiter.js"></script>
     <script type="text/javascript" src="script.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
-<body onload="init()">
+<body>
     <div id="left_side">
       <div id="action_container">
-        <div id="action1" class="button" ontouchstart="action1()" onmousedown="action1()" style="background-image:url(btn_action.png); background-repeat: no-repeat;background-size:100% 100%;">
+        <div id="action1" class="button" ontouchstart="action1()" onmousedown="action1()">
           <div class="button_label" id="action1lbl">Interact</div>
         </div>
-        <div id="action2" class="button" ontouchstart="action2()" onmousedown="action2()" style="background-image:url(btn_action.png); background-repeat: no-repeat;background-size:100% 100%;">
+        <div id="action2" class="button" ontouchstart="action2()" onmousedown="action2()">
           <div class="button_label" id="action2lbl"></div>
         </div>
       </div>
@@ -33,37 +35,38 @@
     </div>
     <div id="right_side">
       <div id="upper_right">
-        <div class="focus_button"  ontouchstart="requestFocus()" onmousedown="requestFocus()" style="background-image:url(btn_focus.png); background-repeat: no-repeat;background-size:100% 100%;">
+        <div class="focus_button" ontouchstart="requestFocus()" onmousedown="requestFocus()">
           <div class="focus_button_label">FOCUS</div>
         </div>
       </div>
       <div id="lower_right">
         <div class="container">
           <div class="margin"></div>
-          <div class="button" ontouchstart="move('L')" ontouchend="move('S')" onmousedown="move('L')" onmouseup="move('S')" style="background-image:url(btn_left.png); background-repeat: no-repeat;background-size:100% 100%;" >
+          <div class="arrow arrowL" ontouchstart="move('L')" ontouchend="move('S')" onmousedown="move('L')" onmouseup="move('S')">
             <div class="button_label"></div>
           </div>
           <div class="margin"></div>
         </div>
         <div class="container">
-          <div class="button" ontouchstart="move('U')" ontouchend="move('S')" onmousedown="move('U')" onmouseup="move('S')" style="background-image:url(btn_up.png); background-repeat: no-repeat;background-size:100% 100%;" >
+          <div class="arrow arrowU" ontouchstart="move('U')" ontouchend="move('S')" onmousedown="move('U')" onmouseup="move('S')">
             <div class="button_label"></div>
           </div>
           <div class="margin"></div>
-          <div class="button" ontouchstart="move('D')" ontouchend="move('S')" onmousedown="move('D')" onmouseup="move('S')" style="background-image:url(btn_down.png); background-repeat: no-repeat;background-size:100% 100%;" >
+          <div class="arrow arrowD" ontouchstart="move('D')" ontouchend="move('S')" onmousedown="move('D')" onmouseup="move('S')">
             <div class="button_label"></div>
           </div>
 
         </div>
         <div class="container">
           <div class="margin"></div>
-          <div class="button" ontouchstart="move('R')" ontouchend="move('S')" onmousedown="move('R')" onmouseup="move('S')" style="background-image:url(btn_right.png); background-repeat: no-repeat;background-size:100% 100%;"  >
+          <div class="arrow arrowR" ontouchstart="move('R')" ontouchend="move('S')" onmousedown="move('R')" onmouseup="move('S')">
             <div class="button_label"> </div>
           </div>
           <div class="margin"></div>
         </div>
       </div>
     </div>
+	<div id="please_wait"><p>Please wait...</p></div>
 </body>
 
 </html>

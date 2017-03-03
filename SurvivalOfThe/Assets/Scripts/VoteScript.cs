@@ -85,7 +85,6 @@ public class VoteScript : MonoBehaviour
 
     question_.text = question;
     code_text_.text = CodeToString();
-    AirConsole.instance.Broadcast("BeginVote");
   }
   public void Init(string question,  char [] code,  string vote_type)
   {
@@ -107,7 +106,6 @@ public class VoteScript : MonoBehaviour
 
     question_.text = question;
     code_text_.text = CodeToString();
-    AirConsole.instance.Broadcast("BeginVote");
     vote_type_ = vote_type;
   }
 
@@ -126,7 +124,6 @@ public class VoteScript : MonoBehaviour
   void BackToGame() {
     game_.State = GameState.PLAY;
     vote_.SetActive(false);
-    AirConsole.instance.Broadcast("EndVote");
     GameObject.Find("Game").GetComponent<GameScript>().PlaySound("InterfaceDeck");
   }
 

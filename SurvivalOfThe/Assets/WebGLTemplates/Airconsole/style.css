@@ -4,7 +4,9 @@
 html,
 body {
     height: 100%;
-    margin: 0px;
+    margin: 0;
+	padding: 0;
+	overflow: hidden;
     font-family: 'PressStart2P', sans-serif;
     color: white;
     text-align: center;
@@ -69,7 +71,22 @@ body {
     float: right;
     background-color: black;
 }
+#please_wait {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+	text-align: center;
+}
+#please_wait p {
+	margin: 40px 0;
+	margin: 40vh 0;
+	font-size: 22px;
+    font-size: 10vh;
+}
 .focus_button {
+	background-image: url('btn_focus.png');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
     display: inline-block;
     height: 100%;
     width: 100%;
@@ -77,6 +94,9 @@ body {
     position: relative;
     margin-top: -6px;
     background-color: lightsalmon;
+}
+.focus_button.active {
+	background-image: url('btn_focus_active.png');
 }
 .focus_button_label {
     margin: auto;
@@ -87,12 +107,52 @@ body {
     font-size:2.0vw;
     float:center;
 }
-
+.arrow,
 .button {
     display: inline-block;
     height: 33%;
     width: 100%;
     position: relative;
+}
+.button {
+	background-image: url('btn_action.png');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
+.button.active {
+	background-image: url('btn_action_active.png');
+}
+.arrowL {
+	background-image: url('btn_left.png');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
+.arrowL.active {
+	background-image: url('btn_left_active.png');
+}
+.arrowU {
+	background-image: url('btn_up.png');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
+.arrowU.active {
+	background-image: url('btn_up_active.png');
+}
+.arrowD {
+	background-image: url('btn_down.png');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
+.arrowD.active {
+	background-image: url('btn_down_active.png');
+}
+.arrowR {
+	background-image: url('btn_right.png');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
+.arrowR.active {
+	background-image: url('btn_right_active.png');
 }
 .container {
     float: left;

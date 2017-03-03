@@ -44,21 +44,6 @@ $(function() {
     }
 	updateText();
   };
-  airconsole.onCustomDeviceStateChange = function(from, data) {
-	if (from == AirConsole.SCREEN && data == "Play") {
-      state = "playing";
-    }
-    if (from == AirConsole.SCREEN && data == "Vote") {
-      state = "voting";
-    }
-    if (from == AirConsole.SCREEN && data == "Join") {
-      state = "joining";
-    }
-    if (from == AirConsole.SCREEN && data == "Wait") {
-      state = "waiting";
-    }
-	updateText();
-  };
   airconsole.onActivePlayersChange = function (player_number)
   {
     //updateText(player_number);

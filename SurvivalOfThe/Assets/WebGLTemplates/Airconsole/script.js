@@ -39,6 +39,7 @@ function init()
       var elem = document.getElementById("inventory_item_" + data.slot);
       elem.style.backgroundImage = "url('" + data.addItem + ".png')";
       console.log(elem.style.backgroundImage);
+      navigator.vibrate(1000);
     }
     if (from == AirConsole.SCREEN && data.removeItem) {
       console.log("removeItem");

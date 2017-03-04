@@ -41,26 +41,17 @@ public class LevelScript : MonoBehaviour
       else
       {
         string yes = "Yes [";
-        foreach(int k in players_.VotesYes( ) )
-        {
-          yes += k.ToString() + ", ";
-        }
+        yes += string.Join(", ", players_.VotesYes().ConvertAll<string>(i => i.ToString()).ToArray());
         yes += "]";
 
         string no = "No [";
-        foreach (int k in players_.VotesNo())
-        {
-          no += k.ToString() + ", ";
-        }
+        no += string.Join(", ", players_.VotesNo().ConvertAll<string>(i => i.ToString()).ToArray());
         no += "]";
 
         GameObject.Find("Game").transform.GetChild(1).GetChild(1).GetChild(2).GetComponent<Text>().text = yes;
         GameObject.Find("Game").transform.GetChild(1).GetChild(1).GetChild(3).GetComponent<Text>().text = no;
       }
     }
-    if (Input.GetKeyDown(KeyCode.V))
-      BeginPuzzle("bridge");
-     // players_.GetComponent<PlayersScript>().GetFirstPlayer().GetComponent<PlayerScript>().addItem("fire_extinguisher");
 
   }
   public void Init()

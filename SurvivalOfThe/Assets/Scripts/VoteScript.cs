@@ -24,7 +24,7 @@ public class VoteScript : MonoBehaviour
   [Header("Tileset used to display numbers")]
   public Texture2D Tileset;
 
-  private string vote_type_ = "startengine";
+  private string vote_type_ = "";
 
   void Start()
   {
@@ -85,6 +85,7 @@ public class VoteScript : MonoBehaviour
 
     question_.text = question;
     code_text_.text = CodeToString();
+    vote_type_ = "startengine";
   }
   public void Init(string question,  char [] code,  string vote_type)
   {
@@ -122,15 +123,16 @@ public class VoteScript : MonoBehaviour
   }
 
   void BackToGame() {
-    game_.State = GameState.PLAY;
+    vote_type_ = "";
     vote_.SetActive(false);
+    game_.State = GameState.PLAY;
     GameObject.Find("Game").GetComponent<GameScript>().PlaySound("InterfaceDeck");
   }
 
   // Airconsole handler
   void OnMessage(int from, JToken data)
   {
-    if (game_.State == GameState.VOTE)
+    if (game_.State == GameState.VOTE && vote_type_ != "")
     {
       if (data["direction"] != null)
       {
@@ -169,17 +171,17 @@ public class VoteScript : MonoBehaviour
             return;
           }
         }
-        if (vote_type_ == "startengine")
-          game_.DisplayInfoBox("The engine started !", 2);
-        BackToGame();
-        foreach (GameObject go in RemoveOnSuccess) {
-          Destroy(go);
-        }
-        if (vote_type_ == "startengine")
+
+        // everything below will only be executed if the code was correct
+        if (vote_type_ == "startengine") {
+          foreach (GameObject go in RemoveOnSuccess) {
+            Destroy(go);
+          }
+          BackToGame();
           game_.ShowIntermission("We should escape the space ship\r\n maybe.. \r\n if we don't wanna die");
-        if (vote_type_ == "open_med_station")
-        {
+        } else if (vote_type_ == "open_med_station") {
           game_.GetCurrentLevel().RemoveObject("med_station_door");
+          BackToGame();
         }
       }
     }

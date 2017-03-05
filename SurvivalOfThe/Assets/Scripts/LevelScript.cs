@@ -41,11 +41,11 @@ public class LevelScript : MonoBehaviour
       else
       {
         string yes = "Yes [";
-        yes += string.Join(", ", players_.VotesYes().ConvertAll<string>(i => i.ToString()).ToArray());
+        yes += string.Join(", ", players_.VotesYes().ToArray());
         yes += "]";
 
         string no = "No [";
-        no += string.Join(", ", players_.VotesNo().ConvertAll<string>(i => i.ToString()).ToArray());
+        no += string.Join(", ", players_.VotesNo().ToArray());
         no += "]";
 
         GameObject.Find("Game").transform.GetChild(1).GetChild(1).GetChild(2).GetComponent<Text>().text = yes;
@@ -69,6 +69,8 @@ public class LevelScript : MonoBehaviour
       int id = from;
       SetFocus(id);
     }
+    if (letter_shown_)
+      HideLetter();
   }
 
   // actions 
@@ -209,7 +211,7 @@ public class LevelScript : MonoBehaviour
   public void BeginPuzzle(string name)
   {
     int number_of_players = GameObject.Find("Players").GetComponent<PlayersScript>().PlayerCount();
-
+    GameObject.Find("Game").GetComponent<GameScript>().State = GameState.PUZZLE;
     PuzzleScript puzzle_script = GameObject.Find("Game").transform.FindChild("UI").FindChild("Puzzle").GetComponent<PuzzleScript>();
     //if(name != "")
    // {
@@ -222,7 +224,7 @@ public class LevelScript : MonoBehaviour
   public void EndPuzzle()
   {
     PuzzleScript puzzle_script = GameObject.Find("Game").transform.FindChild("UI").FindChild("Puzzle").GetComponent<PuzzleScript>();
-
+    GameObject.Find("Game").GetComponent<GameScript>().State = GameState.PLAY;
     GameObject.Find("Game").transform.FindChild("UI").FindChild("Puzzle").gameObject.SetActive(false);
     if (puzzle_script.type_ == "mining_station")
     {
@@ -405,7 +407,7 @@ public class LevelScript : MonoBehaviour
               {
                 int number_of_players = GameObject.Find("Players").GetComponent<PlayersScript>().PlayerCount();
                 VoteScript vote_script = GameObject.Find("UI").GetComponent<VoteScript>();
-                vote_script.Init("Enter the start sequence for the engine ...\nUse the DIRECTION keys to enter the code.\nSubmit the code by pressing YES.", number_of_players);
+                vote_script.Init("Enter the start sequence for the engine ...\nUse the DIRECTION keys to enter the code.\nSubmit the code by pressing SUBMIT.", number_of_players);
               }
               if (parts[1] == "open_med_station")
               {
@@ -457,9 +459,6 @@ public class LevelScript : MonoBehaviour
   }
   public void CheckMoveTrigger(GameObject obj)
   {
-    if (letter_shown_)
-      HideLetter();
-
     int player_id = obj.GetComponent<PlayerScript>().getId();
     GameObject lobjs = gameObject.transform.FindChild("LevelLayer" + current_layer_.ToString()).transform.FindChild("Objects").gameObject;
     if (lobjs != null)

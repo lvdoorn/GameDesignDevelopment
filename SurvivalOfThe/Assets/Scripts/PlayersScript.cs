@@ -60,12 +60,9 @@ public class PlayersScript : MonoBehaviour
     players_.Add(id, clone);
     players_number_.Add(id, players_.Count-1);
 
-    if(players_.Count < 3)
-      GameObject.Find("Game").GetComponent<GameScript>().RefreshWaitingScreen("Waiting for players", players_.Count+" players connected");
-    else
-      GameObject.Find("Game").GetComponent<GameScript>().RefreshWaitingScreen("Start", players_.Count + " players connected");
-    
-    GameObject.Find("Game").GetComponent<GameScript>().ShowStatusMessage(AirConsole.instance.GetNickname(id) + " has joined", "controller_on");
+    GameScript game = GameObject.Find("Game").GetComponent<GameScript>();
+    game.RefreshWaitingScreen(players_.Count);
+    game.ShowStatusMessage(AirConsole.instance.GetNickname(id) + " has joined", "controller_on");
     SetFocus(id);
   }
 
@@ -85,11 +82,7 @@ public class PlayersScript : MonoBehaviour
     }
 
     GameScript game = GameObject.Find("Game").GetComponent<GameScript>();
-    if (players_.Count < 3)
-      game.RefreshWaitingScreen("Waiting for players", players_.Count + " players connected");
-    else
-      game.RefreshWaitingScreen("Start", players_.Count + " players connected");
-
+    game.RefreshWaitingScreen(players_.Count);
     game.ShowStatusMessage(nickname + " has left", "controller_off");
   }
 
@@ -260,25 +253,25 @@ public class PlayersScript : MonoBehaviour
     else
       return 1;
   }
-  public List<int> VotesYes()
+  public List<string> VotesYes()
   {
-    List<int> tl = new List<int>();
+    List<string> tl = new List<string>();
     foreach (KeyValuePair<int, GameObject> player in players_)
     {
-      int v = player.Value.GetComponent<PlayerScript>().getVote();
-      if (v == 0)
-        tl.Add(player.Key);        
+      PlayerScript ps = player.Value.GetComponent<PlayerScript>();
+      if (ps.getVote() == 0)
+        tl.Add(ps.Nickname);        
     }
     return tl;
   }
-  public List<int> VotesNo()
+  public List<string> VotesNo()
   {
-    List<int> tl = new List<int>();
+    List<string> tl = new List<string>();
     foreach (KeyValuePair<int, GameObject> player in players_)
     {
-      int v = player.Value.GetComponent<PlayerScript>().getVote();
-      if (v == 1)
-        tl.Add(player.Key);
+      PlayerScript ps = player.Value.GetComponent<PlayerScript>();
+      if (ps.getVote() == 1)
+        tl.Add(ps.Nickname);
     }
     return tl;
   }

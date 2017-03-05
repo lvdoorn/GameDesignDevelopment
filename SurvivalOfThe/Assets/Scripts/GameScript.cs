@@ -10,6 +10,7 @@ public enum GameState
 {
   JOIN,
   PLAY,
+  PUZZLE,
   VOTE,
   INTERMISSION,
   DISCONNECTED,
@@ -30,6 +31,7 @@ public class GameScript : MonoBehaviour
   private GameObject current_level_;
   public float Scale { get; set; }
   private GameState state_;
+  private CtrlState controller_state_;
   public GameState State {
     get {
       return state_;
@@ -39,19 +41,60 @@ public class GameScript : MonoBehaviour
       if (AirConsole.instance.IsAirConsoleUnityPluginReady()) {
         switch (state_) {
           case GameState.JOIN:
-            AirConsole.instance.SetCustomDeviceState("Join");
+            int number_of_players = GameObject.Find("Players").GetComponent<PlayersScript>().GetNumberOfPlayers();
+            if (number_of_players < 3) {
+              ControllerState = new CtrlState() {
+                state = "Wait",
+                text = "Waiting for " + (3 - number_of_players) + "\r\nmore player" + ((3 - number_of_players) == 1 ? "" : "s")
+              };
+            } else {
+              ControllerState = new CtrlState() {
+                state = "Join",
+                action1 = "Start game"
+              };
+            }
             break;
           case GameState.PLAY:
-            AirConsole.instance.SetCustomDeviceState("Play");
+            ControllerState = new CtrlState() {
+              state = "Play",
+              action1 = "Interact"
+            };
+            break;
+          case GameState.PUZZLE:
+            ControllerState = new CtrlState() {
+              state = "Play"
+            };
             break;
           case GameState.VOTE:
-            AirConsole.instance.SetCustomDeviceState("Vote");
+            ControllerState = new CtrlState() {
+              state = "Vote",
+              action1 = "Yes",
+              action2 = "No"
+            };
+            break;
+          case GameState.INTRO:
+            ControllerState = new CtrlState() {
+              state = "Wait",
+              text = "zZz zzz zZz"
+            };
             break;
           default:
-            AirConsole.instance.SetCustomDeviceState("Wait");
+            ControllerState = new CtrlState() {
+              state = "Wait",
+              text = "Please wait..."
+            };
             break;
         }
       }
+    }
+  }
+  public CtrlState ControllerState {
+    get {
+      return controller_state_;
+    }
+    set {
+      controller_state_ = value;
+      AirConsole.instance.SetCustomDeviceState(controller_state_);
     }
   }
   public Fruits CollectedFruits { get; set; }
@@ -61,6 +104,13 @@ public class GameScript : MonoBehaviour
     public string text;
     public string image_name;
     public bool initialized;
+  }
+
+  public struct CtrlState {
+    public string state;
+    public string action1;
+    public string action2;
+    public string text;
   }
   
   private List<InfoBoxMessage> label_queue_ = new List<InfoBoxMessage>();
@@ -75,12 +125,13 @@ public class GameScript : MonoBehaviour
     
     info_box_ = transform.Find("UI/InfoBox").gameObject;
     info_box_text_ = info_box_.GetComponentInChildren<Text>(true);
-
-    State = GameState.JOIN;
+    
+    controller_state_ = new CtrlState();
+    state_ = GameState.JOIN;
     CollectedFruits = Fruits.NONE;
 
     AirConsole.instance.onMessage += OnMessage;
-    RefreshWaitingScreen("Waiting for players" , "0 players connected");
+    RefreshWaitingScreen(0);
 
     //StartIntro();
 
@@ -260,11 +311,12 @@ public class GameScript : MonoBehaviour
   }
   
 
-  public void RefreshWaitingScreen(string text, string text2)
+  public void RefreshWaitingScreen(int number_of_players)
   {
-
-   // GameObject.Find("WaitingScreenText1").GetComponent<Text>().text = text;
-   // GameObject.Find("WaitingScreenText2").GetComponent<Text>().text = text2;
+    State = GameState.JOIN; // updates controller displays
+    
+    var text = (number_of_players < 3 ? "Waiting for players" : "Start");
+    var text2 = number_of_players + " player" + (number_of_players == 1 ? "" : "s") + " connected";
 
     transform.Find("WaitingScreen/Text/WaitingScreenText1").gameObject.GetComponent<Text>().text = text;
     transform.Find("WaitingScreen/Text/WaitingScreenText2").gameObject.GetComponent<Text>().text = text2;

@@ -4,7 +4,7 @@ navigator.vibrate = (navigator.vibrate ||
                          navigator.msVibrate);
 
 var airconsole;
-var state = "joining";
+var state = "waiting";
 
 /**
   * Sets up the communication to the screen.
@@ -12,53 +12,92 @@ var state = "joining";
 $(function() {
   $("#please_wait").hide();
   airconsole = new AirConsole({"orientation": "landscape"});
-  airconsole.onMessage = function (from, data)
-  {
-    if (from == AirConsole.SCREEN && data.vibrate)
-    {
-      navigator.vibrate(data.vibrate);
+  airconsole.onMessage = function (from, data) {
+    if (from == AirConsole.SCREEN && data.vibrate) {
+	  if (navigator.vibrate) {
+		navigator.vibrate(data.vibrate);
+	  }
     }
-    if (from == AirConsole.SCREEN && data.addItem)
-    {
-      var elem = document.getElementById("inventory_item_" + data.slot);
-      elem.style.backgroundImage = "url('" + data.addItem + ".png')";
-      navigator.vibrate(1000);
+    if (from == AirConsole.SCREEN && data.addItem) {
+      var elem = $("#inventory_item_" + data.slot);
+      elem.css("background-image", "url('" + data.addItem + ".png')");
+	  if (navigator.vibrate) {
+		navigator.vibrate(1000);
+	  }
     }
     if (from == AirConsole.SCREEN && data.removeItem) {
-      var elem = document.getElementById("inventory_item_" + data.slot);
-      elem.style.backgroundImage = "url('btn_item.png')";
+      var elem = $("#inventory_item_" + data.slot);
+      elem.css("background-image", "url('btn_item.png')");
     }
   };
   airconsole.onCustomDeviceStateChange = function(from, data) {
-	if (from == AirConsole.SCREEN && data == "Play") {
+	if (from == AirConsole.SCREEN && data.state == "Play") {
       state = "playing";
     }
-    if (from == AirConsole.SCREEN && data == "Vote") {
+    if (from == AirConsole.SCREEN && data.state == "Vote") {
       state = "voting";
     }
-    if (from == AirConsole.SCREEN && data == "Join") {
+    if (from == AirConsole.SCREEN && data.state == "Join") {
       state = "joining";
     }
-    if (from == AirConsole.SCREEN && data == "Wait") {
+    if (from == AirConsole.SCREEN && data.state == "Wait") {
       state = "waiting";
     }
-	updateText();
+	if (from == AirConsole.SCREEN && data.action1 !== undefined) {
+      if (data.action1 !== null) {
+		$("#action1lbl").html(data.action1);
+		$("#action1").show();
+	  } else {
+		$("#action1").hide();
+	  }
+    }
+	if (from == AirConsole.SCREEN && data.action2 !== undefined) {
+      if (data.action2 !== null) {
+		$("#action2lbl").html(data.action2);
+		$("#action2").show();
+	  } else {
+		$("#action2").hide();
+	  }
+    }
+	if (from == AirConsole.SCREEN && data.text !== undefined) {
+      $("#please_wait > p").html(data.text);
+    }
+	updateVisibility();
   };
-  airconsole.onActivePlayersChange = function (player_number)
-  {
-    //updateText(player_number);
-    updateText();
-  };
-  airconsole.onReady = function ()
-  {
-    updateText();
+  airconsole.onReady = function () {
+    updateVisibility();
   };
   // wrap in RateLimiter
   airconsole = new RateLimiter(airconsole);
+  preloadImages();
 });
+/**
+  * Load all used images to avoid flickering later
+  */
+function preloadImages() {
+  var images = [
+    'btn_action_active.png',
+	'btn_focus_active.png',
+    'btn_up_active.png',
+    'btn_right_active.png',
+    'btn_left_active.png',
+    'btn_down_active.png',
+    'prybar.png',
+    'machete.png',
+    'sample_dna.png',
+    'pickaxe.png',
+    'fuel.png',
+    'fire_extinguisher.png',
+    'dynamite.png',
+    'dna_sampler.png'
+  ];
+  $(images).each(function() {
+    $('<img/>')[0].src = this;
+    (new Image()).src = this;
+  });
+}
 
-function updateText()
-{
+function updateVisibility() {
   if (state == "waiting") {
 	$("#please_wait").show();
 	$("#left_side").hide();
@@ -67,20 +106,6 @@ function updateText()
 	$("#please_wait").hide();
 	$("#left_side").show();
 	$("#right_side").show();
-	
-    if(state == "playing") {
-      $("#action1lbl").html("Interact");
-      $("#action2").hide();
-    }
-    if (state == "joining") {
-      $("#action1lbl").html("Start game");
-      $("#action2").hide();
-    }
-    if (state == "voting") {
-      $("#action1lbl").html("Yes");
-      $("#action2lbl").html("No");
-      $("#action2").show();
-    }
   }
 }
 
@@ -132,6 +157,9 @@ function action2()
 function itemUsed(id)
 {
   airconsole.message(AirConsole.SCREEN, { itemUsed: id });
+  
+  var item = $("#inventory_item_" + id);
+  item.stop(true, true).fadeTo(1, 0.3).fadeTo(1000, 1.0);
 }
 
 function requestFocus()

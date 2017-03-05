@@ -76,6 +76,11 @@ public class VoteScript : MonoBehaviour
 
     vote_.SetActive(true);
     game_.State = GameState.VOTE;
+    game_.ControllerState = new GameScript.CtrlState() {
+      state = "Vote",
+      action1 = "Submit",
+      action2 = "Cancel"
+    };
 
     code_ = new char[number_of_players - 1];
     for (int i = 0; i < number_of_players - 1; i++) {
@@ -94,6 +99,11 @@ public class VoteScript : MonoBehaviour
 
     vote_.SetActive(true);
     game_.State = GameState.VOTE;
+    game_.ControllerState = new GameScript.CtrlState() {
+      state = "Vote",
+      action1 = "Submit",
+      action2 = "Cancel"
+    };
 
     solution_ = code;
     selected_ = 0;
@@ -132,7 +142,7 @@ public class VoteScript : MonoBehaviour
   // Airconsole handler
   void OnMessage(int from, JToken data)
   {
-    if (game_.State == GameState.VOTE && vote_type_ != "")
+    if (gameObject.activeSelf && game_.State == GameState.VOTE && vote_type_ != "")
     {
       if (data["direction"] != null)
       {
@@ -159,28 +169,32 @@ public class VoteScript : MonoBehaviour
           }
         }
       }
-      if (data["vote"] != null && (int)data["vote"] == 1)
+      if (data["vote"] != null)
       {
-        for (int i = 0; i < code_.Length ; i++) {
-          if (code_[i] != solution_[i]) {
-            if(vote_type_ == "startengine")
-              game_.DisplayInfoBox("That code did not start the engine...", 2);
-            else
-              game_.DisplayInfoBox("That code did not work...", 2);
-            BackToGame();
-            return;
+        if ((int)data["vote"] == 1) {
+          for (int i = 0; i < code_.Length ; i++) {
+            if (code_[i] != solution_[i]) {
+              if(vote_type_ == "startengine")
+                game_.DisplayInfoBox("That code did not start the engine...", 2);
+              else
+                game_.DisplayInfoBox("That code did not work...", 2);
+              BackToGame();
+              return;
+            }
           }
-        }
 
-        // everything below will only be executed if the code was correct
-        if (vote_type_ == "startengine") {
-          foreach (GameObject go in RemoveOnSuccess) {
-            Destroy(go);
+          // everything below will only be executed if the code was correct
+          if (vote_type_ == "startengine") {
+            foreach (GameObject go in RemoveOnSuccess) {
+              Destroy(go);
+            }
+            BackToGame();
+            game_.ShowIntermission("We should escape the space ship\r\n maybe.. \r\n if we don't wanna die");
+          } else if (vote_type_ == "open_med_station") {
+            game_.GetCurrentLevel().RemoveObject("med_station_door");
+            BackToGame();
           }
-          BackToGame();
-          game_.ShowIntermission("We should escape the space ship\r\n maybe.. \r\n if we don't wanna die");
-        } else if (vote_type_ == "open_med_station") {
-          game_.GetCurrentLevel().RemoveObject("med_station_door");
+        } else if ((int)data["vote"] == 2) {
           BackToGame();
         }
       }

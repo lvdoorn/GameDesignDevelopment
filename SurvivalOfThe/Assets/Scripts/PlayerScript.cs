@@ -121,6 +121,10 @@ public class PlayerScript : MonoBehaviour
           //anim_.enabled = false;
         }
         moved_ = m;
+      } else if (moved_) {
+        anim_.Play("Idle");
+        GetComponent<AudioSource>().Stop();
+        moved_ = false;
       }
     }
 

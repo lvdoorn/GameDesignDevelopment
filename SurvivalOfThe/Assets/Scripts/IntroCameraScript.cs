@@ -36,7 +36,7 @@ public class IntroCameraScript : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
   {
-    if (active_)
+    if (active_ && GameObject.Find("Game").GetComponent<GameScript>().State == GameState.INTRO)
     {
       if (!reached_)
       {        

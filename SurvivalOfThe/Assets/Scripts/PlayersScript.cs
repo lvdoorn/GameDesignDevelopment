@@ -99,9 +99,11 @@ public class PlayersScript : MonoBehaviour
   void DisconnectPlayer(int id)
   {
     GameScript game = GameObject.Find("Game").GetComponent<GameScript>();
+    if (disconnected_.Count == 0) {
+      saved_state = game.State;
+    }
     disconnected_.Add(id);
     
-    saved_state = game.State;
     game.State = GameState.DISCONNECTED;
     game.transform.Find("UI/PauseScreen").gameObject.SetActive(true);
     game.ShowStatusMessage(players_[id].GetComponent<PlayerScript>().Nickname + " has disconnected!", "controller_off");
@@ -116,7 +118,8 @@ public class PlayersScript : MonoBehaviour
       game.State = saved_state;
     }
     game.ShowStatusMessage(players_[id].GetComponent<PlayerScript>().Nickname + " has reconnected!", "controller_on");
-  }
+    AirConsole.instance.Message(id, new { setColor = ColorUtility.ToHtmlStringRGB(players_[id].GetComponent<SpriteRenderer>().color) });
+    }
 
   public GameObject GetPlayer(int id)
   {

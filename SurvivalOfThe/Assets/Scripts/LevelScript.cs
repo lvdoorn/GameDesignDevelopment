@@ -69,7 +69,7 @@ public class LevelScript : MonoBehaviour
       int id = from;
       SetFocus(id);
     }
-    if (letter_shown_)
+    if (letter_shown_ && data["direction"] != null)
       HideLetter();
   }
 
@@ -550,10 +550,9 @@ public class LevelScript : MonoBehaviour
                 MessageToDebug(parts[x]);
               }
               //child.gameObject.GetComponent<ObjectScript>().trigger_text = "";
-              if (child.gameObject.name == "end_of_lvl")
-              {
-                game.StartWoods();
-              }
+            }
+            if (action == "changeLevelToWoods") {
+              game.StartWoods();
             }
             if (action == "changeLevelMiningStation")
             {

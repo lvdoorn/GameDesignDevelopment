@@ -561,7 +561,6 @@ public class LevelScript : MonoBehaviour
               {
                 game.StartWoods(-4.5f, -1.375f, 0f);
                 game.ShowIntermission("Now that the fuel has been found the space ship will be able to fly.");
-                game.GetCurrentLevel().RemoveObject("exit_mining_station");
               }
               else
               {
@@ -572,27 +571,20 @@ public class LevelScript : MonoBehaviour
             if (action == "changeLevelToMiningStation")
             {
               game.StartMiningStation();
-              game.ShowIntermission("There! A station built into a mountain. Maybe we can find fuel there.");
+              if (!players_.HaveItem("fuel"))
+                game.ShowIntermission("There! A station built into a mountain. Maybe we can find fuel there.");
             }
             if (action == "changeLevelToJungle")
             {
               game.StartJungle();
-              game.ShowIntermission("This place looks beautiful...\r\nMaybe we can find some food here.");
+              if (!game.HaveFruits())
+                game.ShowIntermission("This place looks beautiful...\r\nMaybe we can find some food here.");
             }
             if (action == "exitGame")
             {
-              int fruits = 0;
-              bool poisoned = false;
-              if ((game.CollectedFruits & Fruits.PURPLE) != 0) fruits++;
-              if ((game.CollectedFruits & Fruits.BLUE) != 0) fruits++;
-              if ((game.CollectedFruits & Fruits.RED) != 0) {
-                fruits++;
-                poisoned = true;
-              }
-
-              if (players_.HaveItem("fuel") && fruits >= 2)
+              if (players_.HaveItem("fuel") && game.HaveFruits())
               {
-                if (poisoned)
+                if ((game.CollectedFruits & Fruits.RED) != 0)
                   game.ShowIntermission("Bad End!!");
                 else
                   game.ShowIntermission("Good End!!");
@@ -601,7 +593,6 @@ public class LevelScript : MonoBehaviour
             if (action == "changeLevelJungle") {
               game.StartWoods(-0.75f, 4.125f, 0f); 
               game.ShowIntermission("Now that we have collected delicious fruits, we won't starve on our continuing trip.");
-              game.GetCurrentLevel().RemoveObject("exit_jungle");
             }
           }
 

@@ -42,28 +42,37 @@ public class PlayersScript : MonoBehaviour
     clone.GetComponent<PlayerScript>().setId(id);
     clone.GetComponent<PlayerScript>().Nickname = AirConsole.instance.GetNickname(id);
 
-    if( players_.Count == 1 )
-      clone.GetComponent<SpriteRenderer>().color = Color.blue;
-    if (players_.Count == 2)
-      clone.GetComponent<SpriteRenderer>().color = Color.yellow;
-    if (players_.Count == 3)
-      clone.GetComponent<SpriteRenderer>().color = Color.red;
-    if (players_.Count == 4)
-      clone.GetComponent<SpriteRenderer>().color = Color.green;
-    if (players_.Count == 5)
-      clone.GetComponent<SpriteRenderer>().color = Color.magenta;
-    if (players_.Count == 6)
-      clone.GetComponent<SpriteRenderer>().color = Color.grey;
-    if (players_.Count == 7)
-      clone.GetComponent<SpriteRenderer>().color = Color.cyan;
-
     players_.Add(id, clone);
     players_number_.Add(id, players_.Count-1);
+    UpdatePlayerColors();
 
     GameScript game = GameObject.Find("Game").GetComponent<GameScript>();
     game.RefreshWaitingScreen(players_.Count);
     game.ShowStatusMessage(AirConsole.instance.GetNickname(id) + " has joined", "controller_on");
     SetFocus(id);
+  }
+
+  void UpdatePlayerColors() {
+    foreach (var ip in players_) {
+      int number = players_number_[ip.Key];
+      Color color = Color.white;
+      if (number == 1)
+        color = Color.blue;
+      else if (number == 2)
+        color = Color.yellow;
+      else if (number == 3)
+        color = Color.red;
+      else if (number == 4)
+        color = Color.green;
+      else if (number == 5)
+        color = Color.magenta;
+      else if (number == 6)
+        color = Color.grey;
+      else if (number == 7)
+        color = Color.cyan;
+      ip.Value.GetComponent<SpriteRenderer>().color = color;
+      AirConsole.instance.Message(ip.Key, new { setColor = ColorUtility.ToHtmlStringRGB(color) }); 
+    }
   }
 
   void RemovePlayer(int id)
@@ -80,6 +89,7 @@ public class PlayersScript : MonoBehaviour
         players_number_[dev]--;
       }
     }
+    UpdatePlayerColors();
 
     GameScript game = GameObject.Find("Game").GetComponent<GameScript>();
     game.RefreshWaitingScreen(players_.Count);
@@ -146,7 +156,7 @@ public class PlayersScript : MonoBehaviour
     }
   }
   public void MovePlayer(GameObject player, Vector3 position) {
-    player.transform.position = new Vector3(position.x, position.y, -8);
+    player.transform.position = new Vector3(position.x + Random.Range(-0.01f, 0.01f), position.y + Random.Range(-0.01f, 0.01f), -8);
     PlayerScript ps = player.GetComponent<PlayerScript>();
     ps.layer_ = (int)position.z;
   }

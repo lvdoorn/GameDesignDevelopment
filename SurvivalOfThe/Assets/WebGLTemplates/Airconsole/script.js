@@ -45,55 +45,58 @@ $(function() {
   init();
   airconsole = new AirConsole({"orientation": "landscape"});
   airconsole.onMessage = function (from, data) {
-    if (from == AirConsole.SCREEN && data.vibrate) {
-	  if (navigator.vibrate) {
-		navigator.vibrate(data.vibrate);
-	  }
-    }
-    if (from == AirConsole.SCREEN && data.addItem) {
-      var elem = $("#inventory_item_" + data.slot);
-      elem.css("background-image", "url('" + data.addItem + ".png')");
-	  if (navigator.vibrate) {
-		navigator.vibrate(1000);
-	  }
-    }
-    if (from == AirConsole.SCREEN && data.removeItem) {
-      var elem = $("#inventory_item_" + data.slot);
-      elem.css("background-image", "url('btn_item.png')");
-    }
+	if (from == AirConsole.SCREEN) {
+		if (data.vibrate) {
+		  if (navigator.vibrate) {
+			navigator.vibrate(data.vibrate);
+		  }
+		}
+		if (data.addItem) {
+		  var elem = $("#inventory_item_" + data.slot);
+		  elem.css("background-image", "url('" + data.addItem + ".png')");
+		  if (navigator.vibrate) {
+			navigator.vibrate(1000);
+		  }
+		}
+		if (data.removeItem) {
+		  var elem = $("#inventory_item_" + data.slot);
+		  elem.css("background-image", "url('btn_item.png')");
+		}
+		if (data.setColor) {
+		  $(".color").css("background-color", data.setColor);
+		}
+	}
   };
   airconsole.onCustomDeviceStateChange = function(from, data) {
-	if (from == AirConsole.SCREEN && data.state == "Play") {
-      state = "playing";
-    }
-    if (from == AirConsole.SCREEN && data.state == "Vote") {
-      state = "voting";
-    }
-    if (from == AirConsole.SCREEN && data.state == "Join") {
-      state = "joining";
-    }
-    if (from == AirConsole.SCREEN && data.state == "Wait") {
-      state = "waiting";
-    }
-	if (from == AirConsole.SCREEN && data.action1 !== undefined) {
-      if (data.action1 !== null) {
-		$("#action1lbl").html(data.action1);
-		$("#action1").show();
-	  } else {
-		$("#action1").hide();
-	  }
-    }
-	if (from == AirConsole.SCREEN && data.action2 !== undefined) {
-      if (data.action2 !== null) {
-		$("#action2lbl").html(data.action2);
-		$("#action2").show();
-	  } else {
-		$("#action2").hide();
-	  }
-    }
-	if (from == AirConsole.SCREEN && data.text !== undefined) {
-      $("#please_wait > p").html(data.text);
-    }
+	if (from == AirConsole.SCREEN) {
+		if (data.state == "Play") {
+		  state = "playing";
+		}
+		if (data.state == "Vote") {
+		  state = "voting";
+		}
+		if (data.state == "Join") {
+		  state = "joining";
+		}
+		if (data.state == "Wait") {
+		  state = "waiting";
+		}
+		if (data.action1) {
+			$("#action1lbl").html(data.action1);
+			$("#action1").show();
+		} else {
+			$("#action1").hide();
+		}
+		if (data.action2) {
+			$("#action2lbl").html(data.action2);
+			$("#action2").show();
+		} else {
+			$("#action2").hide();
+		}
+		if (data.text) {
+		  $("#please_wait > p").html(data.text);
+		}
+	}
 	updateVisibility();
   };
   airconsole.onReady = function () {

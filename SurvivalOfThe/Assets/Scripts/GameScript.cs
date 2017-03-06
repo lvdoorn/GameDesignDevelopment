@@ -364,6 +364,15 @@ public class GameScript : MonoBehaviour
     else
       GameObject.Find("IntroCamera").GetComponent<AudioManager>().PlaySingle(name);
   }
+
+  public bool HaveFruits()
+  {
+    int fruits = 0;
+    if ((CollectedFruits & Fruits.PURPLE) != 0) fruits++;
+    if ((CollectedFruits & Fruits.BLUE) != 0) fruits++;
+    if ((CollectedFruits & Fruits.RED) != 0) fruits++;
+    return fruits >= 2;
+  }
 }
 
 

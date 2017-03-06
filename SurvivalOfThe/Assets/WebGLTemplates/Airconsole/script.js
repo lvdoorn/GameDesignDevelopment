@@ -5,12 +5,44 @@ navigator.vibrate = (navigator.vibrate ||
 
 var airconsole;
 var state = "waiting";
-
+/**
+  * jQuery helpers for touch vs mouse interaction
+  * Only one of ontouchstart/end and onmousedown/up events will be triggered
+  */
+(function ($) {
+  $.fn.touchDown = function (callback) {
+    this.bind("touchstart", function (event) {
+	  event.stopPropagation();
+	  event.preventDefault();
+	  callback.call(this, event);
+	});
+    this.bind("mousedown", function (event) {
+	  event.stopPropagation();
+	  event.preventDefault();
+	  callback.call(this, event);
+	});   
+    return this;
+  };
+  $.fn.touchUp = function (callback) {
+    this.bind("touchend", function (event) {
+	  event.stopPropagation();
+	  event.preventDefault();
+	  callback.call(this, event);
+	});
+    this.bind("mouseup", function (event) {
+	  event.stopPropagation();
+	  event.preventDefault();
+	  callback.call(this, event);
+	});   
+    return this;
+  };
+})(jQuery);
 /**
   * Sets up the communication to the screen.
   */
 $(function() {
   $("#please_wait").hide();
+  init();
   airconsole = new AirConsole({"orientation": "landscape"});
   airconsole.onMessage = function (from, data) {
     if (from == AirConsole.SCREEN && data.vibrate) {
@@ -71,6 +103,47 @@ $(function() {
   airconsole = new RateLimiter(airconsole);
   preloadImages();
 });
+/**
+  * Initialize all controls
+  */
+function init() {
+  $("#action1").touchDown(function() {
+	action1();
+  });
+  $("#action2").touchDown(function() {
+	action2();
+  });
+  $("#inventory_item_0").touchDown(function() {
+	itemUsed(0);
+  });
+  $("#inventory_item_1").touchDown(function() {
+	itemUsed(1);
+  });
+  $("#inventory_item_2").touchDown(function() {
+	itemUsed(2);
+  });
+  $("#inventory_item_3").touchDown(function() {
+	itemUsed(3);
+  });
+  $(".focus_button").touchDown(function() {
+	requestFocus();
+  });
+  $(".arrow").touchUp(function() {
+	move('S');
+  });
+  $(".arrowL").touchDown(function() {
+	move('L');
+  });
+  $(".arrowR").touchDown(function() {
+	move('R');
+  });
+  $(".arrowU").touchDown(function() {
+	move('U');
+  });
+  $(".arrowD").touchDown(function() {
+	move('D');
+  });
+}
 /**
   * Load all used images to avoid flickering later
   */

@@ -24,11 +24,9 @@ body {
 }
 #action1 {
     height: 50%;
-    background-color: red;
 }
 #action2 {
     height: 50%;
-    background-color: blue;
 }
 .action_label {
     margin: auto;
@@ -40,12 +38,13 @@ body {
 #inventory_container {
     height: 100%;
     width: 50%;
-    background-color: green;
     float: right;
 }
 .inventory_item {
-    height: 25%;
-    border: 1px solid black;
+	height: 25%;
+    height: 23vh;
+	border: 1px solid black;
+    border: 1vh solid black;
 }
 .inventory_label {
     margin: auto;
@@ -93,7 +92,6 @@ body {
     background-color: #222;
     position: relative;
     margin-top: -6px;
-    background-color: lightsalmon;
 }
 .focus_button.active {
 	background-image: url('btn_focus_active.png');

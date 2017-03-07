@@ -131,20 +131,15 @@ function init() {
   $(".focus_button").touchDown(function() {
 	requestFocus();
   });
-  $(".arrow").touchUp(function() {
-	move('S');
-  });
-  $(".arrowL").touchDown(function() {
-	move('L');
-  });
-  $(".arrowR").touchDown(function() {
-	move('R');
-  });
-  $(".arrowU").touchDown(function() {
-	move('U');
-  });
-  $(".arrowD").touchDown(function() {
-	move('D');
+  new DPad("lower_right", {
+    "directionchange": function(key, pressed) {
+	  if (pressed) {
+        move(key);
+      }
+    },
+    "touchend": function(had_direction) {
+      move('S');
+    }
   });
 }
 /**

@@ -584,9 +584,13 @@ public class LevelScript : MonoBehaviour
               if (players_.HaveItem("fuel") && game.HaveFruits())
               {
                 if ((game.CollectedFruits & Fruits.RED) != 0)
-                  game.ShowIntermission("Bad End!!");
+                {
+                  game.ShowEnd(false);
+                }
                 else
-                  game.ShowIntermission("Good End!!");
+                {
+                  game.ShowEnd(true);
+                }
               }
             }
             if (action == "changeLevelJungle") {

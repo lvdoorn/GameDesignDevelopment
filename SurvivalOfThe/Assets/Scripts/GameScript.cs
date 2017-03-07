@@ -145,6 +145,8 @@ public class GameScript : MonoBehaviour
       if (screen.transform.FindChild("IntermissionText").position.y > 380  + screen.transform.FindChild("IntermissionText").GetComponent<Text>().preferredHeight +20.0f )
         EndIntermission();
     }
+
+
   }
   void OnGUI() {
     if (label_queue_.Count > 0) {
@@ -256,6 +258,19 @@ public class GameScript : MonoBehaviour
     GameObject.Find("Game").transform.FindChild("Intro").gameObject.SetActive(false);
     canvas.transform.FindChild("IntroText").gameObject.SetActive(false);
     StartTutorial();
+  }
+  public void  ShowEnd(bool won)
+  {
+    GameObject outro = GameObject.Find("Game").transform.FindChild("Outro").gameObject;
+    outro.SetActive(true);
+
+    if (won)
+      outro.transform.FindChild("GameWon").gameObject.SetActive(true);
+    else
+      outro.transform.FindChild("GameFailed").gameObject.SetActive(true);
+
+
+
   }
 
   public void ShowIntermission(string text)

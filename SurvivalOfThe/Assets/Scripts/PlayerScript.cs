@@ -22,6 +22,7 @@ public class PlayerScript : MonoBehaviour
   public bool holds_trigger = false;
 
   private string [] items_ = new string[4];
+  private Dictionary<string, string[]> stored_items_;
 
   private GameScript game_;
   public string Nickname;
@@ -38,6 +39,8 @@ public class PlayerScript : MonoBehaviour
     game_ = GameObject.Find("Game").GetComponent<GameScript>();
 
     AirConsole.instance.onMessage += OnMessage;
+
+    stored_items_ = new Dictionary<string, string[]>();
 
     for (int x = 0; x < 4; x++)
     {
@@ -278,20 +281,23 @@ public class PlayerScript : MonoBehaviour
   }
   public void removeItem(string item)
   {
-    for (int x = 0; x < 4; x++)
+    if (item != "")
     {
-      if (items_[x].Equals( item) )
+      for (int x = 0; x < 4; x++)
       {
-        items_[x] = "";
-  
-        var message = new
+        if (items_[x].Equals(item))
         {
-          removeItem = item,
-          slot = x
-        };
-        x = 4;
-        AirConsole.instance.Message(id_, message);
-        Debug.Log("sent item remove");
+          items_[x] = "";
+
+          var message = new
+          {
+            removeItem = item,
+            slot = x
+          };
+          x = 4;
+          AirConsole.instance.Message(id_, message);
+          Debug.Log("sent item remove");
+        }
       }
     }
   }
@@ -305,5 +311,50 @@ public class PlayerScript : MonoBehaviour
 
     return false;
   }
+
+  public void SwitchItems(string this_level, string next_level)
+  {
+  
+
+    if (!stored_items_.ContainsKey(this_level))
+    {
+      stored_items_[this_level] = new string[4];    
+    }
+
+    for (int x = 0; x < 4; x++)
+    {
+      stored_items_[this_level][x] = items_[x];
+    }
+
+  
+    for (int x = 0; x < 4; x++)
+    {
+      if (items_[x] != "")
+        removeItem(items_[x]);
+    }
+
+
+    if (stored_items_.ContainsKey(next_level))
+    {
+      for (int x = 0; x < 4; x++)
+      {
+        addItem(stored_items_[next_level][x]);
+      }
+    }
+    else
+    {
+      items_ = new string[4];
+      for (int x = 0; x < 4; x++)
+      {
+        items_[x] = "";
+      }
+    }
+
+ 
+
+
+  }
+
+
 }
  

@@ -116,6 +116,7 @@ public class GameScript : MonoBehaviour
   private List<InfoBoxMessage> label_queue_ = new List<InfoBoxMessage>();
   private GameObject info_box_;
   private Text info_box_text_;
+  public bool fuel_in_inventory_  = false;
 
   void Awake()
   {
@@ -144,7 +145,7 @@ public class GameScript : MonoBehaviour
       screen.transform.FindChild("IntermissionText").position += new Vector3(0, 1.0f, 0);
       if (screen.transform.FindChild("IntermissionText").position.y > 380  + screen.transform.FindChild("IntermissionText").GetComponent<Text>().preferredHeight +20.0f )
         EndIntermission();
-    }
+    } 
 
 
   }
@@ -184,7 +185,7 @@ public class GameScript : MonoBehaviour
       {
         Debug.Log("received start");
 
-        //StartWoods();
+       // StartWoods();
         StartIntro();
 
        // StartTutorial();
@@ -258,6 +259,7 @@ public class GameScript : MonoBehaviour
     GameObject.Find("Game").transform.FindChild("Intro").gameObject.SetActive(false);
     canvas.transform.FindChild("IntroText").gameObject.SetActive(false);
     StartTutorial();
+ 
   }
   public void  ShowEnd(bool won)
   {
@@ -313,8 +315,12 @@ public class GameScript : MonoBehaviour
     if (current_level_ != null) {
       current_level_.SetActive(false);
     }
-    
-    current_level_ = gameObject.transform.FindChild(lvl).gameObject;
+    if (current_level_ != null)
+    {
+      GameObject.Find("Players").GetComponent<PlayersScript>().LevelSwitched(current_level_.GetComponent<LevelScript>().name, lvl);
+    }
+
+      current_level_ = gameObject.transform.FindChild(lvl).gameObject;
     current_level_.SetActive(true);
 
     State = GameState.PLAY;
@@ -323,6 +329,8 @@ public class GameScript : MonoBehaviour
 
     current_level_.GetComponent<LevelScript>().Init();
     current_level_.GetComponent<LevelScript>().FocusSomeone();
+
+ 
   }
   
 

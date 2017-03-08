@@ -539,6 +539,8 @@ public class LevelScript : MonoBehaviour
                 Destroy(child.gameObject);
                 MessageToDebug("Thats mine now", "Player");
                 game.PlaySound("life_pickup");
+                if(item_trigger == "fuel")
+                  game.fuel_in_inventory_ = true;
               }
             }
 
@@ -583,7 +585,13 @@ public class LevelScript : MonoBehaviour
             }
             if (action == "exitGame")
             {
-              if (players_.HaveItem("fuel") && game.HaveFruits())
+              if (!game.HaveFruits())
+                Debug.Log("no fruits");
+              if (!game.fuel_in_inventory_)
+                Debug.Log("no fuel");
+
+
+              if (game.fuel_in_inventory_ && game.HaveFruits())
               {
                 if ((game.CollectedFruits & Fruits.RED) != 0)
                 {

@@ -328,5 +328,12 @@ public class PlayersScript : MonoBehaviour
   {
     return players_.Count;
   }
+  public void LevelSwitched(string old_level, string new_level)
+  {
+    foreach (KeyValuePair<int, GameObject> player in players_)
+    {
+      player.Value.GetComponent<PlayerScript>().SwitchItems(old_level, new_level);
+    }
+  }
 
 }

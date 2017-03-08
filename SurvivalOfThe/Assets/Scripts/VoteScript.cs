@@ -136,7 +136,6 @@ public class VoteScript : MonoBehaviour
     vote_type_ = "";
     vote_.SetActive(false);
     game_.State = GameState.PLAY;
-    GameObject.Find("Game").GetComponent<GameScript>().PlaySound("InterfaceDeck");
   }
 
   // Airconsole handler
@@ -175,9 +174,10 @@ public class VoteScript : MonoBehaviour
           for (int i = 0; i < code_.Length ; i++) {
             if (code_[i] != solution_[i]) {
               if(vote_type_ == "startengine")
-                game_.DisplayInfoBox("That code did not start the engine...", 2);
+                game_.DisplayInfoBox("That code did not start the engine...");
               else
-                game_.DisplayInfoBox("That code did not work...", 2);
+                game_.DisplayInfoBox("That code did not work...");
+              GameObject.Find("Game").GetComponent<GameScript>().PlaySound("wrong");
               BackToGame();
               return;
             }
@@ -190,8 +190,10 @@ public class VoteScript : MonoBehaviour
             }
             BackToGame();
             game_.ShowIntermission("We should escape the space ship\r\n maybe.. \r\n if we don't wanna die");
+            GameObject.Find("Game").GetComponent<GameScript>().PlaySound("correct");
           } else if (vote_type_ == "open_med_station") {
             game_.GetCurrentLevel().RemoveObject("med_station_door");
+            GameObject.Find("Game").GetComponent<GameScript>().PlaySound("correct");
             BackToGame();
           }
         } else if ((int)data["vote"] == 2) {

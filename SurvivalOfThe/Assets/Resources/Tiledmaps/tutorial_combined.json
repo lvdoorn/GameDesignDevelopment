@@ -306,12 +306,10 @@
                  "name":"console_mid",
                  "properties":
                     {
-                     "sound":"once|InterfaceDeck",
                      "trigger_vote":"disable_pipe_system|Shut down extended systems?| Shutting off this system means disabling all extended system (upper level, stasis chambers,.. )"
                     },
                  "propertytypes":
                     {
-                     "sound":"string",
                      "trigger_vote":"string"
                     },
                  "rotation":0,

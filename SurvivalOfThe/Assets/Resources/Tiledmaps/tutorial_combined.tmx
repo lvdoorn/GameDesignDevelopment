@@ -412,7 +412,6 @@
   </object>
   <object id="40" name="console_mid" gid="103" x="896.5" y="333.5" width="32" height="32">
    <properties>
-    <property name="sound" value="once|InterfaceDeck"/>
     <property name="trigger_vote" value="disable_pipe_system|Shut down extended systems?| Shutting off this system means disabling all extended system (upper level, stasis chambers,.. )"/>
    </properties>
   </object>

@@ -144,7 +144,6 @@ public class LevelScript : MonoBehaviour
     GameObject.Find("Game").GetComponent<GameScript>().State = GameState.PLAY;
     vote_mode = false;
     GameObject.Find("Game").transform.GetChild(1).gameObject.SetActive(false);
-    GameObject.Find("Game").GetComponent<GameScript>().PlaySound("InterfaceDeck");
     if ( vote_event == "disable_pipe_system"  )
     {
       if(vote == 0 )
@@ -158,6 +157,8 @@ public class LevelScript : MonoBehaviour
         RemoveObject("animal_stasis_pot_2");
         RemoveObject("animal_stasis_pot_3");
         RemoveObject("animal_stasis_pot_4");
+        GameObject.Find("Game").GetComponent<GameScript>().PlaySound("InterfaceDeck");
+        AirConsole.instance.Broadcast(new { vibrate = 500 });
         GameObject.Find("tutorial").transform.GetChild(0).GetChild(2).FindChild("dead_animal_warning").gameObject.GetComponent<ObjectScript>().trigger_text = "Oh my god the stasis pots....They are dead| ... We killed them";
       }
     } else if (vote_event.StartsWith("collect_fruit_")) {
@@ -189,7 +190,7 @@ public class LevelScript : MonoBehaviour
         } else { // collected first fruit
           msg += "Great! But we definitely need MORE food!";
         }
-        game.DisplayInfoBox(msg, 10, "Player");
+        game.DisplayInfoBox(msg, -1, "Player");
         
         // transform fruit trees and remove borders
         Transform objects = game.GetCurrentLevel().transform.GetChild(0).GetChild(2);
@@ -204,7 +205,7 @@ public class LevelScript : MonoBehaviour
           }
         }
       } else {
-        GameObject.Find("Game").GetComponent<GameScript>().DisplayInfoBox("But they look so tasty!", 3, "Player");
+        GameObject.Find("Game").GetComponent<GameScript>().DisplayInfoBox("But they look so tasty!", -1, "Player");
       }
     }
   }
@@ -226,6 +227,7 @@ public class LevelScript : MonoBehaviour
     PuzzleScript puzzle_script = GameObject.Find("Game").transform.FindChild("UI").FindChild("Puzzle").GetComponent<PuzzleScript>();
     GameObject.Find("Game").GetComponent<GameScript>().State = GameState.PLAY;
     GameObject.Find("Game").transform.FindChild("UI").FindChild("Puzzle").gameObject.SetActive(false);
+    GameObject.Find("Game").GetComponent<GameScript>().PlaySound("correct");
     if (puzzle_script.type_ == "mining_station")
     {
       RemoveObject("puzzle_door");
@@ -258,7 +260,7 @@ public class LevelScript : MonoBehaviour
   }
 
 
-  public void MessageToDebug(string msg, string icon = "Info", int seconds = 3)
+  public void MessageToDebug(string msg, string icon = "Info", int seconds = -1)
   {
     Debug.Log("Display " + msg);
     GameObject.Find("Game").GetComponent<GameScript>().DisplayInfoBox(msg,seconds,icon);
@@ -396,7 +398,7 @@ public class LevelScript : MonoBehaviour
             if (action.StartsWith("hint")) {
               string[] parts = action.Split(':');
               string hint = parts[1];
-              int seconds = parts.Length > 2 ? int.Parse(parts[2]) : 5;
+              int seconds = parts.Length > 2 ? int.Parse(parts[2]) : -1;
               string img = parts.Length > 3 ? parts[3] : "Info";
               GameObject.Find("Game").GetComponent<GameScript>().DisplayInfoBox(hint, seconds, img);
             }

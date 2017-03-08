@@ -209,7 +209,7 @@ public class GameScript : MonoBehaviour
     );
     ChangeLevel("tutorial");
    // ShowIntermission("A long time ago in a galaxy far, far away....\n\n....a spaceship crashed....");
-    DisplayInfoBox("Welcome to Survival of the Zargs! Use the ACTION buttons on your device to interact.", 20, "Alien");
+    DisplayInfoBox("Welcome to Survival of the Zargs! Use the ACTION buttons on your device to interact.", 10, "Alien");
   }
   public void StartMiningStation()
   {
@@ -345,8 +345,11 @@ public class GameScript : MonoBehaviour
      return null;    
   }
 
-  public void DisplayInfoBox(string text, float seconds = 5, string image_name = "Info") {
+  public void DisplayInfoBox(string text, float seconds = -1, string image_name = "Info") {
     float end_time;
+    if (seconds < 0) {
+      seconds = 1.5f + text.Length / 20f;
+    }
     if (label_queue_.Count > 0) {
       // display the new label until *seconds* seconds after the last label in the queue 
       end_time = label_queue_[label_queue_.Count - 1].time + seconds;

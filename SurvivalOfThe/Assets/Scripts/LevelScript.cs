@@ -350,7 +350,7 @@ public class LevelScript : MonoBehaviour
               {
                 if(parts[0] == "condition_remove")
                 {
-                  if (child.gameObject.GetComponent<ObjectScript>().IsMultipleTriggered(int.Parse(parts[2])))
+                  if (child.gameObject.GetComponent<ObjectScript>().IsMultipleTriggered(int.Parse(parts[2] ), player.GetComponent<PlayerScript>().getId() )  )
                   {
                     RemoveObject(objname);
                     player.GetComponent<PlayerScript>().removeItem("prybar");

@@ -18,6 +18,7 @@ public class ObjectScript : MonoBehaviour
   public List<int> inside = new List<int>();
 
   public List<float> activations = new List<float>();
+  public List<int> activation_ids = new List<int>();
 
 
   void Start()
@@ -44,24 +45,44 @@ public class ObjectScript : MonoBehaviour
     Debug.Log("inside" +inside.Count);
     return ( (inside.Count-1) > 0);
   }
-  public bool IsMultipleTriggered(int number)
+  public bool IsMultipleTriggered(int number, int player_id)
   {
     float now = Time.time;
 
-    float delta = 1000.0f;
+    float delta = 1.0f;
 
     int count = 0;
 
     for( int x=0; x < activations.Count;x++ )
     {
-      if ((now - activations[x]) < delta)
+      if ( ( (now - activations[x]) < delta )  && (activation_ids[x] != player_id))
         count++;
+    }
+
+    for (int x = 0; x < activations.Count; x++)
+    {
+     if( ( (now - activations[x]) > delta )  || (activation_ids[x] == player_id))
+     {
+        activations.RemoveAt(x);
+        activation_ids.RemoveAt(x);
+      }
     }
 
     if (count >= number-1)
       return true;
 
     activations.Add(now);
+    activation_ids.Add(player_id);
+    return false;
+  }
+  private bool PlayerTriggered(int player_id)
+  {
+    for (int x = 0; x < activations.Count; x++)
+    {
+      if (activation_ids[x] == player_id)
+        return true;
+    }
+
     return false;
   }
 }

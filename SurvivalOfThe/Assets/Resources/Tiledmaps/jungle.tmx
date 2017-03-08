@@ -182,29 +182,19 @@
    </objectgroup>
   </tile>
   <tile id="55">
-   <objectgroup draworder="index">
-    <object id="1" x="0" y="0" width="32" height="32"/>
-   </objectgroup>
+   <objectgroup draworder="index"/>
   </tile>
   <tile id="56">
-   <objectgroup draworder="index">
-    <object id="1" x="0" y="0" width="32" height="32"/>
-   </objectgroup>
+   <objectgroup draworder="index"/>
   </tile>
   <tile id="57">
-   <objectgroup draworder="index">
-    <object id="1" x="0" y="0" width="32" height="32"/>
-   </objectgroup>
+   <objectgroup draworder="index"/>
   </tile>
   <tile id="58">
-   <objectgroup draworder="index">
-    <object id="1" x="0" y="0" width="32" height="32"/>
-   </objectgroup>
+   <objectgroup draworder="index"/>
   </tile>
   <tile id="59">
-   <objectgroup draworder="index">
-    <object id="1" x="0" y="0" width="32" height="32"/>
-   </objectgroup>
+   <objectgroup draworder="index"/>
   </tile>
   <tile id="60">
    <objectgroup draworder="index">
@@ -212,9 +202,7 @@
    </objectgroup>
   </tile>
   <tile id="61">
-   <objectgroup draworder="index">
-    <object id="1" x="0" y="0" width="32" height="32"/>
-   </objectgroup>
+   <objectgroup draworder="index"/>
   </tile>
   <tile id="62">
    <objectgroup draworder="index">
@@ -232,29 +220,19 @@
    </objectgroup>
   </tile>
   <tile id="65">
-   <objectgroup draworder="index">
-    <object id="1" x="0" y="0" width="32" height="32"/>
-   </objectgroup>
+   <objectgroup draworder="index"/>
   </tile>
   <tile id="66">
-   <objectgroup draworder="index">
-    <object id="1" x="0" y="0" width="32" height="32"/>
-   </objectgroup>
+   <objectgroup draworder="index"/>
   </tile>
   <tile id="67">
-   <objectgroup draworder="index">
-    <object id="1" x="0" y="0" width="32" height="32"/>
-   </objectgroup>
+   <objectgroup draworder="index"/>
   </tile>
   <tile id="68">
-   <objectgroup draworder="index">
-    <object id="1" x="0" y="0" width="32" height="32"/>
-   </objectgroup>
+   <objectgroup draworder="index"/>
   </tile>
   <tile id="69">
-   <objectgroup draworder="index">
-    <object id="1" x="0" y="0" width="32" height="32"/>
-   </objectgroup>
+   <objectgroup draworder="index"/>
   </tile>
   <tile id="70">
    <objectgroup draworder="index">
@@ -277,19 +255,13 @@
    </objectgroup>
   </tile>
   <tile id="75">
-   <objectgroup draworder="index">
-    <object id="1" x="0" y="0" width="32" height="32"/>
-   </objectgroup>
+   <objectgroup draworder="index"/>
   </tile>
   <tile id="76">
-   <objectgroup draworder="index">
-    <object id="1" x="0" y="0" width="32" height="32"/>
-   </objectgroup>
+   <objectgroup draworder="index"/>
   </tile>
   <tile id="77">
-   <objectgroup draworder="index">
-    <object id="1" x="0" y="0" width="32" height="32"/>
-   </objectgroup>
+   <objectgroup draworder="index"/>
   </tile>
  </tileset>
  <tileset firstgid="101" name="tileset_mining" tilewidth="32" tileheight="32" tilecount="100" columns="10">
@@ -613,16 +585,11 @@
   <object id="95" name="border" gid="44" x="608" y="1184" width="32" height="32"/>
   <object id="96" name="border" gid="44" x="640" y="1184" width="32" height="32"/>
   <object id="98" name="border" gid="44" x="672" y="1184" width="32" height="32"/>
-  <object id="100" name="exit_level" x="544" y="1216" width="32" height="32">
+  <object id="100" name="exit_level" x="544" y="1248" width="32" height="32">
    <properties>
     <property name="action" value="changeLevelJungle"/>
    </properties>
   </object>
-  <object id="101" name="exit" gid="45" x="480" y="1280" width="32" height="32"/>
-  <object id="102" name="exit" gid="45" x="512" y="1280" width="32" height="32"/>
-  <object id="103" name="exit" gid="45" x="544" y="1280" width="32" height="32"/>
-  <object id="104" name="exit" gid="45" x="576" y="1280" width="32" height="32"/>
-  <object id="105" name="exit" gid="45" x="608" y="1280" width="32" height="32"/>
   <object id="113" name="grass" gid="74" x="576" y="864" width="32" height="32"/>
   <object id="114" name="grass" gid="74" x="608" y="864" width="32" height="32"/>
   <object id="115" name="grass" gid="74" x="640" y="864" width="32" height="32"/>

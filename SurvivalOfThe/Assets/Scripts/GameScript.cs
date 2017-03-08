@@ -330,7 +330,7 @@ public class GameScript : MonoBehaviour
   {
     State = GameState.JOIN; // updates controller displays
     
-    var text = (number_of_players < 3 ? "Waiting for players" : "Start");
+    var text = (number_of_players < 3 ? "Waiting for players" : "Ready to start");
     var text2 = number_of_players + " player" + (number_of_players == 1 ? "" : "s") + " connected";
 
     transform.Find("WaitingScreen/Text/WaitingScreenText1").gameObject.GetComponent<Text>().text = text;

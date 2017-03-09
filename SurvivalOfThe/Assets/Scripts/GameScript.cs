@@ -145,7 +145,8 @@ public class GameScript : MonoBehaviour
       screen.transform.FindChild("IntermissionText").position += new Vector3(0, 1.0f, 0);
       if (screen.transform.FindChild("IntermissionText").position.y > 380  + screen.transform.FindChild("IntermissionText").GetComponent<Text>().preferredHeight +20.0f )
         EndIntermission();
-    } 
+    }
+ 
 
 
   }
@@ -259,7 +260,7 @@ public class GameScript : MonoBehaviour
     GameObject.Find("Game").transform.FindChild("Intro").gameObject.SetActive(false);
     canvas.transform.FindChild("IntroText").gameObject.SetActive(false);
     StartTutorial();
- 
+  //  StartWoods();
   }
   public void  ShowEnd(bool won)
   {

@@ -1,0 +1,147 @@
+\documentclass[a4paper]{article}
+
+%% Language and font encodings
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+
+%% Sets page size and margins
+\usepackage[a4paper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+%% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\providecommand{\keywords}[1]{\textbf{\textit{Tags:}} #1}
+\providecommand{\talkurl}[1]{\textbf{\textit{Url:}} #1}
+\providecommand{\track}[1]{\textbf{\textit{Track:}} #1}
+\providecommand{\speaker}[1]{\textbf{\textit{Speaker:}} #1}
+
+
+
+\title{Improving Geometry Culling for 'Deus Ex: Mankind Devided' by Nicolas Trudel, Sampo Lappalainen, Otso Maekinen}
+\author{Author: Pascal Stadlbauer}
+
+\begin{document}
+\maketitle
+
+\begin{keywords} Geometry culling, Umbra \end{keywords}
+
+\begin{track} GDC San Francisco 16 - Programming \end{track}
+
+\begin{talkurl}  \url{http://www.gdcvault.com/play/1023678/Improving-Geometry-Culling-for-Deus} \end{talkurl}
+
+\begin{speaker} Nicolas Trudel, Sampo Lappalainen, Otso Maekinen, Umbra \end{speaker}
+
+
+\begin{abstract}
+
+The talk describes an efficient occlusion culling technique, which is used in the Umbra system \cite{umbra},
+that is a part of the Dawn Engine. 'Deus Ex: Mankind Devided ' uses the Dawn Engine \cite{dawn} as a basis.
+
+\end{abstract}
+
+\section{Summary of Talk}
+
+%Your summary of the talk goes here! (in your own words!) 
+%Describe the main points / lessons learned of the talk, the relevance for game development. 
+
+Umbra provides an occlusion culling system for engines. First the procedure used by Umbra is presented. After that this system is integrated into the Dawn Engine, which is used for many AAA games, like 'Deus Ex: Mankind Devided '.
+
+\subsection{Procedure}
+
+The procedure consists of first pre-processing the scene at scene creation and then querying the previous constructed data structure at run time.
+
+\subsubsection{Pre-processing}
+
+The procedure starts with a polygon soup. To create a system that runs in real 
+time this polygon soup is then pre-processed and a spatial database is constructed.
+To be more precise the polygon soup is converted into voxels. Flood filling is then 
+used to find the different cells and the so-called portals, which connect the cells.
+The placement of portals would usually be done by an artist during scene creation, which can be a lot of work if we consider, that this technique is not only used for inside scenes, but also for outside scenes.
+
+\subsubsection{Runtime}
+
+Visibility queries are then performed during run time. In outdoor areas the portal 
+technique is usually very tricky. Umbra solves this problem by creating many portals
+and using rasterization for visibility queries. This means that the portal meshes are rasterized from users view and the result is stored in a buffer. 
+In the newer edition of this algorithm a kind of LOD for the meshes is integrated. This produces much better results, when small portals are in the frustum and far away and don't need to be rendered.
+
+\subsection{Dawn-Engine integration}
+Umbra is integrated in the Dawn-Engine. During level creation the artist can set different parameters, which concern the occlusion culling process. The artists needs to set default parameters for the whole scene and can also set parameters for different sections of the scene. These parameters include the size of the smallest occluder and hole. They serve to keep the database size as small as possible, while ensuring that everything important is rendered. \newline
+Also during pre-processing the engine defines different kind of object types, like occluders, targets, portals, which are necessary for visibility queries during run time. 
+It was mentioned, that it took a lot of time to categorize these objects right. Too many occluders of course cause larger databases, which results in a too high memory consumption and also a long pre-processing time.\newline
+The Dawn-Engine keeps only static objects in the database. Dynamic objects, which are not predictable at pre-processing time, are kept in an octree.
+
+
+\subsection{Streaming 3D Worlds}
+Also mentioned sre the future developments of Umbra. Umbra tries to bring 3D worlds to every device.
+This will be done by streaming 3D worlds from central Umbra data bases to the devices, which also includes smartphones. Due to the streaming the reduction of necessary computational power should be enough to guarantee a fluent rendering.
+
+\subsection{Conclusion}
+
+For computer graphics occlusion culling is a crucial aspect to create a good performance.
+A high amount of objects inside the frustum requires a lot of draw calls. With a increasing number of draw calls the frame rate tends to drop immensely. 
+That's why an efficient occlusion culling algorithm is needed to keep the number of objects relevant for drawing low.\newline
+In the talk a efficient process is presented, which reduces the necessary draw calls immensely and also pays attention to keeping the work for the artist low.\newline
+This can help particularly devices, where the hardware is slower.
+The streaming of 3D worlds, especially with efficient occlusion culling, seems to be the best way to ensure satisfying frame rates.
+
+\section{Overview and Relevance}
+%Research on the topic of the talk; overall overview and the relevance of the technologies/techniques; give a short overview on the state of the art of the topic, reference further readings and current developments. 
+
+%Provide a list of further readings, links (websites, papers, talks, articles,...) in the bibliography  
+
+In general there are two major techniques the Potentially Visible Set - method (PVS) and the portal technique, that is adapted in the Umbra system.
+
+\subsection{Potentially Visible Set}
+The Potentially Visible Set technique, that was summarized in \cite{pvs}, was mentioned and adapted in many other algorithms. Earlier versions, that basicaly used the same concept where for example mentioned in \cite{pvs2}.  The basic process consists of first dividing the scene into different regions and then pre-computing the PVS for each region, which results in a relatively high computation time and memory requirement.
+ A big PVS for a region is caused by the fact that all points of a region need to be considered as a view point.
+
+\subsection{Portal rendering}
+Portal rendering as mentioned above consists of partitioning the scene into multiple regions. This is usually done by an artist, which has to specify the connection areas connection the individual regions. If the scene consists of an indoor area this step is
+usually relatively effortless, because in most cases only the doors need to be selected as portals. The technique mentioned above automatizes this step. Another automation process is described in \cite{autoportal}. \newline
+During run time the portals are rendered from the view point to determine, which regions have to be rendered in addition to the region, where the current view point resides.  
+
+\newpage
+
+\renewcommand{\refname}{\section{References and Further Sources}}
+\begin{thebibliography}{1}
+  
+\bibitem{pvs}  
+	MikkoLaakso,
+	 \emph{  Potentially Visible Set(PVS)},	 
+	 Real-Time 3D Graphics,
+	 Spring 2003.
+	 
+\bibitem{pvs2}  
+	Teller, Seth J and S{\'e}quin, Carlo H,
+	 \emph{ Visibility preprocessing for interactive walkthroughs},	 
+	 ACM SIGGRAPH Computer Graphics,
+	 1991.
+	 
+\bibitem{autoportal}  
+	Lefebvre, Sylvain and Hornus, Samuel,
+	 \emph{ Automatic cell-and-portal decomposition},	 
+	 INRIA,
+	 2003.
+\bibitem{dawn}  
+	Eidos Montreal,
+	 \emph{ Dawn Engine},	 
+	 \url{https://eidosmontreal.com/en/news/dawn-engine},
+	 2017.
+\bibitem{umbra}  
+	Umbra,
+	 \emph{ Umbra 3D},	 
+	 \url{http://umbra3d.com/},
+	 2017.
+
+
+
+  %http://www.tml.tkk.fi/Opinnot/Tik-111.500/2003/paperit/MikkoLaakso.pdf
+
+\end{thebibliography}
+
+\end{document}

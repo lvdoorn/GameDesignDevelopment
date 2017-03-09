@@ -502,7 +502,7 @@ public class LevelScript : MonoBehaviour
               {
                 players_.RefreshVisibility();
               }
-              TempDisableObjects(obj);
+              TempDisableObjects(obj, switch_layer);
             }
 
             if (t != "")
@@ -664,10 +664,10 @@ public class LevelScript : MonoBehaviour
     }   
   }
 
-  private void TempDisableObjects(GameObject obj)
+  private void TempDisableObjects(GameObject obj, int layer)
   {
     int player_id = obj.GetComponent<PlayerScript>().getId();
-    GameObject lobjs = GameObject.Find("LevelLayer" + current_layer_.ToString()).transform.FindChild("Objects").gameObject;
+    GameObject lobjs = transform.FindChild("LevelLayer" + layer.ToString()).transform.FindChild("Objects").gameObject;
     if (lobjs != null)
     {
       foreach (Transform child in lobjs.transform)

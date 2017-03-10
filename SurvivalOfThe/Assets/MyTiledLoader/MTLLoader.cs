@@ -645,5 +645,28 @@ public class MTLLoader : MonoBehaviour
     }
   }
 
+  public void Convert()
+  {
+    for(int x=0; x < gameObject.transform.childCount;x++)
+    {
+      GameObject tile_layers = gameObject.transform.GetChild(x).FindChild("TileLayers").gameObject;
+      for(int i=0;i <tile_layers.transform.childCount; i++)
+      {
+        GameObject layer = tile_layers.transform.GetChild(i).gameObject;
+        for(int c=0;c <layer.transform.childCount;c++)
+        {
+          GameObject tile = layer.transform.GetChild(c).gameObject;
+          Sprite s = tile.GetComponent<SpriteRenderer>().sprite;
+          if(s.name == "tileset_21")
+          {
+            Debug.Log("Tiledmaps/Tilesets/tileset/" + s.name);
+            tile.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Tiledmaps/Tilesets/tileset/"+ s.name);
+          }
+        }
+      }
+    }
+ 
+  }
+
 }
 #endif

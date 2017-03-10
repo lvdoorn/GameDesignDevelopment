@@ -20,6 +20,10 @@ public class LoaderEditor : Editor
     {
       myScript.Clear();
     }
+    if (GUILayout.Button("Convert"))
+    {
+      myScript.Convert();
+    }
   }
 }
 #endif

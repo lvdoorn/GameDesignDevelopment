@@ -1,0 +1,109 @@
+\documentclass[a4paper]{article}
+
+%% Language and font encodings
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+%% Sets page size and margins
+\usepackage[a4paper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+%% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage[autostyle]{csquotes}
+
+\providecommand{\keywords}[1]{\textbf{\textit{Tags:}} #1}
+\providecommand{\talkurl}[1]{\textbf{\textit{Url:}} #1}
+\providecommand{\track}[1]{\textbf{\textit{Track:}} #1}
+\providecommand{\speaker}[1]{\textbf{\textit{Speaker:}} #1}
+
+\definecolor{codegray}{gray}{0.95}
+\newcommand{\code}[1]{\colorbox{codegray}{\texttt{#1}}}
+
+\title{Android TV Gaming: Designing (and Programming) for Success on Marshmallow by Lars Bishop}
+\author{Author: Markus Meyer}
+
+\begin{document}
+\maketitle
+
+\begin{keywords} Android, Marshmallow, API 23, Android TV, Google TV, Gaming, 4K, NVIDIA \end{keywords}
+
+\begin{track} GDC Vault 2016 - Programming \end{track}
+
+\begin{talkurl} \url{http://www.gdcvault.com/play/1023527} \end{talkurl}
+
+\begin{speaker} Lars Bishop, NVIDIA \end{speaker}
+
+\begin{abstract}
+Lars Bishop and the NVIDIA DevTech team support dozens of Android TV (ATV) game developers per year. In his talk, Lars Bishop summarizes the new features of Android Marshmallow. Subsequently, a few things to keep in mind, while developing games for ATV, are presented. Finally, a brief prospect of the upcoming Android Nougat and its features is given.
+\end{abstract}
+
+\section{Summary of Talk}
+Lars Bishops talk in the Game Developers Conference (GDC) 2016 not only discusses several new features [\ref{feature:4k} - \ref{feature:low-latency-audio}] of Android Marshmallow (API 23), but also gives some really good lessons to learn [\ref{lesson:ui} - \ref{lesson:standout-features}] about designing and developing games for Android TV (ATV). In the end of the talk, a short outlook to the new features of Android Nougat [\ref{outlook}] is given.
+
+\subsection{4K Resolution}
+\label{feature:4k}
+Gaming on ATV unlocks a new potential of 4K resolution games on a cinema like environment. The \code{SurfaceView} class of Android M allows developers to access the 4K resolution display and provides the \code{Display.getSupportedModes()} method to check for 4K support of the device. However, the API method may mistakenly return no 4K mode, even though the display would support it.\\\\
+In case of a NativeActivity, where the API method is not available, developers can read the \code{sys.display-size} property to check 4K support and in order to enable it use the NDK method \code{ANativeWindow\_setBuffersGeometry(...)}.
+
+\subsection{Permissions}
+Game data, such as levels or character information, is often stored on an external storage. In order to read and write to the external storage path, Android API 18 and lower, require the \code{READ/WRITE\_EXTERNAL\_STORAGE} permission. However, this behavior changed with API 19, where \code{getExternalFilesDir(String)} and \code{getExternalCacheDir()} do not require this permission anymore. Additionally, with Android M, permissions are divided into several protection levels. There are dangerous permissions, such as the read and write to external storage, which require a user approval during runtime. Nonetheless, games should \textbf{not} need the external storage permission, and use the external files/cache directories provided by the above mentioned API methods.
+
+\subsection{Adoptable Storage}
+Android M allows developers to access external storage, as if it was internal storage. For that reason, the external storage is encrypted by the operating system. Furthermore, the OS may change the storage path of application data because of moved memory. On that account, many applications crashed after updating to API 23, because they assumed to find the application data within a package name derived path. Android M provides the \code{Context} and \code{ApplicationInfo} classes to access application specific resources and paths.
+
+\subsection{Security Changes}
+Due to privacy reasons, \code{Wifi.getMacAddress()} and \code{BluetoothAdapter.getAddress()} will return a constant value of \code{"02:00:00:00:00:00"}, starting with API 23. Applications, that used those values for unique identification, should use \code{Settings.Secure.ANDROID\_ID} instead. Googles developer terms, however, prohibit to use this device id to be used for advertising purposes.
+
+\subsection{Low Latency Audio}
+\label{feature:low-latency-audio}
+The new Android Marshmallow has dramatically improved the latency of audio playback. There is a new feature tag \code{android.hardware.audio.low\_latency}, which can be used to filter targeted devices. Yet this property should not be \textbf{required} by games, since it is meant to be used for applications like professional audio tools and instrument simulators, where low latency is essential.
+
+\subsection{User Interface}
+\label{lesson:ui}
+The first design advice, given in this talk, is to build a user interface which feels native to the Android TV. Expect that the user interacts from a \emph{couch distance} with the device under less than ideal lighting conditions. Keep in mind, that ATV is not a personal screen, but more a public screen, shared by several people. Highlight the currently focused element and provide simple left, right, up and down navigations. Voice inputs are commonly used or even expected for ATV devices. 
+
+\subsection{Gamepads}
+There are many different gamepads available for ATV. When developing a game, expect to deal with a wide range of available input axes and buttons. Provide the user with controller diagrams to explain the button assignments. Furthermore, since most gamepads are wireless, handle disconnects and hot-plug of controllers. Finally, try to support the remote control as game controller, or at least in all menus, since the player might launch the game with the remote and switch to the gamepad only when necessary.
+
+\subsection{Core Requirements}
+Lars Bishop encountered many games not being successful or annoying, because the core requirements where implemented sloppy or not at all. A proper manifest file, defining feature tags, life cycle and permission management, is a basic and simple requirement, but crucial for a successful Android TV game. Correct handling of audio focus and daydream, which is kind of a screen-saver, make the experience of the game even more outstanding.
+
+\subsection{Standout Features}
+\label{lesson:standout-features}
+Android TV is a multi media surround sound entertainment system. During game development, first make a solid game, satisfying the core requirements, but make it a mind-blowing adventure by using the standout features of ATV. Features, such as multi channel surround sound, a deep search integration to launch your game via voice input, and custom recommendation tiles to announce new DLCs, are the key for an outstanding gaming experience.
+
+\subsection{Android Nougat}
+\label{outlook}
+The upcoming version of Android will make a split screen apps possible and allow a picture-in-picture mode to display video footage. However, the most important new feature with Android Nougat for game developers is probably the Vulkan support. Vulkan is an open standard for high performance, but yet lightweight and thread friendly, 3D rendering.
+
+\section{Overview and Relevance}
+According to Trebilcox-Ruiz \cite{Trebilcox-Ruiz2016}, roughly 90\% of the revenue, which developers receive from the Google Play Store, are due to games. Given the similarity of Android smartphone games and Android TV (ATV) games, we can expect that many developers will broaden their supply to both platforms.
+As described by several sources \cite{Trebilcox-Ruiz2016,Android-Developer:TV,NVIDIA-Developer:TV}, Android TV is a great new platform for Android game developers. Nevertheless, there are some important adaptions to be made to target the multi media living room entertainment systems. A short list of things to keep in mind when targeting ATV is given below \cite{Android-Developer:TV}:
+\begin{itemize}
+\item{\textbf{Display:}} Although current smartphone displays may already have 4K resolutions, the relevance of 4K game graphics is even more significant for TV games. The TV screen is much bigger and allows multiple players on one screen.
+\item{\textbf{Input Device:}} The general input method for ATV is not a touchscreen. In most cases a remote control, gamepad or voice input will be used to interact with the system.
+\item{\textbf{User Interface:}} The TV will \textbf{always} display the app in landscape mode. Navigation of a menu should support directional pad controllers. It is recommended, not to use mouse cursor navigation with Android TV.
+\item{\textbf{Manifest:}} Several ATV specific properties should be configured in the application manifest to achieve a nice TV experience. Refer to \cite{Android-Developer:TV,NVIDIA-Developer:TV} for more details and examples.\\
+\end{itemize}
+Android Nougat \cite{Android-Developer:Nougat}, the latest version of Android by now, has introduced several new features. While doze on the go, background optimizations and several other low power improvements have been made for smartphones, Android N also provides helpful new features for Android TV. Besides the split screen and picture-in-picture support, the Vulkan \cite{sellers2016vulkan} API is probably the most anticipated new feature for ATV developers. Vulkan is an open standard for high-performance, real-time 3D rendering on GPUs. NVIDIA \cite{NVIDIA-Developer:Vulkan} features two small samples, demonstrating dozens of high quality helicopters and multi-threaded rendering of several fish in an aquarium. For ATV game developers, Vulkan might be a great OpenGL alternative to look into.
+
+\renewcommand{\refname}{\section{References and Further Sources}}
+\begin{thebibliography}{6}
+\bibitem{Android-Developer:Nougat}\emph{Android 7.0 for Developers}. Google, Inc. \textsc{url}: \url{https://developer.android.com/about/versions/nougat/android-7.0.html} (visited on 02/19/2017).
+
+\bibitem{NVIDIA-Developer:TV}\emph{Android TV Developer Guide}. NVIDIA, Corp. \textsc{url}: \url{https://developer.nvidia.com/android-tv-developer-guide} (visited on 02/19/2017).
+
+\bibitem{Android-Developer:TV}\emph{Building TV Games}. Google, Inc. \textsc{url}: \url{https://developer.android.com/training/tv/games/index.html} (visited on 02/19/2017).
+
+\bibitem{sellers2016vulkan}G. Sellers and J.M. Kessenich. \emph{Vulkan Programming Guide: The Official Guide to Learning Vulkan}. OpenGL Series. Addison Wesley, 2016. \textsc{isbn}: 9780134464541. \textsc{url}: \url{https://books.google.at/books?id=kUJujwEACAAJ}.
+
+\bibitem{Trebilcox-Ruiz2016}Paul Trebilcox-Ruiz. “The Android TV Platform for Game Development”. In: \emph{Android TV Apps Development: Building for Media and Games}. Berkeley, CA: Apress, 2016, pp. 89–110. \textsc{isbn}: 978-1-4842-1784-9. \textsc{doi}: \href{http://dx.doi.org/10.1007/978-1-4842-1784-9\_5}{10.1007/978-1-4842-1784-9\_5}. \textsc{url}: \url{http://dx.doi.org/10.1007/978-1-4842-1784-9\_5}
+
+\bibitem{NVIDIA-Developer:Vulkan}\emph{Vulkan on Android}. NVIDIA, Corp. \textsc{url}: \url{https://developer.nvidia.com/vulkan-android} (visited on 02/20/2017).
+\end{thebibliography}
+
+\end{document}
